@@ -7,7 +7,7 @@ class EditarInformacion(wx.Frame):
 		wx.Frame.__init__(self, None, id, title, size = (878, 350),pos=(0,0), style = wx.DEFAULT_FRAME_STYLE
 			& ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
 		self.ventana_inicio = ventana_inicio
-		self.SetIcon(wx.Icon("imagenes/logo.png"))
+		self.SetIcon(wx.Icon(logotipo1))
 		self.panel = wx.Panel(self,-1)
 		self.archivo_txt = archivo_txt
 		self.informacion = informacion

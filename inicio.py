@@ -36,11 +36,11 @@ style3 = (wx.DEFAULT_FRAME_STYLE & ~ (wx.CAPTION))
 
 size1 = wx.Size(1000, 730) # Ventana principal
 size2 = wx.Size(1000, 130) # Header Efenergy + Logo
-size3 = wx.Size(1000, 700) # 
-size4 = wx.Size(970, 500) # 
-size5 = wx.Size(880, 200) # 
+size3 = wx.Size(1000, 500) # Panel general de pestañas
+size4 = wx.Size(970, 500) # Zona pestañas individuales
+size5 = wx.Size(880, 200) # Zona para texto explicativo de la norma
 size6 = wx.Size(200, 30) # 
-size7 = wx.Size(300, 30) # 
+size7 = wx.Size(300, 30) # Botones inferiores para acciones
 
 # --------------------------- / -----------------------------------
 # DEFINICIONES VARIAS
@@ -53,6 +53,20 @@ texto_header = "Efenergy"
 tab1 = "Voltaje"
 tab2 = "Potencia"
 tab3 = "Armónicos"
+
+btn1 = "Analizar voltaje"
+btn2 = "Analizar factor de potencia"
+btn3 = "Analizar potencia reactiva"
+btn4 = "Analizar armónicos de tensión"
+btn5 = "Analizar armónicos de corriente"
+icono1 = "imagenes/icono_pdf.png"
+
+
+
+
+
+
+
 
 class Aplicacion(wx.Frame):
 		
@@ -90,7 +104,7 @@ class Aplicacion(wx.Frame):
 		self.bitmap1 = wx.StaticBitmap(header, -1, bmp1, (30,20))
 
 		titulo = wx.StaticText(header, wx.ID_ANY, texto_header, style=wx.ALIGN_CENTER, pos=(150,25))
-		font = wx.Font(40, wx.ROMAN, wx.ITALIC, wx.NORMAL)
+		font = wx.Font(50, wx.DEFAULT, wx.ITALIC, wx.NORMAL)
 		titulo.SetFont(font)
 
 		# --------------------------- / -----------------------------------
@@ -128,34 +142,34 @@ class Aplicacion(wx.Frame):
 		self.componentesComunes(self.page_2, self.panel_informacion_potencia, tab2.upper(), 2, 5)
 		self.componentesComunes(self.page_3, self.panel_informacion_armonico, tab3.upper(), 3, 6)
 
-		btn_analizar_voltaje = wx.Button(self.page_1, 4, u"Analizar voltaje", size=size6, pos=(700,400))
+		btn_analizar_voltaje = wx.Button(self.page_1, 4, btn1, size=size7, pos=(600,400))
 		btn_analizar_voltaje.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
 
-		btn_analizar_factor_potencia = wx.Button(self.page_2, 5, u"Analizar factor de potencia", size=size7, pos=(295,400))
+		btn_analizar_factor_potencia = wx.Button(self.page_2, 5, btn2, size=size7, pos=(295,400))
 		btn_analizar_factor_potencia.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
 
-		btn_analizar_potencia_reactiva = wx.Button(self.page_2, 6, u"Analizar potencia reactiva", size=size7, pos=(600,400))
+		btn_analizar_potencia_reactiva = wx.Button(self.page_2, 6, btn3, size=size7, pos=(600,400))
 		btn_analizar_potencia_reactiva.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
 
-		btn_analizar_armonicos_tension = wx.Button(self.page_3, 7, u"Analizar armónicos de tensión", size=size7, pos=(295,400))
+		btn_analizar_armonicos_tension = wx.Button(self.page_3, 7, btn4, size=size7, pos=(295,400))
 		btn_analizar_armonicos_tension.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
 
-		btn_analizar_armonicos_corriente = wx.Button(self.page_3, 8, u"Analizar armónicos de corrente", size=size7, pos=(600,400))
+		btn_analizar_armonicos_corriente = wx.Button(self.page_3, 8, btn5, size=size7, pos=(600,400))
 		btn_analizar_armonicos_corriente.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
 
-		btn_pdf = wx.BitmapButton(self.panel_informacion_voltage, 9, wx.Bitmap( u"imagenes/pdf5.png", wx.BITMAP_TYPE_ANY), (800,10), wx.DefaultSize, wx.NO_BORDER)	
-		btn_pdf.SetBitmapCurrent( wx.Bitmap(u"imagenes/pdf4.png", wx.BITMAP_TYPE_ANY))
-		btn_pdf.SetBackgroundColour('#FFFFFF')
+		btn_pdf = wx.BitmapButton(self.panel_informacion_voltage, 9, wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY), (800,10), wx.DefaultSize, wx.NO_BORDER)	
+		btn_pdf.SetBitmapCurrent( wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY))
+		btn_pdf.SetBackgroundColour(blanco)
 		btn_pdf.Bind(wx.EVT_BUTTON, self.abrirPDF)
 
-		btn_pdf = wx.BitmapButton(self.panel_informacion_potencia, 10, wx.Bitmap( u"imagenes/pdf5.png", wx.BITMAP_TYPE_ANY), (800,10), wx.DefaultSize, wx.NO_BORDER)	
-		btn_pdf.SetBitmapCurrent( wx.Bitmap(u"imagenes/pdf4.png", wx.BITMAP_TYPE_ANY))
-		btn_pdf.SetBackgroundColour('#FFFFFF')
+		btn_pdf = wx.BitmapButton(self.panel_informacion_potencia, 10, wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY), (800,10), wx.DefaultSize, wx.NO_BORDER)	
+		btn_pdf.SetBitmapCurrent( wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY))
+		btn_pdf.SetBackgroundColour(blanco)
 		btn_pdf.Bind(wx.EVT_BUTTON, self.abrirPDF)
 
-		btn_pdf = wx.BitmapButton(self.panel_informacion_armonico, 11, wx.Bitmap( u"imagenes/pdf5.png", wx.BITMAP_TYPE_ANY), (800,10), wx.DefaultSize, wx.NO_BORDER)	
-		btn_pdf.SetBitmapCurrent( wx.Bitmap(u"imagenes/pdf4.png", wx.BITMAP_TYPE_ANY))
-		btn_pdf.SetBackgroundColour('#FFFFFF')
+		btn_pdf = wx.BitmapButton(self.panel_informacion_armonico, 11, wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY), (800,10), wx.DefaultSize, wx.NO_BORDER)	
+		btn_pdf.SetBitmapCurrent( wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY))
+		btn_pdf.SetBackgroundColour(blanco)
 		btn_pdf.Bind(wx.EVT_BUTTON, self.abrirPDF)
 	
 		# --------------------------- / -----------------------------------
@@ -181,19 +195,22 @@ class Aplicacion(wx.Frame):
 
 		# ---------------------------/--------------------------------------------
 
-	def componentesComunes(self,ubicacion,panel,nombre,identificador_btn1,identificador_btn2):
+	def componentesComunes(self, ubicacion, panel, nombre, identificador_btn1, identificador_btn2):
+
+		# ---------------------------/--------------------------------------------
+
 		if identificador_btn1 == 1:
-			self.txt_informacion_voltaje = wx.StaticText(panel, -1, self.cargar_informacion()[0], pos=(40, 30), size=(700,150),style=wx.ST_NO_AUTORESIZE)
-			font = wx.Font(12, wx.ROMAN, wx.NORMAL, wx.NORMAL)
+			self.txt_informacion_voltaje = wx.StaticText(panel, -1, self.cargar_informacion()[0], pos=(40,30), size=(700,150), style=wx.ST_NO_AUTORESIZE)
+			font = wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL)
 			self.txt_informacion_voltaje.SetFont(font)
 
 		if identificador_btn1 == 2:
-			self.txt_informacion_potencia = wx.StaticText(panel, -1, self.cargar_informacion()[1], pos=(40, 30), size=(700,150),style=wx.ST_NO_AUTORESIZE)
-			font = wx.Font(12, wx.ROMAN, wx.NORMAL, wx.NORMAL)
+			self.txt_informacion_potencia = wx.StaticText(panel, -1, self.cargar_informacion()[1], pos=(40,30), size=(700,150), style=wx.ST_NO_AUTORESIZE)
+			font = wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL)
 			self.txt_informacion_potencia.SetFont(font)
 		if identificador_btn1 == 3:
-			self.txt_informacion_armonico = wx.StaticText(panel, -1, self.cargar_informacion()[2], pos=(40, 30), size=(700,150),style=wx.ST_NO_AUTORESIZE)
-			font = wx.Font(12, wx.ROMAN, wx.NORMAL, wx.NORMAL)
+			self.txt_informacion_armonico = wx.StaticText(panel, -1, self.cargar_informacion()[2], pos=(40,30), size=(700,150), style=wx.ST_NO_AUTORESIZE)
+			font = wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL)
 			self.txt_informacion_armonico.SetFont(font)
 
 		button_editar_informacion = wx.BitmapButton(panel, identificador_btn1, wx.Bitmap(u"imagenes/icono_editar.png"), pos=(835,10), size=wx.DefaultSize, style=wx.BU_AUTODRAW|wx.NO_BORDER )
@@ -222,8 +239,11 @@ class Aplicacion(wx.Frame):
 		txt_voltaje = wx.StaticText(ubicacion, wx.ID_ANY, nombre, pos=(30,55))
 		font = wx.Font(10, wx.ROMAN, wx.NORMAL, wx.NORMAL)
 		txt_voltaje.SetFont(font)
+
+		# ---------------------------/--------------------------------------------
 		
 	def informacion(self,event):
+
 		from VentanaInformacion import VentanaInformacion
 		informacion_semillero = VentanaInformacion()
 		informacion_semillero.informacion()

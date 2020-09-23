@@ -26,7 +26,7 @@ class AnalisisDistorcionArmonica(wx.Frame):
 		self.panel = wx.ScrolledWindow( self, wx.ID_ANY, size=(1500,570), pos=(0,120), style=wx.HSCROLL|wx.VSCROLL )
 		self.panel.SetScrollRate( 5, 5 )
 
-		self.SetIcon(wx.Icon("imagenes/logo.png"))
+		self.SetIcon(wx.Icon(logotipo1))
 		self.Elementos()
 		self.footer()
 
@@ -39,8 +39,8 @@ class AnalisisDistorcionArmonica(wx.Frame):
 		titulo.SetFont(font)
 
 
-		logotipo = 'imagenes/logotipo.JPG'
-		bmp1 = wx.Image(logotipo, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
+		
+		bmp1 = wx.Image(logotipo1, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(header, -1, bmp1, (30,10))
 
 		txt_seleccion_dia = wx.StaticText(self.panel, -1, "Día: ", pos=(30,30))

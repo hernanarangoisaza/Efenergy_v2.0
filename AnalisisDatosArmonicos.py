@@ -24,7 +24,7 @@ class AnalisisDatosArmonicos(wx.Frame):
 
 		self.panel = wx.Panel(self, -1, size=(1500, 730), pos=(0,120))
 		# agrega icono a la ventana
-		self.SetIcon(wx.Icon("imagenes/logo.png"))
+		self.SetIcon(wx.Icon(logotipo1))
 		self.Elementos()	
 		self.footer()
 
@@ -39,8 +39,8 @@ class AnalisisDatosArmonicos(wx.Frame):
 		font = wx.Font(40, wx.ROMAN, wx.ITALIC, wx.NORMAL)
 		titulo.SetFont(font)
 
-		logotipo = 'imagenes/logotipo.JPG'
-		bmp1 = wx.Image(logotipo, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
+		
+		bmp1 = wx.Image(logotipo1, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(header, -1, bmp1, (30,10))
 
 		txt_seleccion_dia = wx.StaticText(self.panel, -1, "Día: ", pos=(440,32))
