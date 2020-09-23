@@ -7,7 +7,7 @@ class EditarInformacion(wx.Frame):
 		wx.Frame.__init__(self, None, id, title, size = (878, 350),pos=(0,0), style = wx.DEFAULT_FRAME_STYLE
 			& ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
 		self.ventana_inicio = ventana_inicio
-		self.SetIcon(wx.Icon("Images/logo.png"))
+		self.SetIcon(wx.Icon("imagenes/logo.png"))
 		self.panel = wx.Panel(self,-1)
 		self.archivo_txt = archivo_txt
 		self.informacion = informacion
@@ -42,11 +42,11 @@ class EditarInformacion(wx.Frame):
 
 		self.inp_informacion = wx.TextCtrl(self.panel, wx.ID_ANY, self.informacion, size=(600,200), pos=(30,70), style=wx.TE_MULTILINE)
 		
-		button_editar = wx.BitmapButton( self.panel, wx.ID_ANY, wx.Bitmap(u"Images/icono_aceptar.png"), pos=(600,275), size=wx.DefaultSize, style=wx.BU_AUTODRAW|wx.NO_BORDER )
+		button_editar = wx.BitmapButton( self.panel, wx.ID_ANY, wx.Bitmap(u"imagenes/icono_aceptar.png"), pos=(600,275), size=wx.DefaultSize, style=wx.BU_AUTODRAW|wx.NO_BORDER )
 		button_editar.SetBackgroundColour("#FFFFFF")
 		button_editar.Bind(wx.EVT_BUTTON, self.on_editar_informacion)
 
-		button_cancelar = wx.BitmapButton( self.panel, wx.ID_ANY, wx.Bitmap(u"Images/icono_cancelar.png"), pos=(30,275), size=wx.DefaultSize, style=wx.BU_AUTODRAW|wx.NO_BORDER )
+		button_cancelar = wx.BitmapButton( self.panel, wx.ID_ANY, wx.Bitmap(u"imagenes/icono_cancelar.png"), pos=(30,275), size=wx.DefaultSize, style=wx.BU_AUTODRAW|wx.NO_BORDER )
 		button_cancelar.SetBackgroundColour("#FFFFFF")
 		button_cancelar.Bind(wx.EVT_BUTTON, self.on_cancelar)
 

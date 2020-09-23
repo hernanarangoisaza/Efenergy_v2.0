@@ -18,7 +18,7 @@ Graficar datos, Guardar datos en Excel, Listar Datos
 
         info = wx.adv.AboutDialogInfo()
 
-        info.SetIcon(wx.Icon('Images/logo_sena.png', wx.BITMAP_TYPE_PNG))
+        info.SetIcon(wx.Icon('imagenes/logo_sena.png', wx.BITMAP_TYPE_PNG))
         info.SetName('EFENERGY')
         info.SetVersion('1.0')
         info.SetDescription(descripcion)

@@ -26,7 +26,7 @@ class AnalisisDistorcionArmonica(wx.Frame):
 		self.panel = wx.ScrolledWindow( self, wx.ID_ANY, size=(1500,570), pos=(0,120), style=wx.HSCROLL|wx.VSCROLL )
 		self.panel.SetScrollRate( 5, 5 )
 
-		self.SetIcon(wx.Icon("Images/logo.png"))
+		self.SetIcon(wx.Icon("imagenes/logo.png"))
 		self.Elementos()
 		self.footer()
 
@@ -39,7 +39,7 @@ class AnalisisDistorcionArmonica(wx.Frame):
 		titulo.SetFont(font)
 
 
-		logotipo = 'images/logotipo.JPG'
+		logotipo = 'imagenes/logotipo.JPG'
 		bmp1 = wx.Image(logotipo, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(header, -1, bmp1, (30,10))
 
@@ -75,18 +75,18 @@ class AnalisisDistorcionArmonica(wx.Frame):
 		
 		#--------------------------------------------------------------------------------------------
 
-		icon_seleccionar_dia = 'images/calendario.png'
+		icon_seleccionar_dia = 'imagenes/calendario.png'
 		bmp1 = wx.Image(icon_seleccionar_dia, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(self.panel, -1, bmp1, (70, 30))
 		
-		icon_fase = 'images/fase.png'
+		icon_fase = 'imagenes/fase.png'
 		bmp1 = wx.Image(icon_fase, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(self.panel, -1, bmp1, (450, 28))
 
 		btn_listar = wx.Button(self.panel, 7, u"Listar", size=(100,30), pos=(1010,30))
 		btn_listar.Bind(wx.EVT_BUTTON, self.validacion_entre_armonico_10_11)
 		
-		icon_listar = 'images/listar.png'
+		icon_listar = 'imagenes/listar.png'
 		bmp1 = wx.Image(icon_listar, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(self.panel, -1, bmp1, (975, 30))
 		

@@ -20,7 +20,7 @@ class AnalisisDatosArmonicosCorriente(wx.Frame):
 		self.frame = wx.Frame.__init__(self, None, id, title, size = (1300, 730), style = wx.DEFAULT_FRAME_STYLE )
 			#& ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX)) # bloquear boton de maximizar
 
-		self.SetIcon(wx.Icon("Images/logo.png"))
+		self.SetIcon(wx.Icon("imagenes/logo.png"))
 
 		self.lista_hora = []
 
@@ -42,7 +42,7 @@ class AnalisisDatosArmonicosCorriente(wx.Frame):
 		titulo.SetFont(font)
 
 
-		logotipo = 'images/logotipo.JPG'
+		logotipo = 'imagenes/logotipo.JPG'
 		bmp1 = wx.Image(logotipo, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(header, -1, bmp1, (30,10))
 
@@ -61,20 +61,20 @@ class AnalisisDatosArmonicosCorriente(wx.Frame):
 
 		# -------------------------------------------------------------------------------------------------			
 
-		ico_grafica = wx.Bitmap("Images/grafica.png", wx.BITMAP_TYPE_ANY)
+		ico_grafica = wx.Bitmap("imagenes/grafica.png", wx.BITMAP_TYPE_ANY)
 		button_grafica_faseA = AB.AquaButton(self.panel, 1, bitmap=ico_grafica, size=(35,35),pos=(1150,90))
 		button_grafica_faseA.SetForegroundColour("black")
 		button_grafica_faseA.Bind(wx.EVT_BUTTON, self.grafica )
 	
-		icon_seleccionar_dia = 'images/calendario.png'
+		icon_seleccionar_dia = 'imagenes/calendario.png'
 		bmp1 = wx.Image(icon_seleccionar_dia, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(self.panel, -1, bmp1, (67, 30))
 
-		icon_listar = 'images/listar.png'
+		icon_listar = 'imagenes/listar.png'
 		bmp1 = wx.Image(icon_listar, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(self.panel, -1, bmp1, (975, 30))
 		
-		icon_fase = 'images/fase.png'
+		icon_fase = 'imagenes/fase.png'
 		bmp1 = wx.Image(icon_fase, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(self.panel, -1, bmp1, (470, 28))
 

@@ -12,13 +12,13 @@ class Menu2:
 		self.menu.AppendSeparator()
 
 		menuItem3 = wx.MenuItem(self.menu, wx.ID_ANY, u"Salir\tCTRL+Q",u"Salir de Efenergy", wx.ITEM_NORMAL )
-		menuItem3.SetBitmap(wx.Bitmap(u"Images/atras.png", wx.BITMAP_TYPE_ANY ))
+		menuItem3.SetBitmap(wx.Bitmap(u"imagenes/atras.png", wx.BITMAP_TYPE_ANY ))
 		opt_general.Bind(wx.EVT_MENU, self.salir, menuItem3)
 		self.menu.Append(menuItem3)
 
 		menu2 = wx.Menu()
 		menu2Item = wx.MenuItem(self.menu, wx.ID_ANY, u"About...\tF1", u"Acerca de Efenergy", wx.ITEM_NORMAL )
-		menu2Item.SetBitmap(wx.Bitmap(u"Images/acerca_de.png", wx.BITMAP_TYPE_ANY ))
+		menu2Item.SetBitmap(wx.Bitmap(u"imagenes/acerca_de.png", wx.BITMAP_TYPE_ANY ))
 		opt_general.Bind(wx.EVT_MENU, self.informacion, menu2Item)
 		menu2.Append(menu2Item)
 
@@ -29,7 +29,7 @@ class Menu2:
 
 	def opt_ir_atras(self,opt_general):	
 		menuItem2 = wx.MenuItem(self.menu, wx.ID_ANY, u"Cerrar ventana", wx.EmptyString, wx.ITEM_NORMAL )
-		menuItem2.SetBitmap(wx.Bitmap(u"Images/atras.png", wx.BITMAP_TYPE_ANY ))
+		menuItem2.SetBitmap(wx.Bitmap(u"imagenes/atras.png", wx.BITMAP_TYPE_ANY ))
 
 		self.Bind(wx.EVT_MENU, self.irAtras, menuItem2)
 		self.menu.Append(menuItem2)

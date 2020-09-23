@@ -27,7 +27,7 @@ class Aplicacion(wx.Frame):
 
 		self.ruta_archivo_texto = "archivo\informacion.txt"
 		self.archivo_txt = ArchivoInformacion(self.ruta_archivo_texto)
-		self.SetIcon(wx.Icon("Images/logo.png"))
+		self.SetIcon(wx.Icon("imagenes/logo.png"))
 		self.Elementos()
 		self.footer()
 
@@ -36,7 +36,7 @@ class Aplicacion(wx.Frame):
 		header= wx.Panel(self,-1,size=(1000,100),pos=(0,0))
 		header.SetBackgroundColour("#6E7B99")
 		
-		logotipo = 'images/logotipo.JPG'
+		logotipo = 'imagenes/logotipo.JPG'
 		bmp1 = wx.Image(logotipo, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(header, -1, bmp1, (30,5))
 
@@ -91,18 +91,18 @@ class Aplicacion(wx.Frame):
 		btn_analizar_armonicos_corriente = wx.Button(self.page_3, 8, u"Analizar armónicos de corrente", size=(300,30), pos=(600,400))
 		btn_analizar_armonicos_corriente.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
 
-		btn_pdf = wx.BitmapButton(self.panel_informacion_voltage, 9, wx.Bitmap( u"Images/pdf5.png",wx.BITMAP_TYPE_ANY),(800,10),wx.DefaultSize,wx.NO_BORDER)	
-		btn_pdf.SetBitmapCurrent( wx.Bitmap( u"Images/pdf4.png",wx.BITMAP_TYPE_ANY))
+		btn_pdf = wx.BitmapButton(self.panel_informacion_voltage, 9, wx.Bitmap( u"imagenes/pdf5.png",wx.BITMAP_TYPE_ANY),(800,10),wx.DefaultSize,wx.NO_BORDER)	
+		btn_pdf.SetBitmapCurrent( wx.Bitmap( u"imagenes/pdf4.png",wx.BITMAP_TYPE_ANY))
 		btn_pdf.SetBackgroundColour('#FFFFFF')
 		btn_pdf.Bind(wx.EVT_BUTTON, self.abrirPDF)
 
-		btn_pdf = wx.BitmapButton(self.panel_informacion_potencia, 10, wx.Bitmap( u"Images/pdf5.png",wx.BITMAP_TYPE_ANY),(800,10),wx.DefaultSize,wx.NO_BORDER)	
-		btn_pdf.SetBitmapCurrent( wx.Bitmap( u"Images/pdf4.png",wx.BITMAP_TYPE_ANY))
+		btn_pdf = wx.BitmapButton(self.panel_informacion_potencia, 10, wx.Bitmap( u"imagenes/pdf5.png",wx.BITMAP_TYPE_ANY),(800,10),wx.DefaultSize,wx.NO_BORDER)	
+		btn_pdf.SetBitmapCurrent( wx.Bitmap( u"imagenes/pdf4.png",wx.BITMAP_TYPE_ANY))
 		btn_pdf.SetBackgroundColour('#FFFFFF')
 		btn_pdf.Bind(wx.EVT_BUTTON, self.abrirPDF)
 
-		btn_pdf = wx.BitmapButton(self.panel_informacion_armonico, 11, wx.Bitmap( u"Images/pdf5.png",wx.BITMAP_TYPE_ANY),(800,10),wx.DefaultSize,wx.NO_BORDER)	
-		btn_pdf.SetBitmapCurrent( wx.Bitmap( u"Images/pdf4.png",wx.BITMAP_TYPE_ANY))
+		btn_pdf = wx.BitmapButton(self.panel_informacion_armonico, 11, wx.Bitmap( u"imagenes/pdf5.png",wx.BITMAP_TYPE_ANY),(800,10),wx.DefaultSize,wx.NO_BORDER)	
+		btn_pdf.SetBitmapCurrent( wx.Bitmap( u"imagenes/pdf4.png",wx.BITMAP_TYPE_ANY))
 		btn_pdf.SetBackgroundColour('#FFFFFF')
 		btn_pdf.Bind(wx.EVT_BUTTON, self.abrirPDF)
 	
@@ -110,14 +110,14 @@ class Aplicacion(wx.Frame):
 		menubar = wx.MenuBar(0)
 		menu = wx.Menu()
 		menuItem3 = wx.MenuItem(menu, wx.ID_ANY, u"Salir\tCTRL+Q",u"Salir de Efenergy",  wx.ITEM_NORMAL )
-		menuItem3.SetBitmap(wx.Bitmap(u"Images/cerrar.png", wx.BITMAP_TYPE_ANY ))
+		menuItem3.SetBitmap(wx.Bitmap(u"imagenes/cerrar.png", wx.BITMAP_TYPE_ANY ))
 		self.Bind(wx.EVT_MENU, self.salir, menuItem3)
 		menu.Append(menuItem3)
 		menu.AppendSeparator()
 
 		menu2 = wx.Menu()
 		menu2Item = wx.MenuItem(menu, wx.ID_ANY, u"About...\tF1", u"Acerca de Efenergy", wx.ITEM_NORMAL )
-		menu2Item.SetBitmap(wx.Bitmap(u"Images/acerca_de.png", wx.BITMAP_TYPE_ANY ))
+		menu2Item.SetBitmap(wx.Bitmap(u"imagenes/acerca_de.png", wx.BITMAP_TYPE_ANY ))
 		self.Bind(wx.EVT_MENU, self.informacion, menu2Item)
 		menu2.Append(menu2Item)
 
@@ -142,7 +142,7 @@ class Aplicacion(wx.Frame):
 			font = wx.Font(12, wx.ROMAN, wx.NORMAL, wx.NORMAL)
 			self.txt_informacion_armonico.SetFont(font)
 
-		button_editar_informacion = wx.BitmapButton(panel, identificador_btn1, wx.Bitmap(u"Images/icono_editar.png"), pos=(835,10), size=wx.DefaultSize, style=wx.BU_AUTODRAW|wx.NO_BORDER )
+		button_editar_informacion = wx.BitmapButton(panel, identificador_btn1, wx.Bitmap(u"imagenes/icono_editar.png"), pos=(835,10), size=wx.DefaultSize, style=wx.BU_AUTODRAW|wx.NO_BORDER )
 		button_editar_informacion.SetBackgroundColour("#FFFFFF")
 		button_editar_informacion.Bind(wx.EVT_BUTTON, self.on_editar_informacion)
 
@@ -158,7 +158,7 @@ class Aplicacion(wx.Frame):
 		decoracion_izquierda2_panel_informacion= wx.Panel(panel,-1,size=(5,100),pos=(875,100))
 		decoracion_izquierda2_panel_informacion.SetBackgroundColour("#6CFFCD")
 
-		icon_seleccionar_archivo = 'images/archivo.png'
+		icon_seleccionar_archivo = 'imagenes/archivo.png'
 		bmp1 = wx.Image(icon_seleccionar_archivo, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(ubicacion, -1, bmp1, (225, 11))
 

@@ -25,7 +25,7 @@ class AnalisisDatosVoltaje(wx.Frame):
 		self.frame = wx.Frame.__init__(self, None, id, title, size = (1200,730), style = wx.DEFAULT_FRAME_STYLE 
 			& ~(wx.MAXIMIZE_BOX)) 
 
-		self.SetIcon(wx.Icon("Images/logo.png"))
+		self.SetIcon(wx.Icon("imagenes/logo.png"))
 		self.panel = wx.Panel(self,-1,size=(1200,700),pos=(0,120))
 		
 		self.Elementos()
@@ -38,7 +38,7 @@ class AnalisisDatosVoltaje(wx.Frame):
 		menugrafica = self.panel_menu.opt_grafica_voltaje()
 
 		menuItem2 = wx.MenuItem(menugrafica, wx.ID_ANY, u"Ver Grafica1\tCTRL+G", u"Ver representación grafica de los datos en porcentaje (%) por hora", wx.ITEM_NORMAL )
-		menuItem2.SetBitmap(wx.Bitmap(u"Images/grafica1.png", wx.BITMAP_TYPE_ANY ))
+		menuItem2.SetBitmap(wx.Bitmap(u"imagenes/grafica1.png", wx.BITMAP_TYPE_ANY ))
 		menugrafica.Append(menuItem2)
 		self.Bind(wx.EVT_MENU, self.graficaVolageVsTiempo, id = menuItem2.GetId() )
 
@@ -53,7 +53,7 @@ class AnalisisDatosVoltaje(wx.Frame):
 		font = wx.Font(40, wx.ROMAN, wx.ITALIC, wx.NORMAL)
 		titulo.SetFont(font)
 
-		logotipo = 'images/logotipo.JPG'
+		logotipo = 'imagenes/logotipo.JPG'
 		bmp1 = wx.Image(logotipo, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(header, -1, bmp1, (30,10))
 
@@ -79,25 +79,25 @@ class AnalisisDatosVoltaje(wx.Frame):
 		
 		# -------------------------------------------------------------------------------------------------	
 		 
-		bmp1 = wx.Image('Images/calendario.png', wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
+		bmp1 = wx.Image('imagenes/calendario.png', wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		icon_seleccionar_dia = wx.StaticBitmap(self.panel, -1, bmp1, (585, 30))
 
-		bmp1 = wx.Image('Images/voltaje.png', wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
+		bmp1 = wx.Image('imagenes/voltaje.png', wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		icon_estado_voltaje = wx.StaticBitmap(self.panel, -1, bmp1, (585, 65))
 
-		bmp1 = wx.Image('Images/fase.png', wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
+		bmp1 = wx.Image('imagenes/fase.png', wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		icon_fase = wx.StaticBitmap(self.panel, -1, bmp1, (585, 95))
 		# -------------------------------------------------------------------------------------------------	
 
 		btn_listar = wx.Button(self.panel, 7, u"Listar", size=(200,30), pos=(520,130))
 		btn_listar.Bind(wx.EVT_BUTTON, self.cargarDatos)
 
-		ico_grafica = wx.Bitmap("Images/grafica.png", wx.BITMAP_TYPE_ANY)
+		ico_grafica = wx.Bitmap("imagenes/grafica.png", wx.BITMAP_TYPE_ANY)
 		button_grafica_faseA = AB.AquaButton(self.panel, 1, bitmap=ico_grafica, size=(38,35),pos=(560,180))
 		button_grafica_faseA.SetForegroundColour("red")
 		button_grafica_faseA.Bind(wx.EVT_BUTTON, self.graficaVolageVsTiempo )
 
-		ico_repote = wx.Bitmap("Images/reporte6.png", wx.BITMAP_TYPE_ANY)
+		ico_repote = wx.Bitmap("imagenes/reporte6.png", wx.BITMAP_TYPE_ANY)
 		button_reportar= AB.AquaButton(self.panel, 1, bitmap=ico_repote, size=(38,35),pos=(630,180))
 		button_reportar.SetForegroundColour("black")
 		button_reportar.Bind(wx.EVT_BUTTON, self.reporteAnalisis )

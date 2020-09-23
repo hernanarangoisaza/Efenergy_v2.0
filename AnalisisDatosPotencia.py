@@ -24,7 +24,7 @@ class AnalisisDatosPotencia(wx.Frame):
 		self.frame = wx.Frame.__init__(self, None, id, title, size = (1100, 730), style = wx.DEFAULT_FRAME_STYLE )
 			#& ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX)) # bloquear boton de maximizar
 
-		self.SetIcon(wx.Icon("Images/logo.png"))
+		self.SetIcon(wx.Icon("imagenes/logo.png"))
 		self.panel = wx.Panel(self,-1,size=(1200,700),pos=(0,120))
 
 		self.Elementos()
@@ -43,7 +43,7 @@ class AnalisisDatosPotencia(wx.Frame):
 		font = wx.Font(40, wx.ROMAN, wx.ITALIC, wx.NORMAL)
 		titulo.SetFont(font)
 
-		logotipo = 'images/logotipo.JPG'
+		logotipo = 'imagenes/logotipo.JPG'
 		bmp1 = wx.Image(logotipo, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(header, -1, bmp1, (30,10))
 
@@ -69,20 +69,20 @@ class AnalisisDatosPotencia(wx.Frame):
 		
 		# -------------------------------------------------------------------------------------------------	
 		
-		bmp1 = wx.Image('images/calendario.png', wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
+		bmp1 = wx.Image('imagenes/calendario.png', wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		icon_seleccionar_dia = wx.StaticBitmap(self.panel, -1, bmp1, (585, 30))
 
-		bmp2 = wx.Image( 'images/potencia1.png', wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
+		bmp2 = wx.Image( 'imagenes/potencia1.png', wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		icon_estado_voltage = wx.StaticBitmap(self.panel, -1, bmp2, (585, 65))
 
-		bmp3 = wx.Image('images/fase.png', wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
+		bmp3 = wx.Image('imagenes/fase.png', wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		icon_fase = wx.StaticBitmap(self.panel, -1, bmp3, (585, 95))
 		# -------------------------------------------------------------------------------------------------	
 
 		btn_listar = wx.Button(self.panel, 7, u"Listar", size=(200,30), pos=(520,130))
 		btn_listar.Bind(wx.EVT_BUTTON, self.cargarDatos)
 
-		ico_grafica = wx.Bitmap("Images/grafica.png", wx.BITMAP_TYPE_ANY)
+		ico_grafica = wx.Bitmap("imagenes/grafica.png", wx.BITMAP_TYPE_ANY)
 		button_grafica_faseA = AB.AquaButton(self.panel, 1, bitmap=ico_grafica, size=(38,35),pos=(560,180))
 		button_grafica_faseA.SetForegroundColour("red")
 		button_grafica_faseA.Bind(wx.EVT_BUTTON, self.graficaFactorPotencia )
