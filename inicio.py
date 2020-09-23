@@ -4,6 +4,7 @@
 import wx
 import easygui as eg
 import pandas as pd
+
 from hilo_trabajo_barra_espera import WorkerThread
 from AnalisisDatosVoltaje import AnalisisDatosVoltaje
 from AnalisisDatosPotencia import AnalisisDatosPotencia
@@ -13,10 +14,55 @@ from AnalisisDatosArmonicosCorriente import AnalisisDatosArmonicosCorriente
 from ArchivoInformacion import ArchivoInformacion
 from EditarInformacion import EditarInformacion
 
+# --------------------------- / -----------------------------------
+# DEFINICIÓN DE COLORES
+# --------------------------- / -----------------------------------
+
+gris1 = wx.Colour(252, 252,252) # FCFCFC	
+gris2 = wx.Colour(242, 242,242) # F2F2F2
+blanco = wx.Colour(255, 255,255) # FFFFFF
+
+# --------------------------- / -----------------------------------
+# DEFINICIÓN DE ESTILOS DEL FRAME PRINCIPAL
+# --------------------------- / -----------------------------------
+
+style1 = (wx.DEFAULT_FRAME_STYLE)
+style2 = (wx.CLOSE_BOX|wx.CAPTION)
+style3 = (wx.DEFAULT_FRAME_STYLE & ~ (wx.CAPTION))
+
+# --------------------------- / -----------------------------------
+# DEFINICIÓN DE TAMAÑOS
+# --------------------------- / -----------------------------------
+
+size1 = wx.Size(1000, 730) # Ventana principal
+size2 = wx.Size(1000, 130) # Header Efenergy + Logo
+size3 = wx.Size(1000, 700) # 
+size4 = wx.Size(970, 500) # 
+size5 = wx.Size(880, 200) # 
+size6 = wx.Size(200, 30) # 
+size7 = wx.Size(300, 30) # 
+
+# --------------------------- / -----------------------------------
+# DEFINICIONES VARIAS
+# --------------------------- / -----------------------------------
+
+logotipo1 = "imagenes/logo_2020.png"
+ruta1 = "archivo\informacion.txt"
+titulo_ventana = "Efenergy v2.0"
+texto_header = "Efenergy"
+tab1 = "Voltaje"
+tab2 = "Potencia"
+tab3 = "Armónicos"
+
 class Aplicacion(wx.Frame):
+		
 	def __init__(self, id, title):
-		self.frame = wx.Frame.__init__(self, None, id, title, size = (1000, 700),pos=(0,0), style = wx.DEFAULT_FRAME_STYLE)
-		self.SetBackgroundColour("#6E7B99")
+
+		# --------------------------- / -----------------------------------
+
+		self.frame = wx.Frame.__init__(self, None, id, titulo_ventana, size=size1, pos=(0,0), style=style2)
+		self.SetBackgroundColour(gris1)
+		self.SetIcon(wx.Icon(logotipo1))
 
 		self.url_voltaje = None
 		self.url_potencia = None
@@ -25,91 +71,98 @@ class Aplicacion(wx.Frame):
 		self.ultima_url_potencia = None
 		self.ultima_url_armonico = None
 
-		self.ruta_archivo_texto = "archivo\informacion.txt"
+		self.ruta_archivo_texto = ruta1
 		self.archivo_txt = ArchivoInformacion(self.ruta_archivo_texto)
-		self.SetIcon(wx.Icon("imagenes/logo.png"))
+
 		self.Elementos()
 		self.footer()
 
-	def Elementos(self):
 		# --------------------------- / -----------------------------------
-		header= wx.Panel(self,-1,size=(1000,100),pos=(0,0))
-		header.SetBackgroundColour("#6E7B99")
-		
-		logotipo = 'imagenes/logotipo.JPG'
-		bmp1 = wx.Image(logotipo, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
-		self.bitmap1 = wx.StaticBitmap(header, -1, bmp1, (30,5))
 
-		titulo = wx.StaticText(header, wx.ID_ANY, "Efenergy", style=wx.ALIGN_CENTER, pos=(150,25))
+	def Elementos(self):
+
+		# --------------------------- / -----------------------------------
+
+		header = wx.Panel(self, -1, size=size2, pos=(0,0))
+		header.SetBackgroundColour(gris1)
+		
+		bmp1 = wx.Image(logotipo1, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
+		self.bitmap1 = wx.StaticBitmap(header, -1, bmp1, (30,20))
+
+		titulo = wx.StaticText(header, wx.ID_ANY, texto_header, style=wx.ALIGN_CENTER, pos=(150,25))
 		font = wx.Font(40, wx.ROMAN, wx.ITALIC, wx.NORMAL)
 		titulo.SetFont(font)
 
 		# --------------------------- / -----------------------------------
-		panel= wx.Panel(self,-1,size=(1000,700),pos=(8,110))
 
-		notebook = wx.Notebook(panel, size=(970,500))
-		notebook.SetBackgroundColour('#6E7B99')
+		panel = wx.Panel(self, -1, size=size3, pos=(8,140))
+
+		notebook = wx.Notebook(panel, size=size4)
+		notebook.SetBackgroundColour(gris1)
+
 		self.page_1 = wx.Panel(notebook)
-		self.page_1.SetBackgroundColour('#F5F7F7')
+		self.page_1.SetBackgroundColour(gris2)
 		self.page_2 = wx.Panel(notebook)
-		self.page_2.SetBackgroundColour('#F5F7F7')
+		self.page_2.SetBackgroundColour(gris2)
 		self.page_3 = wx.Panel(notebook)
-		self.page_3.SetBackgroundColour('#F5F7F7')
+		self.page_3.SetBackgroundColour(gris2)
 
-		notebook.AddPage(self.page_1, "Voltaje")
-		notebook.AddPage(self.page_2, "Potencia")
-		notebook.AddPage(self.page_3, "Armónicos")
+		notebook.AddPage(self.page_1, tab1)
+		notebook.AddPage(self.page_2, tab2)
+		notebook.AddPage(self.page_3, tab3)
 		
 		# --------------------------- / -----------------------------------
-		self.panel_informacion_voltage= wx.Panel(self.page_1,-1,size=(880,200),pos=(20,85))
-		self.panel_informacion_voltage.SetBackgroundColour("#FFFFFF")
 
-		self.panel_informacion_potencia= wx.Panel(self.page_2,-1,size=(880,200),pos=(20,85))
-		self.panel_informacion_potencia.SetBackgroundColour("#FFFFFF")
+		self.panel_informacion_voltage= wx.Panel(self.page_1, -1, size=size5, pos=(20,85))
+		self.panel_informacion_voltage.SetBackgroundColour(blanco)
 
-		self.panel_informacion_armonico= wx.Panel(self.page_3,-1,size=(880,200),pos=(20,85))
-		self.panel_informacion_armonico.SetBackgroundColour("#FFFFFF")
+		self.panel_informacion_potencia= wx.Panel(self.page_2, -1, size=size5, pos=(20,85))
+		self.panel_informacion_potencia.SetBackgroundColour(blanco)
+
+		self.panel_informacion_armonico= wx.Panel(self.page_3, -1, size=size5, pos=(20,85))
+		self.panel_informacion_armonico.SetBackgroundColour(blanco)
 
 		# --------------------------- / -----------------------------------
 		
-		self.componentesComunes(self.page_1,self.panel_informacion_voltage,"VOLTAJE ",1,4)
-		self.componentesComunes(self.page_2,self.panel_informacion_potencia,"POTENCIA ",2,5)
-		self.componentesComunes(self.page_3,self.panel_informacion_armonico,"ARMÓNICOS ",3,6)
+		self.componentesComunes(self.page_1, self.panel_informacion_voltage, tab1.upper(), 1, 4)
+		self.componentesComunes(self.page_2, self.panel_informacion_potencia, tab2.upper(), 2, 5)
+		self.componentesComunes(self.page_3, self.panel_informacion_armonico, tab3.upper(), 3, 6)
 
-		btn_analizar_voltaje = wx.Button(self.page_1, 4, u"Analizar voltaje", size=(200,30), pos=(700,400))
+		btn_analizar_voltaje = wx.Button(self.page_1, 4, u"Analizar voltaje", size=size6, pos=(700,400))
 		btn_analizar_voltaje.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
 
-		btn_analizar_factor_potencia = wx.Button(self.page_2, 5, u"Analizar factor de potencia", size=(300,30), pos=(295,400))
+		btn_analizar_factor_potencia = wx.Button(self.page_2, 5, u"Analizar factor de potencia", size=size7, pos=(295,400))
 		btn_analizar_factor_potencia.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
 
-		btn_analizar_potencia_reactiva = wx.Button(self.page_2, 6, u"Analizar potencia reactiva", size=(300,30), pos=(600,400))
+		btn_analizar_potencia_reactiva = wx.Button(self.page_2, 6, u"Analizar potencia reactiva", size=size7, pos=(600,400))
 		btn_analizar_potencia_reactiva.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
 
-		btn_analizar_armonicos_tension = wx.Button(self.page_3, 7, u"Analizar armónicos de tensión", size=(300,30), pos=(295,400))
+		btn_analizar_armonicos_tension = wx.Button(self.page_3, 7, u"Analizar armónicos de tensión", size=size7, pos=(295,400))
 		btn_analizar_armonicos_tension.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
 
-		btn_analizar_armonicos_corriente = wx.Button(self.page_3, 8, u"Analizar armónicos de corrente", size=(300,30), pos=(600,400))
+		btn_analizar_armonicos_corriente = wx.Button(self.page_3, 8, u"Analizar armónicos de corrente", size=size7, pos=(600,400))
 		btn_analizar_armonicos_corriente.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
 
-		btn_pdf = wx.BitmapButton(self.panel_informacion_voltage, 9, wx.Bitmap( u"imagenes/pdf5.png",wx.BITMAP_TYPE_ANY),(800,10),wx.DefaultSize,wx.NO_BORDER)	
-		btn_pdf.SetBitmapCurrent( wx.Bitmap( u"imagenes/pdf4.png",wx.BITMAP_TYPE_ANY))
+		btn_pdf = wx.BitmapButton(self.panel_informacion_voltage, 9, wx.Bitmap( u"imagenes/pdf5.png", wx.BITMAP_TYPE_ANY), (800,10), wx.DefaultSize, wx.NO_BORDER)	
+		btn_pdf.SetBitmapCurrent( wx.Bitmap(u"imagenes/pdf4.png", wx.BITMAP_TYPE_ANY))
 		btn_pdf.SetBackgroundColour('#FFFFFF')
 		btn_pdf.Bind(wx.EVT_BUTTON, self.abrirPDF)
 
-		btn_pdf = wx.BitmapButton(self.panel_informacion_potencia, 10, wx.Bitmap( u"imagenes/pdf5.png",wx.BITMAP_TYPE_ANY),(800,10),wx.DefaultSize,wx.NO_BORDER)	
-		btn_pdf.SetBitmapCurrent( wx.Bitmap( u"imagenes/pdf4.png",wx.BITMAP_TYPE_ANY))
+		btn_pdf = wx.BitmapButton(self.panel_informacion_potencia, 10, wx.Bitmap( u"imagenes/pdf5.png", wx.BITMAP_TYPE_ANY), (800,10), wx.DefaultSize, wx.NO_BORDER)	
+		btn_pdf.SetBitmapCurrent( wx.Bitmap(u"imagenes/pdf4.png", wx.BITMAP_TYPE_ANY))
 		btn_pdf.SetBackgroundColour('#FFFFFF')
 		btn_pdf.Bind(wx.EVT_BUTTON, self.abrirPDF)
 
-		btn_pdf = wx.BitmapButton(self.panel_informacion_armonico, 11, wx.Bitmap( u"imagenes/pdf5.png",wx.BITMAP_TYPE_ANY),(800,10),wx.DefaultSize,wx.NO_BORDER)	
-		btn_pdf.SetBitmapCurrent( wx.Bitmap( u"imagenes/pdf4.png",wx.BITMAP_TYPE_ANY))
+		btn_pdf = wx.BitmapButton(self.panel_informacion_armonico, 11, wx.Bitmap( u"imagenes/pdf5.png", wx.BITMAP_TYPE_ANY), (800,10), wx.DefaultSize, wx.NO_BORDER)	
+		btn_pdf.SetBitmapCurrent( wx.Bitmap(u"imagenes/pdf4.png", wx.BITMAP_TYPE_ANY))
 		btn_pdf.SetBackgroundColour('#FFFFFF')
 		btn_pdf.Bind(wx.EVT_BUTTON, self.abrirPDF)
 	
 		# --------------------------- / -----------------------------------
+
 		menubar = wx.MenuBar(0)
 		menu = wx.Menu()
-		menuItem3 = wx.MenuItem(menu, wx.ID_ANY, u"Salir\tCTRL+Q",u"Salir de Efenergy",  wx.ITEM_NORMAL )
+		menuItem3 = wx.MenuItem(menu, wx.ID_ANY, u"Salir\tCTRL+Q",u"Salir de Efenergy", wx.ITEM_NORMAL )
 		menuItem3.SetBitmap(wx.Bitmap(u"imagenes/cerrar.png", wx.BITMAP_TYPE_ANY ))
 		self.Bind(wx.EVT_MENU, self.salir, menuItem3)
 		menu.Append(menuItem3)
@@ -125,6 +178,7 @@ class Aplicacion(wx.Frame):
 		menubar.Append(menu2, u"Ayuda" ) 
 
 		self.SetMenuBar(menubar)
+
 		# ---------------------------/--------------------------------------------
 
 	def componentesComunes(self,ubicacion,panel,nombre,identificador_btn1,identificador_btn2):
