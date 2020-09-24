@@ -4,7 +4,9 @@ import ctypes
 from inicio import Aplicacion
 
 class Menu:
+
 	def main(self, argv=None):
+
 		shell32 = ctypes.windll.shell32
 		app = wx.App()
 #		if argv is None and shell32.IsUserAnAdmin():
@@ -19,5 +21,6 @@ class Menu:
 #			box.Destroy()
 
 if __name__ == '__main__':
+
 	menu = Menu()
 	menu.main()

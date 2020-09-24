@@ -182,20 +182,16 @@ class Aplicacion(wx.Frame):
 
 		menubar = wx.MenuBar(0)
 		menu = wx.Menu()
-		menuItem3 = wx.MenuItem(menu, wx.ID_ANY, u"Salir\tCTRL+Q",u"Salir de Efenergy", wx.ITEM_NORMAL )
-		menuItem3.SetBitmap(wx.Bitmap(u"imagenes/cerrar.png", wx.BITMAP_TYPE_ANY ))
-		self.Bind(wx.EVT_MENU, self.salir, menuItem3)
-		menu.Append(menuItem3)
-		menu.AppendSeparator()
 
-		menu2 = wx.Menu()
-		menu2Item = wx.MenuItem(menu, wx.ID_ANY, u"About...\tF1", u"Acerca de Efenergy", wx.ITEM_NORMAL )
-		menu2Item.SetBitmap(wx.Bitmap(u"imagenes/acerca_de.png", wx.BITMAP_TYPE_ANY ))
-		self.Bind(wx.EVT_MENU, self.informacion, menu2Item)
-		menu2.Append(menu2Item)
+		menuItem2 = wx.MenuItem(menu, wx.ID_ANY, texto_opcion2, tip_opcion2, wx.ITEM_NORMAL )
+		self.Bind(wx.EVT_MENU, self.informacion, menuItem2)
+		menu.Append(menuItem2)
 
-		menubar.Append(menu, u"Archivo" )
-		menubar.Append(menu2, u"Ayuda" ) 
+		menuItem1 = wx.MenuItem(menu, wx.ID_ANY, texto_opcion1, tip_opcion1, wx.ITEM_NORMAL)
+		self.Bind(wx.EVT_MENU, self.salir, menuItem1)
+		menu.Append(menuItem1)
+
+		menubar.Append(menu, texto_opcion6 )
 
 		self.SetMenuBar(menubar)
 
