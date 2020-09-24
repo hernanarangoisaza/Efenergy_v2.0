@@ -47,13 +47,13 @@ size7 = wx.Size(300, 30) # Botones inferiores para acciones
 # --------------------------- / -----------------------------------
 
 logotipo1 = "imagenes/logo_2020.png"
+logotipo2 = "imagenes/logo_texto_2020.png"
 ruta1 = "archivo\informacion.txt"
 titulo_ventana = "Efenergy v2.0"
 texto_header = "Efenergy"
 tab1 = "Voltaje"
 tab2 = "Potencia"
 tab3 = "Armónicos"
-
 btn1 = "Analizar voltaje"
 btn2 = "Analizar factor de potencia"
 btn3 = "Analizar potencia reactiva"
@@ -61,12 +61,18 @@ btn4 = "Analizar armónicos de tensión"
 btn5 = "Analizar armónicos de corriente"
 icono1 = "imagenes/icono_pdf.png"
 
+texto_opcion1 = "Salir\tCTRL+Q"
+tip_opcion1 = "Salir de Efenergy"
 
+texto_opcion2 = "Acerca de...\tF1"
+tip_opcion2 = "Acerca de Efenergy"
 
+texto_opcion3 = "Cerrar ventana"
+texto_opcion4 = "Archivo"
+texto_opcion5 = "Ayuda"
+texto_opcion6 = "Opciones"
 
-
-
-
+# --------------------------- / -----------------------------------
 
 class Aplicacion(wx.Frame):
 		
@@ -100,12 +106,12 @@ class Aplicacion(wx.Frame):
 		header = wx.Panel(self, -1, size=size2, pos=(0,0))
 		header.SetBackgroundColour(gris1)
 		
-		bmp1 = wx.Image(logotipo1, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
+		bmp1 = wx.Image(logotipo2, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(header, -1, bmp1, (30,20))
 
-		titulo = wx.StaticText(header, wx.ID_ANY, texto_header, style=wx.ALIGN_CENTER, pos=(150,25))
-		font = wx.Font(50, wx.DEFAULT, wx.ITALIC, wx.NORMAL)
-		titulo.SetFont(font)
+		#titulo = wx.StaticText(header, wx.ID_ANY, texto_header, style=wx.ALIGN_CENTER, pos=(150,25))
+		#font = wx.Font(50, wx.DEFAULT, wx.ITALIC, wx.NORMAL)
+		#titulo.SetFont(font)
 
 		# --------------------------- / -----------------------------------
 
