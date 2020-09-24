@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import wx
 import ctypes
 from inicio import Aplicacion

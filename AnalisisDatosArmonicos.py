@@ -270,7 +270,6 @@ class AnalisisDatosArmonicos(wx.Frame):
 		armonico9 = df[('Armónicos Tensión9 %sN Med')%fase[identificador - 1]].values
 		armonico10 = df[('Armónicos Tensión10 %sN Med')%fase[identificador - 1]].values
 		armonico11 = df[('Armónicos Tensión11 %sN Med')%fase[identificador - 1]].values
- 
 
 		ls_hora = df.Hora.str.slice(0,2)
 		ls_minuto = df.Hora.str.slice(3,5)
