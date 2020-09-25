@@ -71,4 +71,21 @@ texto_opcion4 = "Archivo"
 texto_opcion5 = "Ayuda"
 texto_opcion6 = "Opciones"
 
+descripcion = """
+Efenergy es un programa diseñado para funcionar bajo Windows el 
+cual usted podrá utilizar en el análisis de la información y 
+presentación oportuna de informes para el control de la eficiencia 
+energética. 
+
+Diversos estándares sobre "Calidad de Energía Eléctrica" convergen 
+en la necesidad de realizar mediciones con la ayuda de herramientas 
+TRUE RMS y analizar los  datos  recolectados mediante  herramientas 
+digitales con finalidad específica como Efenergy."""
+
+integrantes_semillero = ["\n\nSemillero Energías - TEINNOVA", "\nViviana Ramírez Ramírez", "\nAndrés Tafur Piedrahita", "\nYuely Adriana Arce Arias"]
+
+copy_right = "(C) 2020\nCentro de Diseño e Innovación Tecnológica Industrial\nSENA - CDITI\nDosquebradas (Risaralda)"
+
+desarrolladores = "\n\nHernán Arango Isaza\nWendy Vanessa Mejía Agudelo\nDiego Alexander Sepúlveda García"
+
 # --------------------------- / -----------------------------------

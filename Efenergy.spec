@@ -2,7 +2,6 @@
 
 block_cipher = None
 
-
 a = Analysis(['Efenergy.py'],
              pathex=['C:\\Users\\diego\\OneDrive\\Documentos\\AplicacionEnergetica'],
              binaries=[],
@@ -15,8 +14,10 @@ a = Analysis(['Efenergy.py'],
              win_private_assemblies=False,
              cipher=block_cipher,
              noarchive=False)
-pyz = PYZ(a.pure, a.zipped_data,
-             cipher=block_cipher)
+pyz = PYZ(a.pure, 
+          a.zipped_data,
+          cipher=block_cipher)
+
 exe = EXE(pyz,
           a.scripts,
           a.binaries,
@@ -29,4 +30,4 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
-          console=False , icon='Images\\logo.ico')
+          console=False , icon='Imagenes\\logo.ico')
