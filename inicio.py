@@ -157,7 +157,7 @@ class Aplicacion(wx.Frame):
 
 		# ---------------------------/--------------------------------------------
 
-		font = wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL)
+		font = wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.NORMAL)
 
 		# ZONA INTERNA DEL ÁREA PARA INFORMACIÓN DE LA NORMA
 
@@ -209,18 +209,32 @@ class Aplicacion(wx.Frame):
 
 		# ---------------------------/--------------------------------------------
 		
-	def informacion(self,event):
+	def informacion(self, event):
+
+		# ---------------------------/--------------------------------------------
+
+		# VENTANA DE INFORMACIÓN / ACERCA DE
 
 		from VentanaInformacion import VentanaInformacion
 
 		informacion_semillero = VentanaInformacion()
 		informacion_semillero.informacion()
 
-	def salir(self,event):
+		# ---------------------------/--------------------------------------------
+
+	def salir(self, event):
+
+		# ---------------------------/--------------------------------------------
+
+		# SALIR DEL SISTEMA
 
 		self.Destroy()
 
+		# ---------------------------/--------------------------------------------
+
 	def on_editar_informacion(self, event):
+
+		# ---------------------------/--------------------------------------------
 
 		try:
 
@@ -229,12 +243,17 @@ class Aplicacion(wx.Frame):
 
 		except ValueError:
 
-			print("Error Validando Clave")
+			print("Clave incorrecta. No puede editar la información")
 	
+		# ---------------------------/--------------------------------------------
+
 	def validacion_clave(self, identificador):
 		
+		# ---------------------------/--------------------------------------------
+
 		clave = "1234"
-		dlg = wx.PasswordEntryDialog(self.frame, 'Ingrese Clave de Validación','Validar Clave',style=wx.TextEntryDialogStyle)
+
+		dlg = wx.PasswordEntryDialog(self.frame, 'Digite su clave', 'Clave para edición', style=wx.TextEntryDialogStyle)
 		
 		if dlg.ShowModal() == wx.ID_OK:
 
@@ -262,15 +281,24 @@ class Aplicacion(wx.Frame):
 
 			else:
 
-				self.msgError("Clave Incorrecta")
+				self.msgError("Clave incorrecta. Intente de nuevo")
 				self.validacion_clave(identificador)
+
+		# ---------------------------/--------------------------------------------
 
 	def cargar_informacion(self):
 
+		# ---------------------------/--------------------------------------------
+
 		informacion = self.archivo_txt.leer_archivo()
+
 		return informacion
 
+		# ---------------------------/--------------------------------------------
+
 	def abrirPDF(self,event):
+
+		# ---------------------------/--------------------------------------------
 
 		import webbrowser as wb
 
@@ -288,8 +316,11 @@ class Aplicacion(wx.Frame):
 
 			wb.open_new(u'archivo\\NormaArmónico.pdf')
 
+		# ---------------------------/--------------------------------------------
 
 	def OnSeleccionArchivo(self, event):
+
+		# ---------------------------/--------------------------------------------
 
 		self.rango_mayor = float(127 + (127 * (10 / 100)))
 		self.rango_menor = float(127 - (127 * (10 / 100))) 
@@ -338,7 +369,11 @@ class Aplicacion(wx.Frame):
 			self.url_armonico = self.ultima_url_armonico
 			print("No se selecciono el archivo")
 
+		# ---------------------------/--------------------------------------------
+
 	def tituloArchivo(self,url_archivo,ubicacion):
+
+		# ---------------------------/--------------------------------------------
 
 		ruta_archivo = url_archivo.replace("\\", "&")
 		separar_ruta_archivo = ruta_archivo.split('&')
@@ -348,7 +383,11 @@ class Aplicacion(wx.Frame):
 		font1 = wx.Font(11, wx.ROMAN, wx.NORMAL, wx.NORMAL)
 		nombre_archivo.SetFont(font1)
 
+		# ---------------------------/--------------------------------------------
+
 	def OnViewTableVoltageMayor(self, event):
+
+		# ---------------------------/--------------------------------------------
 
 		identificador = event.GetId()
 		
@@ -414,7 +453,11 @@ class Aplicacion(wx.Frame):
 
 		app.MainLoop()
 	
+		# ---------------------------/--------------------------------------------
+
 	def OnRunButton(self):
+
+		# ---------------------------/--------------------------------------------
 
 		self.progressDialog = wx.ProgressDialog(
 							"Cargando Archivo...",
@@ -426,12 +469,20 @@ class Aplicacion(wx.Frame):
 		self.progressDialog.ShowModal()
 		self.progressDialog.Layout()
 
+		# ---------------------------/--------------------------------------------
+
 	def worker(self, callback):
+
+		# ---------------------------/--------------------------------------------
 
 		thread = WorkerThread(callback)
 		thread.start()
 
+		# ---------------------------/--------------------------------------------
+
 	def threadCallback(self, info):
+
+		# ---------------------------/--------------------------------------------
 
 		if info == -1:
 
@@ -441,13 +492,21 @@ class Aplicacion(wx.Frame):
 
 			self.progressDialog.Update(info)
 			
+		# ---------------------------/--------------------------------------------
+
 	def msgError(self, mensaje):
+
+		# ---------------------------/--------------------------------------------
 
 		box = wx.MessageDialog(None, mensaje, 'ERROR',style=wx.ICON_ERROR | wx.OK)
 		answer = box.ShowModal()
 		box.Destroy()
 
+		# ---------------------------/--------------------------------------------
+
 	def footer(self):
+
+		# ---------------------------/--------------------------------------------
 
 		barra_estado = self.CreateStatusBar(1) # crear pie de pagina
 		barra_estado.SetStatusWidths([-1])
@@ -457,3 +516,5 @@ class Aplicacion(wx.Frame):
 		for i in range(len(barra_estado_fields)):
 
 			barra_estado.SetStatusText(barra_estado_fields[i], i)
+
+		# ---------------------------/--------------------------------------------
