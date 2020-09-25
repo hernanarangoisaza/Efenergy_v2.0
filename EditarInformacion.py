@@ -219,3 +219,4 @@ class EditarInformacion(wx.Frame):
 		return answer
 
 		# ---------------------------/--------------------------------------------
+
