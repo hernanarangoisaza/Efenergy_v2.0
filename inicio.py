@@ -117,19 +117,19 @@ class Aplicacion(wx.Frame):
 
 		# BOTÓN PDF PARA VER LA NORMA
 		
-		btn_pdf = wx.BitmapButton(self.panel_informacion_voltage, 9, wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY), (800,10), wx.DefaultSize, wx.NO_BORDER)	
-		btn_pdf.SetBitmapCurrent( wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY))
+		btn_pdf = wx.BitmapButton(self.panel_informacion_voltage, 9, wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY), (800,10), (32,32), wx.NO_BORDER)	
 		btn_pdf.SetBackgroundColour(blanco)
+		btn_pdf.SetToolTip(wx.ToolTip(texto_pdf))
 		btn_pdf.Bind(wx.EVT_BUTTON, self.abrirPDF)
 
 		btn_pdf = wx.BitmapButton(self.panel_informacion_potencia, 10, wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY), (800,10), wx.DefaultSize, wx.NO_BORDER)	
-		btn_pdf.SetBitmapCurrent( wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY))
 		btn_pdf.SetBackgroundColour(blanco)
+		btn_pdf.SetToolTip(wx.ToolTip(texto_pdf))
 		btn_pdf.Bind(wx.EVT_BUTTON, self.abrirPDF)
 
 		btn_pdf = wx.BitmapButton(self.panel_informacion_armonico, 11, wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY), (800,10), wx.DefaultSize, wx.NO_BORDER)	
-		btn_pdf.SetBitmapCurrent( wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY))
 		btn_pdf.SetBackgroundColour(blanco)
+		btn_pdf.SetToolTip(wx.ToolTip(texto_pdf))
 		btn_pdf.Bind(wx.EVT_BUTTON, self.abrirPDF)
 
 		# --------------------------- / -----------------------------------
@@ -181,21 +181,22 @@ class Aplicacion(wx.Frame):
 
 		button_editar_informacion = wx.BitmapButton(panel, identificador_btn1, wx.Bitmap(icono2), pos=(835,10), size=wx.DefaultSize, style=wx.BU_AUTODRAW|wx.NO_BORDER)
 		button_editar_informacion.SetBackgroundColour(blanco)
+		button_editar_informacion.SetToolTip(wx.ToolTip(texto_editar))
 		button_editar_informacion.Bind(wx.EVT_BUTTON, self.on_editar_informacion)
 
 		# FRANJAS PARCIALES QUE SE DIBUJAN EN LA ZONA DE INFORMACIÓN DE LA NORMA
 
 		decoracion_derecha1_panel_informacion= wx.Panel(panel, -1, size=(200,5), pos=(0,0))
-		decoracion_derecha1_panel_informacion.SetBackgroundColour(naranja)
+		decoracion_derecha1_panel_informacion.SetBackgroundColour(lila)
 
 		decoracion_derecha2_panel_informacion= wx.Panel(panel, -1, size=(5,100), pos=(0,0))
-		decoracion_derecha2_panel_informacion.SetBackgroundColour(naranja)
+		decoracion_derecha2_panel_informacion.SetBackgroundColour(lila)
 		
 		decoracion_izquierda1_panel_informacion= wx.Panel(panel, -1, size=(200,5), pos=(680,195))
-		decoracion_izquierda1_panel_informacion.SetBackgroundColour(naranja)
+		decoracion_izquierda1_panel_informacion.SetBackgroundColour(azul)
 
 		decoracion_izquierda2_panel_informacion= wx.Panel(panel, -1, size=(5,100), pos=(875,100))
-		decoracion_izquierda2_panel_informacion.SetBackgroundColour(naranja)
+		decoracion_izquierda2_panel_informacion.SetBackgroundColour(azul)
 
 		btn_seleccionar_archivo = wx.Button(ubicacion, identificador_btn1, btn6, size=size6, pos=(20,10))
 		btn_seleccionar_archivo.Bind(wx.EVT_BUTTON, self.OnSeleccionArchivo)
@@ -243,7 +244,7 @@ class Aplicacion(wx.Frame):
 
 		except ValueError:
 
-			print("Clave incorrecta. No puede editar la información")
+			print(texto_clave_incorrecta)
 	
 		# ---------------------------/--------------------------------------------
 
@@ -251,9 +252,7 @@ class Aplicacion(wx.Frame):
 		
 		# ---------------------------/--------------------------------------------
 
-		clave = "1234"
-
-		dlg = wx.PasswordEntryDialog(self.frame, 'Digite su clave', 'Clave para edición', style=wx.TextEntryDialogStyle)
+		dlg = wx.PasswordEntryDialog(self.frame, texto_digitar_clave, titulo_editar_clave, style=wx.TextEntryDialogStyle)
 		
 		if dlg.ShowModal() == wx.ID_OK:
 
@@ -265,15 +264,15 @@ class Aplicacion(wx.Frame):
 
 				if identificador == 1:
 
-					frame = EditarInformacion(-1, 'Editar Información de Voltaje', self.cargar_informacion()[0], self.archivo_txt, self, identificador)
+					frame = EditarInformacion(-1, texto_editar_informacion_voltaje, self.cargar_informacion()[0], self.archivo_txt, self, identificador)
 
 				if identificador == 2:
 
-					frame = EditarInformacion(-1, 'Editar Información de Potencia', self.cargar_informacion()[1], self.archivo_txt, self, identificador)
+					frame = EditarInformacion(-1, texto_editar_informacion_potencia, self.cargar_informacion()[1], self.archivo_txt, self, identificador)
 
 				if identificador == 3:
 
-					frame = EditarInformacion(-1, 'Editar Información de Armónicos', self.cargar_informacion()[2], self.archivo_txt, self, identificador)
+					frame = EditarInformacion(-1, texto_editar_informacion_armonicos, self.cargar_informacion()[2], self.archivo_txt, self, identificador)
 				
 				frame.Centre()
 				frame.Show()
@@ -281,7 +280,7 @@ class Aplicacion(wx.Frame):
 
 			else:
 
-				self.msgError("Clave incorrecta. Intente de nuevo")
+				self.msgError(texto_clave_error)
 				self.validacion_clave(identificador)
 
 		# ---------------------------/--------------------------------------------
@@ -306,15 +305,15 @@ class Aplicacion(wx.Frame):
 
 		if identificador == 9:
 
-			wb.open_new(u'archivo\\NormaVoltaje.pdf')
+			wb.open_new(url_voltaje_pdf)
 
 		elif identificador == 10:
 
-			wb.open_new(u'archivo\\NormaPotencia.pdf')
+			wb.open_new(url_potencia_pdf)
 
 		elif identificador == 11:
 
-			wb.open_new(u'archivo\\NormaArmónico.pdf')
+			wb.open_new(url_armonicos_pdf)
 
 		# ---------------------------/--------------------------------------------
 
@@ -325,9 +324,9 @@ class Aplicacion(wx.Frame):
 		self.rango_mayor = float(127 + (127 * (10 / 100)))
 		self.rango_menor = float(127 - (127 * (10 / 100))) 
 		
-		extension = ["*.xlsx","*.xls"]
 		
-		self.url_archivo = eg.fileopenbox(msg="Abrir archivo de Excel", title="Control", default=extension[0], filetypes=extension)
+		
+		self.url_archivo = eg.fileopenbox(msg=texto_abrir_xls, title=titulo_abrir_xls, default=extension_xls[0], filetypes=extension_xls)
 
 		if self.url_archivo == None:
 
@@ -367,7 +366,7 @@ class Aplicacion(wx.Frame):
 			self.url_voltaje = self.ultima_url_voltaje
 			self.url_potencia = self.ultima_url_potencia
 			self.url_armonico = self.ultima_url_armonico
-			print("No se selecciono el archivo")
+			print(seleccion_archivo_xls_error)
 
 		# ---------------------------/--------------------------------------------
 
@@ -395,61 +394,61 @@ class Aplicacion(wx.Frame):
 
 		if identificador == 4:
 			if self.url_voltaje != None:
-				frame = AnalisisDatosVoltaje(-1, 'Analizar Voltaje', self.archivo_voltaje)
+				frame = AnalisisDatosVoltaje(-1, texto_analizar_voltaje, self.archivo_voltaje)
 				frame.Centre()
 				frame.Show()
 
 			else:
 
-				self.msgError("ERROR Seleccionar archivo")
+				self.msgError(texto_seleccionar_archivo_error)
 
 		if identificador == 5:
 
 			if self.url_potencia != None:
 
-				frame = AnalisisDatosPotencia(-1, 'Analizar Factor de Potencia', self.archivo_potencia)
+				frame = AnalisisDatosPotencia(-1, texto_analizar_factor_potencia, self.archivo_potencia)
 				frame.Centre()
 				frame.Show()
 
 			else:
 
-				self.msgError("ERROR Seleccionar archivo")
+				self.msgError(texto_seleccionar_archivo_error)
 
 		if identificador == 6:
 
 			if self.url_potencia != None:
 
-				frame = AnalisisDatosPotenciaReactiva(-1, 'Analizar Potencia reactiva', self.archivo_potencia)
+				frame = AnalisisDatosPotenciaReactiva(-1, texto_analizar_potencia_reactiva, self.archivo_potencia)
 				frame.Centre()
 				frame.Show()
 
 			else:
 
-				self.msgError("ERROR Seleccionar archivo")
+				self.msgError(texto_seleccionar_archivo_error)
 
 		if identificador == 7:
 
 			if self.url_armonico != None:
 
-				frame = AnalisisDatosArmonicos(-1, 'Analisis armónicos de tensión',self.archivo_armonico)
+				frame = AnalisisDatosArmonicos(-1, texto_analisis_armonicos_tension,self.archivo_armonico)
 				frame.Centre()
 				frame.Show()
 
 			else:
 
-				self.msgError("ERROR Seleccionar archivo")
+				self.msgError(texto_seleccionar_archivo_error)
 
 		if identificador == 8:
 
 			if self.url_armonico != None:
 
-				frame = AnalisisDatosArmonicosCorriente(-1, 'Analizar armónicos de corriente', self.archivo_armonico)	
+				frame = AnalisisDatosArmonicosCorriente(-1, texto_analisis_armonicos_corriente, self.archivo_armonico)	
 				frame.Centre()
 				frame.Show()
 
 			else:
 
-				self.msgError("ERROR Seleccionar archivo")
+				self.msgError(texto_seleccionar_archivo_error)
 
 		app.MainLoop()
 	
@@ -460,8 +459,8 @@ class Aplicacion(wx.Frame):
 		# ---------------------------/--------------------------------------------
 
 		self.progressDialog = wx.ProgressDialog(
-							"Cargando Archivo...",
-							"Cargando Archivo...",
+							texto_cargando_archivo, 
+							texto_cargando_archivo,
 							maximum=WorkerThread.MAX_COUNT, parent=self,
 							style=wx.PD_CAN_ABORT | wx.PD_ELAPSED_TIME | wx.PD_REMAINING_TIME)
 		
@@ -498,7 +497,7 @@ class Aplicacion(wx.Frame):
 
 		# ---------------------------/--------------------------------------------
 
-		box = wx.MessageDialog(None, mensaje, 'ERROR',style=wx.ICON_ERROR | wx.OK)
+		box = wx.MessageDialog(None, mensaje, titulo_error, style=wx.ICON_ERROR|wx.OK)
 		answer = box.ShowModal()
 		box.Destroy()
 
@@ -511,8 +510,6 @@ class Aplicacion(wx.Frame):
 		barra_estado = self.CreateStatusBar(1) # crear pie de pagina
 		barra_estado.SetStatusWidths([-1])
 	
-		barra_estado_fields = ["Todos los derechos reservados."]
-
 		for i in range(len(barra_estado_fields)):
 
 			barra_estado.SetStatusText(barra_estado_fields[i], i)

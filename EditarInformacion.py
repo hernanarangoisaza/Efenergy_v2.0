@@ -119,9 +119,9 @@ class EditarInformacion(wx.Frame):
 
 		try:
 
-			extension = ["*.pdf"]
+			
 			a = None 
-			self.archivo = eg.fileopenbox(msg=texto_seleccionar_pdf, title=titulo_norma, default=extension[0], filetypes=extension)
+			self.archivo = eg.fileopenbox(msg=texto_seleccionar_pdf, title=titulo_norma, default=extension_pdf[0], filetypes=extension_pdf)
 			
 			if self.archivo != None:
 

@@ -12,6 +12,10 @@ gris2 = wx.Colour(242, 242, 242)    # F2F2F2
 blanco = wx.Colour(255, 255, 255)   # FFFFFF
 negro = wx.Colour(0, 0, 0)          # 000000
 naranja = wx.Colour(248, 175, 38)   # F8AF26
+verde = wx.Colour(93, 165, 92)      #5DA55C
+azul = wx.Colour(66, 142, 174)      #428EAE
+lila = wx.Colour(167, 94, 143)      #A75E8F
+morado = wx.Colour(113, 87, 154)    #71579A
 
 # --------------------------- / -----------------------------------
 # ESTILOS DEL FRAME PRINCIPAL
@@ -43,6 +47,8 @@ size12 = wx.Size(600, 200) #
 # MISCELÁNEAS
 # --------------------------- / -----------------------------------
 
+clave = "1234" # Clave de edición de la norma
+
 logotipo1 = "imagenes/logo_2020.png"
 logotipo2 = "imagenes/logo_texto_2020.png"
 
@@ -63,10 +69,10 @@ btn2 = "Analizar factor de potencia"
 btn3 = "Analizar potencia reactiva"
 btn4 = "Analizar armónicos de tensión"
 btn5 = "Analizar armónicos de corriente"
-btn6 = "Seleccionar plantilla de MS-Excel (xls, xlsx)"
+btn6 = "Seleccionar plantilla de origen de datos"
 
-icono1 = "imagenes/icono_pdf.png"
-icono2 = "imagenes/icono_editar.png"
+icono1 = "imagenes/icono_pdf.ico"
+icono2 = "imagenes/icono_editar.ico"
 icono3 = "imagenes/icono_xls.png"
 icono_aceptar = "imagenes/icono_aceptar.png"
 icono_cancelar = "imagenes/icono_cancelar.png"
@@ -81,6 +87,9 @@ texto_opcion3 = "Cerrar ventana"
 texto_opcion4 = "Archivo"
 texto_opcion5 = "Ayuda"
 texto_opcion6 = "Opciones"
+
+texto_pdf = "Ver pdf de la norma"
+texto_editar = "Editar texto de la norma"
 
 descripcion = """
 Efenergy es un programa diseñado para funcionar bajo Windows el 
@@ -113,5 +122,35 @@ texto_cancelar_operacion = "Desea cancelar esta operación?"
 titulo_informacion = "Información"
 titulo_error = "Error"
 titulo_confirmacion = "Confirmación"
+
+barra_estado_fields = ["   SENA - CDITI - TEINNOVA - Semillero de Energías. Todos los derechos reservados. (C) 2020"]
+
+texto_clave_incorrecta = "Clave incorrecta. No puede editar la información"
+texto_clave_error = "Clave incorrecta. Intente de nuevo"
+texto_editar_informacion_voltaje = "Editar Información de Voltaje"
+texto_editar_informacion_potencia = "Editar Información de Potencia"
+texto_editar_informacion_armonicos = "Editar Información de Armónicos"
+texto_digitar_clave = "Digite su clave"
+titulo_editar_clave = "Clave para edición"
+
+url_voltaje_pdf = "archivo\\NormaVoltaje.pdf"
+url_potencia_pdf = "archivo\\NormaPotencia.pdf"
+url_armonicos_pdf = "archivo\\NormaArmónico.pdf"
+
+extension_xls = ["*.xlsx","*.xls"]
+extension_pdf = ["*.pdf"]
+texto_abrir_xls = "Abrir archivo de Excel"
+titulo_abrir_xls = "Abrir plantilla"
+
+seleccion_archivo_xls_error = "No se seleccionó el archivo"
+
+texto_analizar_voltaje = "Analizar Voltaje"
+texto_seleccionar_archivo_error = "Error al seleccionar archivo"
+texto_analizar_factor_potencia = "Analizar Factor de Potencia"
+texto_analizar_potencia_reactiva = "Analizar Potencia reactiva"
+texto_analizar_armonicos_tension = "Analisis armónicos de tensión"
+texto_analizar_armonicos_corriente = "Analizar armónicos de corriente"
+
+texto_cargando_archivo = "Cargando Archivo..."
 
 # --------------------------- / -----------------------------------

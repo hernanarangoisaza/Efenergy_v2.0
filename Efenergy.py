@@ -17,7 +17,7 @@ class Menu:
 		app.MainLoop()
 
 #		else:
-#			box = wx.MessageDialog(None, "Ejecute la Aplicación como Administrador", 'Error',style=wx.ICON_ERROR | wx.OK)
+#			box = wx.MessageDialog(None, "Ejecute la Aplicación como Administrador", 'Error', style=wx.ICON_ERROR|wx.OK)
 #			answer = box.ShowModal()
 #			box.Destroy()
 
