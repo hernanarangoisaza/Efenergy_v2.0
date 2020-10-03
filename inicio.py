@@ -175,7 +175,6 @@ class Aplicacion(wx.Frame):
 
 			self.txt_informacion_armonico = wx.StaticText(panel, -1, self.cargar_informacion()[2], pos=(40,30), size=size8, style=wx.ST_NO_AUTORESIZE)
 			self.txt_informacion_armonico.SetFont(font)
-
 		
 		# BOTÓN DE EDICION PARA INFORMACIÓN DE LA NORMA
 
@@ -324,8 +323,6 @@ class Aplicacion(wx.Frame):
 		self.rango_mayor = float(127 + (127 * (10 / 100)))
 		self.rango_menor = float(127 - (127 * (10 / 100))) 
 		
-		
-		
 		self.url_archivo = eg.fileopenbox(msg=texto_abrir_xls, title=titulo_abrir_xls, default=extension_xls[0], filetypes=extension_xls)
 
 		if self.url_archivo == None:
@@ -344,21 +341,21 @@ class Aplicacion(wx.Frame):
 
 				self.url_voltaje = self.url_archivo
 				self.archivo_voltaje= pd.ExcelFile(self.url_voltaje)
-				self.tituloArchivo(self.url_voltaje,self.page_1)
+				self.tituloArchivo(self.url_voltaje, self.page_1)
 				self.ultima_url_voltaje = self.url_voltaje
 
 			if identificador == 2:
 
 				self.url_potencia = self.url_archivo
 				self.archivo_potencia = pd.ExcelFile(self.url_potencia)
-				self.tituloArchivo(self.url_potencia,self.page_2)
+				self.tituloArchivo(self.url_potencia, self.page_2)
 				self.ultima_url_potencia = self.url_potencia
 
 			if identificador == 3:
 
 				self.url_armonico = self.url_archivo
 				self.archivo_armonico = pd.ExcelFile(self.url_armonico)
-				self.tituloArchivo(self.url_armonico,self.page_3)
+				self.tituloArchivo(self.url_armonico, self.page_3)
 				self.ultima_url_armonico = self.url_armonico
 
 		except:
@@ -378,8 +375,8 @@ class Aplicacion(wx.Frame):
 		separar_ruta_archivo = ruta_archivo.split('&')
 		longitud_ruta_archivo = len(separar_ruta_archivo)
 
-		nombre_archivo = wx.StaticText(ubicacion, wx.ID_ANY, separar_ruta_archivo[longitud_ruta_archivo-1], pos=(260,17))
-		font1 = wx.Font(11, wx.ROMAN, wx.NORMAL, wx.NORMAL)
+		nombre_archivo = wx.StaticText(ubicacion, wx.ID_ANY, 'Archivo: '+separar_ruta_archivo[longitud_ruta_archivo-1], pos=(360,17))
+		font1 = wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.NORMAL)
 		nombre_archivo.SetFont(font1)
 
 		# ---------------------------/--------------------------------------------
@@ -462,7 +459,7 @@ class Aplicacion(wx.Frame):
 							texto_cargando_archivo, 
 							texto_cargando_archivo,
 							maximum=WorkerThread.MAX_COUNT, parent=self,
-							style=wx.PD_CAN_ABORT | wx.PD_ELAPSED_TIME | wx.PD_REMAINING_TIME)
+							style=wx.PD_CAN_ABORT|wx.PD_ELAPSED_TIME|wx.PD_REMAINING_TIME)
 		
 		self.worker(self.threadCallback)
 		self.progressDialog.ShowModal()

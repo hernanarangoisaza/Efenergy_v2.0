@@ -140,7 +140,7 @@ url_armonicos_pdf = "archivo\\NormaArmónico.pdf"
 extension_xls = ["*.xlsx","*.xls"]
 extension_pdf = ["*.pdf"]
 texto_abrir_xls = "Abrir archivo de Excel"
-titulo_abrir_xls = "Abrir plantilla"
+titulo_abrir_xls = "Seleccionar plantilla"
 
 seleccion_archivo_xls_error = "No se seleccionó el archivo"
 
