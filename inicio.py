@@ -28,6 +28,8 @@ class Aplicacion(wx.Frame):
 		self.SetBackgroundColour(gris1)
 		self.SetIcon(wx.Icon(logotipo1))
 
+		self.last_path = None
+
 		self.url_voltaje = None
 		self.url_potencia = None
 		self.url_armonico = None
@@ -322,8 +324,14 @@ class Aplicacion(wx.Frame):
 
 		self.rango_mayor = float(127 + (127 * (10 / 100)))
 		self.rango_menor = float(127 - (127 * (10 / 100))) 
+
+		if self.last_path != None:
+			self.last_path = self.last_path[0:self.last_path.rfind('\\')]
+			self.last_path = self.last_path + '\\' + extension_xls[0]
+		else:
+			self.last_path = extension_xls[0]
 		
-		self.url_archivo = eg.fileopenbox(msg=texto_abrir_xls, title=titulo_abrir_xls, default=extension_xls[0], filetypes=extension_xls)
+		self.url_archivo = eg.fileopenbox(msg=texto_abrir_xls, title=titulo_abrir_xls, default=self.last_path, filetypes=extension_xls)
 
 		if self.url_archivo == None:
 
@@ -337,26 +345,28 @@ class Aplicacion(wx.Frame):
 
 		try:
 
+			self.last_path = self.url_archivo
+
 			if identificador == 1:
 
 				self.url_voltaje = self.url_archivo
 				self.archivo_voltaje= pd.ExcelFile(self.url_voltaje)
 				self.tituloArchivo(self.url_voltaje, self.page_1)
-				self.ultima_url_voltaje = self.url_voltaje
+				self.ultima_url_voltaje = self.url_voltaje[0:self.url_voltaje.rfind('\\')]
 
 			if identificador == 2:
 
 				self.url_potencia = self.url_archivo
 				self.archivo_potencia = pd.ExcelFile(self.url_potencia)
 				self.tituloArchivo(self.url_potencia, self.page_2)
-				self.ultima_url_potencia = self.url_potencia
+				self.ultima_url_potencia = self.url_potencia[0:self.url_potencia.rfind('\\')]
 
 			if identificador == 3:
 
 				self.url_armonico = self.url_archivo
 				self.archivo_armonico = pd.ExcelFile(self.url_armonico)
 				self.tituloArchivo(self.url_armonico, self.page_3)
-				self.ultima_url_armonico = self.url_armonico
+				self.ultima_url_armonico = self.url_armonico[0:self.url_armonico.rfind('\\')]
 
 		except:
 
@@ -367,7 +377,7 @@ class Aplicacion(wx.Frame):
 
 		#-------------------------------------------------------------------------------------------------
 
-	def tituloArchivo(self,url_archivo,ubicacion):
+	def tituloArchivo(self, url_archivo, ubicacion):
 
 		#-------------------------------------------------------------------------------------------------
 

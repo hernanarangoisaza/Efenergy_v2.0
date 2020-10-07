@@ -120,6 +120,7 @@ class EditarInformacion(wx.Frame):
 		try:
 
 			
+
 			a = None 
 			self.archivo = eg.fileopenbox(msg=texto_seleccionar_pdf, title=titulo_norma, default=extension_pdf[0], filetypes=extension_pdf)
 			
