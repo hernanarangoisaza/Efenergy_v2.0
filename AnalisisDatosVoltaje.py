@@ -7,10 +7,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import datetime
 import numpy      
-from menu import Menu 
 import wx.lib.agw.aquabutton as AB    
-from GraficaPotencia import GraficaPotencia
 from matplotlib.widgets import CheckButtons
+
+from menu import Menu 
+from GraficaPotencia import GraficaPotencia
 from NuevoArchivoVoltajeReglas import NuevoArchivoVoltajeReglas
 
 from Definiciones import *

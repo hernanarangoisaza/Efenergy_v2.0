@@ -326,14 +326,26 @@ class Aplicacion(wx.Frame):
 		self.rango_menor = float(127 - (127 * (10 / 100))) 
 
 		if self.last_path != None:
+			
 			self.last_path = self.last_path[0:self.last_path.rfind('\\')]
 			self.last_path = self.last_path + '\\' + extension_xls[0]
+		
 		else:
+			
 			self.last_path = extension_xls[0]
 		
 		self.url_archivo = eg.fileopenbox(msg=texto_abrir_xls, title=titulo_abrir_xls, default=self.last_path, filetypes=extension_xls)
 
 		if self.url_archivo == None:
+
+			if self.last_path.rfind('\\') != -1:
+
+				self.last_path = self.last_path[0:self.last_path.rfind('\\')]
+				self.last_path = self.last_path + '\\' + extension_xls[0]			
+
+			else:
+
+				self.last_path = extension_xls[0]
 
 			pass
 
@@ -341,11 +353,9 @@ class Aplicacion(wx.Frame):
 
 			self.OnRunButton()
 
-		identificador = event.GetId()
-
 		try:
 
-			self.last_path = self.url_archivo
+			identificador = event.GetId()
 
 			if identificador == 1:
 
@@ -373,7 +383,6 @@ class Aplicacion(wx.Frame):
 			self.url_voltaje = self.ultima_url_voltaje
 			self.url_potencia = self.ultima_url_potencia
 			self.url_armonico = self.ultima_url_armonico
-			print(seleccion_archivo_xls_error)
 
 		#-------------------------------------------------------------------------------------------------
 
