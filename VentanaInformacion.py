@@ -9,12 +9,12 @@ class VentanaInformacion():
 
     def informacion(self):
 
-		# --------------------------- / -----------------------------------
+		#-------------------------------------------------------------------------------------------------
 
         info = wx.adv.AboutDialogInfo()
 
-        info.SetName('EFENERGY')
-        info.SetVersion('2.0')
+        info.SetName(nombreApp)
+        info.SetVersion(versionApp)
         info.SetDescription(descripcion)
         info.SetCopyright(copy_right)
         info.AddDeveloper(desarrolladores)
@@ -22,4 +22,4 @@ class VentanaInformacion():
 
         wx.adv.AboutBox(info)
 
-		# --------------------------- / -----------------------------------
+		#-------------------------------------------------------------------------------------------------

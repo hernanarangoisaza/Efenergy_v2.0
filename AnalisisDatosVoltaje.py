@@ -13,6 +13,8 @@ from GraficaPotencia import GraficaPotencia
 from matplotlib.widgets import CheckButtons
 from NuevoArchivoVoltajeReglas import NuevoArchivoVoltajeReglas
 
+from Definiciones import *
+
 class AnalisisDatosVoltaje(wx.Frame):
 
 	def __init__(self, id, title, archivo,):
