@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import wx
-import easygui as eg
+import easygui
 
 from ArchivoInformacion import ArchivoInformacion
 from Definiciones import *
@@ -122,7 +122,7 @@ class EditarInformacion(wx.Frame):
 			
 
 			a = None 
-			self.archivo = eg.fileopenbox(msg=texto_seleccionar_pdf, title=titulo_norma, default=extension_pdf[0], filetypes=extension_pdf)
+			self.archivo = easygui.fileopenbox(msg=texto_seleccionar_pdf, title=titulo_norma, default=extension_pdf[0], filetypes=extension_pdf)
 			
 			if self.archivo != None:
 

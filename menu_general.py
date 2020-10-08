@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import wx
 import easygui as eg
 from VentanaInformacion import VentanaInformacion

@@ -4,7 +4,8 @@
 import wx
 import numpy
 import wx.grid
-import pandas as pd
+import pandas
+
 from AnalisisDistorcionArmonica import AnalisisDistorcionArmonica
 
 class DistorcionArmonica(wx.Frame):

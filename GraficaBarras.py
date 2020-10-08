@@ -1,7 +1,10 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import matplotlib.pyplot as plt
 from matplotlib import style
 from matplotlib.widgets import Slider
-import numpy as np
+import numpy
 from matplotlib.widgets import CheckButtons
 
 style.use("ggplot")
@@ -86,7 +89,7 @@ class GraficaBarras:
         Y11=self.lista_armonico11[pos:pos+n]
 
 
-        ind = np.arange(len(X))
+        ind = numpy.arange(len(X))
         self.b_corriente_fundamental = self.ax.bar(X,self.Y0,width=0.06,visible=True,align='edge', data=None, label='C. Fund.',color='#94FF3F',ecolor='black')
         self.b_armonico1 = self.ax.bar(ind+0.06,Y1,width=0.06,visible=True,align='edge',label='Arm. 1',color='#FF4618',ecolor='black')
         self.b_armonico2 = self.ax.bar(ind+0.12,Y2,width=0.06,visible=True,align='edge',label='Arm. 2',color='#1DC0CC',ecolor='black')

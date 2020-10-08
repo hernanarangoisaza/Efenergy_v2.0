@@ -1,5 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import wx
-import easygui as eg 
+import easygui 
 
 from DistorcionArmonica import DistorcionArmonica
 from NuevoArchivoArmonico import NuevoArchivoArmonico
@@ -65,7 +68,7 @@ class Menu:
 	def guardarArchivo(self, event):
 
 		extension = "*.xls"
-		archivo = eg.filesavebox(msg="Guardar archivo",
+		archivo = easygui.filesavebox(msg="Guardar archivo",
 							title="Control: filesavebox",
 							default=extension,
 							filetypes=extension)
