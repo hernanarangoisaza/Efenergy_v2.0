@@ -409,6 +409,7 @@ class Aplicacion(wx.Frame):
 		app = wx.App()
 
 		if identificador == 4:
+
 			if self.url_voltaje != None:
 				frame = AnalisisDatosVoltaje(-1, texto_analizar_voltaje, self.archivo_voltaje)
 				frame.Centre()

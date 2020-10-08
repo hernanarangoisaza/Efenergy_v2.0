@@ -12,10 +12,10 @@ gris2 = wx.Colour(242, 242, 242)    # F2F2F2
 blanco = wx.Colour(255, 255, 255)   # FFFFFF
 negro = wx.Colour(0, 0, 0)          # 000000
 naranja = wx.Colour(248, 175, 38)   # F8AF26
-verde = wx.Colour(93, 165, 92)      #5DA55C
-azul = wx.Colour(66, 142, 174)      #428EAE
-lila = wx.Colour(167, 94, 143)      #A75E8F
-morado = wx.Colour(113, 87, 154)    #71579A
+verde = wx.Colour(93, 165, 92)      # 5DA55C
+azul = wx.Colour(66, 142, 174)      # 428EAE
+lila = wx.Colour(167, 94, 143)      # A75E8F
+morado = wx.Colour(113, 87, 154)    # 71579A
 
 #-------------------------------------------------------------------------------------------------
 # ESTILOS DEL FRAME PRINCIPAL
