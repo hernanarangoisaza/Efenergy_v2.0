@@ -6,6 +6,8 @@ import ctypes
 
 from inicio import Aplicacion
 
+from Definiciones import *
+
 #-------------------------------------------------------------------------------------------------
 
 class Menu:
@@ -19,14 +21,14 @@ class Menu:
 
 		if argv is None and shell32.IsUserAnAdmin():
 
-			frame = Aplicacion(-1, 'Efenergy')
+			frame = Aplicacion(-1, nombreAplicacion)
 			frame.Centre()
 			frame.Show()
 			app.MainLoop()
 
 		else:
 
-			box = wx.MessageDialog(None, "Ejecute la Aplicación como Administrador", 'Error', style=wx.ICON_ERROR|wx.OK)
+			box = wx.MessageDialog(None, mensajeAdministrador, titulo_error, style=wx.ICON_ERROR|wx.OK)
 			answer = box.ShowModal()
 			box.Destroy()
 

@@ -47,8 +47,9 @@ size12 = wx.Size(600, 200) #
 # MISCELÁNEAS
 #-------------------------------------------------------------------------------------------------
 
-nombreApp = 'EFENERGY'
-versionApp = '2.0'
+nombreApp = "EFENERGY"
+versionApp = "2.0"
+nombreAplicacion = "Efenergy"
 
 clave = "1234" # Clave de edición de la norma
 
@@ -155,5 +156,7 @@ texto_analizar_armonicos_tension = "Analisis armónicos de tensión"
 texto_analizar_armonicos_corriente = "Analizar armónicos de corriente"
 
 texto_cargando_archivo = " Cargando plantilla"
+
+mensajeAdministrador = "Ejecute la Aplicación como Administrador"
 
 #-------------------------------------------------------------------------------------------------
