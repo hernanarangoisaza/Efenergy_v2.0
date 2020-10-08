@@ -3,7 +3,7 @@
 
 import wx
 import wx.grid
-import pandas as pd
+import pandas
 import matplotlib.pyplot as plt
 import datetime
 import numpy      
@@ -13,7 +13,6 @@ from matplotlib.widgets import CheckButtons
 from menu import Menu 
 from GraficaPotencia import GraficaPotencia
 from NuevoArchivoVoltajeReglas import NuevoArchivoVoltajeReglas
-
 from Definiciones import *
 
 class AnalisisDatosVoltaje(wx.Frame):
@@ -143,7 +142,7 @@ class AnalisisDatosVoltaje(wx.Frame):
 		self.rango_mayor = float(127 + (127 * (10 / 100)))
 		self.rango_menor = float(127 - (127 * (10 / 100))) 
 
-		df = pd.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
+		df = pandas.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
 		
 		self.fecha = []
 		fecha_larga = df['Fecha']
@@ -248,7 +247,7 @@ class AnalisisDatosVoltaje(wx.Frame):
 
 
 	def graficaVolageVsTiempo(self, event):
-		df = pd.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
+		df = pandas.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
 
 		datos_voltaje_fase_a = df['Vrms ph-n AN Med'].values
 		datos_voltaje_fase_b = df['Vrms ph-n BN Med'].values

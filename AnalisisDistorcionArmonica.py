@@ -3,11 +3,12 @@
 
 import wx
 import wx.grid
-import pandas as pd
+import pandas
 import matplotlib.pyplot as plt
 import numpy
-from menu_general import Menu2
 import wx.lib.agw.aquabutton as AB
+
+from menu_general import Menu2
 from norma import Norma
 
 class AnalisisDistorcionArmonica(wx.Frame):
@@ -114,7 +115,7 @@ class AnalisisDistorcionArmonica(wx.Frame):
 			self.validacionesDistorcionArmonica((2.0),(3.5),(4.5),(5.5),(7.0))
 
 	def validacionesDistorcionArmonica(self,regla1,regla2,regla3,regla4,regla5):
-		df = pd.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
+		df = pandas.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
 		
 		self.fecha = []
 		fecha_larga = df['Fecha']

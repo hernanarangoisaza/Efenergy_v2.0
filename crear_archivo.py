@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+
 import xlwt
-import pandas as pd
+import pandas
 import os
 
 class NuevoArchivo:
@@ -51,7 +52,7 @@ class NuevoArchivo:
 			ws.write(0,38,'Armónicos Tensión11 AN Med')
 			ws.write(0,39,'Armónicos Tensión11 BN Med')
 			ws.write(0,40,'Armónicos Tensión11 CN Med')
-			df = pd.read_excel(archivo_excel, i)
+			df = pandas.read_excel(archivo_excel, i)
 			for z in df.columns.tolist():
 				if z == 'THD V AN Med':
 					encontrado = True

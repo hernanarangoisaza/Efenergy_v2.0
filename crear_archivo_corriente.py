@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+
 import xlwt
-import pandas as pd
+import pandas
 import os
 
 class ArchivoCorriente:
@@ -55,7 +56,7 @@ class ArchivoCorriente:
 			ws.write(0,42,'Armónicos Corriente11 B Med')
 			ws.write(0,43,'Armónicos Corriente11 C Med')
 
-			df = pd.read_excel(archivo_excel, i)
+			df = pandas.read_excel(archivo_excel, i)
 			for y in df.columns.tolist():
 				if y == 'THD A A Med':
 					encontrado = True

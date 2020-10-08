@@ -1,15 +1,16 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+
 import xlwt
-import pandas as pd
+import pandas
 import os
-import easygui as eg 
+import easygui
 import os.path as path
 
 class NuevoArchivoVoltajeReglas:
 	def CrearArchivo(self,archivo_excel,estado_voltaje):
 		extension = "*.xls"
-		nombre = eg.filesavebox(msg="Guardar archivo",
+		nombre = easygui.filesavebox(msg="Guardar archivo",
 							title="Control: filesavebox",
 							default=extension,
 							filetypes=extension)
@@ -33,7 +34,7 @@ class NuevoArchivoVoltajeReglas:
 				agregar_hojas.write(0,9,'Hora')
 				agregar_hojas.write(0,10,'Vrms ph-n CN Med')
 
-				df = pd.read_excel(archivo_excel, i)
+				df = pandas.read_excel(archivo_excel, i)
 				for columna in df.columns.tolist():
 					if columna == ('Vrms ph-n CN Med'):
 						self.fecha = []

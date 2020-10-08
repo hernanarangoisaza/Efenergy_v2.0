@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+
 import xlwt
-import pandas as pd
+import pandas
 import os
 import os.path as path
 
@@ -17,7 +18,7 @@ class NuevoArchivoVoltaje:
 			agregar_hojas.write(0,3,'Vrms ph-n BN Med')
 			agregar_hojas.write(0,4,'Vrms ph-n CN Med')
 			
-			df = pd.read_excel(archivo_excel, i) # leer archivo el itemcada hoja
+			df = pandas.read_excel(archivo_excel, i) # leer archivo el itemcada hoja
 			for columnas in df.columns.tolist(): # Obtener nombre de columnas del excel
 				if columnas == ('Vrms ph-n AN Med'):
 					fecha = df['Fecha'].values

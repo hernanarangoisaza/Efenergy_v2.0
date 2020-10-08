@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+
 import wx
 import wx.grid
-import pandas as pd
+import pandas
 import matplotlib.pyplot as plt
 import wx.lib.agw.aquabutton as AB
 from matplotlib.widgets import CheckButtons
+
 from menu import Menu
 
 class AnalisisDatosArmonicos(wx.Frame):
@@ -108,7 +110,7 @@ class AnalisisDatosArmonicos(wx.Frame):
 	
 	
 	def cargarDatos(self):
-		df = pd.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
+		df = pandas.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
 
 		fecha = []
 		fecha_larga = df['Fecha']
@@ -254,7 +256,7 @@ class AnalisisDatosArmonicos(wx.Frame):
 
 	def graficaArmonicoVsTiempo(self, event):
 		identificador = event.GetId()
-		df = pd.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
+		df = pandas.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
 
 		fase = ['A','B','C']
 		thdv = df[('THD V %sN Med')%fase[identificador - 1]].values

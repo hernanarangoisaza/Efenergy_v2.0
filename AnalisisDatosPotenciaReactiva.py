@@ -4,9 +4,10 @@
 import wx
 import wx.grid
 import math
-import pandas as pd
+import pandas
 import wx.lib.agw.aquabutton as AB
 import wx.lib.agw.gradientbutton as GB
+
 from menu import Menu
 from GraficaPotencia import GraficaPotencia
 
@@ -121,7 +122,7 @@ class AnalisisDatosPotenciaReactiva(wx.Frame):
 		uno de los niveles de potencia se llama su respectivo metodo 
 	'''
 	def cargarDatos(self,event):
-		df = pd.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
+		df = pandas.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
 		fase =self.Fase.GetString(self.Fase.GetSelection())
 		reglas_potencia = self.reglas_potencia.GetString(self.reglas_potencia.GetSelection())
 
@@ -217,7 +218,7 @@ class AnalisisDatosPotenciaReactiva(wx.Frame):
 		box.Destroy()
 
 	def cargarGrafica(self,event):
-		df = pd.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
+		df = pandas.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
 		datos_potencia_reactiva_fase_a = df['Potencia Reactiva AN Med'].values
 		datos_potencia_reactiva_fase_b = df['Potencia Reactiva BN Med'].values
 		datos_potencia_reactiva_fase_c = df['Potencia Reactiva CN Med'].values 

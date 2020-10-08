@@ -2,14 +2,15 @@
 # -*- coding: utf-8 -*-
 
 import wx
-import pandas as pd
-import easygui as eg
+import pandas
+import easygui
 import matplotlib.pyplot as plt
-import numpy as np
+import numpy
 import wx.lib.agw.aquabutton as AB
 import wx.lib.agw.gradientbutton as GB
 from matplotlib.widgets import Slider
 from matplotlib.widgets import CheckButtons
+
 from menu import Menu
 
 class AnalisisDatosArmonicosCorriente(wx.Frame):
@@ -121,7 +122,7 @@ class AnalisisDatosArmonicosCorriente(wx.Frame):
 		lista11 = []
 		cont = 0
 
-		df = pd.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
+		df = pandas.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
 		thda = df[('THD A %s Med')%(fase)].values
 		fecha = df['Fecha'].values
 		hora = df['Hora'].values
@@ -191,7 +192,7 @@ class AnalisisDatosArmonicosCorriente(wx.Frame):
 
 	def grafica(self, event):
 		fase=self.Fase.GetString(self.Fase.GetSelection())
-		df = pd.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
+		df = pandas.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
 		
 		thda = df['THD A %s Med'%(fase)].values
 		armonico0 = df['Armónicos Corriente0 %s Med'%(fase)].values

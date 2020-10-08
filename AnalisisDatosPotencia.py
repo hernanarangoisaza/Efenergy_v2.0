@@ -3,14 +3,15 @@
 
 import wx
 import wx.grid
-import pandas as pd
+import pandas
 import math
 import matplotlib.pyplot as plt
 import wx.lib.agw.aquabutton as AB
 import wx.lib.agw.gradientbutton as GB
 from matplotlib.widgets import CheckButtons
-from GraficaPotencia import GraficaPotencia
 from cycler import cycler
+
+from GraficaPotencia import GraficaPotencia
 from menu import Menu
 
 class AnalisisDatosPotencia(wx.Frame):
@@ -122,7 +123,7 @@ class AnalisisDatosPotencia(wx.Frame):
 		rango_mayor = 1
 		rango_menor = 0.9 
 		
-		df = pd.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
+		df = pandas.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
 		fase =self.Fase.GetString(self.Fase.GetSelection())
 		
 		self.fecha = []
@@ -201,7 +202,7 @@ class AnalisisDatosPotencia(wx.Frame):
 		box.Destroy()
 
 	def graficaFactorPotencia(self, event):
-		df = pd.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
+		df = pandas.read_excel(self.archivo_excel, self.choice.GetString(self.choice.GetSelection()))
 
 		datos_factor_potencia_fase_a = df['Factor de Potencia AN Med'].values
 		datos_factor_potencia_fase_b = df['Factor de Potencia BN Med'].values

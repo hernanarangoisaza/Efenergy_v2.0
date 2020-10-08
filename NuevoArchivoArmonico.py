@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+
 import xlwt
-import pandas as pd
+import pandas
 import os
 import os.path as path
 
@@ -55,7 +56,7 @@ class NuevoArchivoArmonico:
 			ws.write(0,42,'Armónicos %s11 B%s Med'% (armonico, neutro))
 			ws.write(0,43,'Armónicos %s11 C%s Med'% (armonico, neutro))
 
-			df = pd.read_excel(archivo_excel, i)
+			df = pandas.read_excel(archivo_excel, i)
 			for y in df.columns.tolist():
 				if y == ('THD %s A%s Med'% (letra_armonico, neutro)):
 					fecha = df['Fecha'].values

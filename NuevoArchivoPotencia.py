@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+
 import xlwt
-import pandas as pd
+import pandas
 import os
 import os.path as path
 
@@ -23,7 +24,7 @@ class NuevoArchivoPotencia:
 				agregar_hojas.write(0,3,'Potencia Reactiva BN Med')
 				agregar_hojas.write(0,4,'Potencia Reactiva CN Med')
 			
-			df = pd.read_excel(archivo_excel, i) # leer archivo el item cada hoja
+			df = pandas.read_excel(archivo_excel, i) # leer archivo el item cada hoja
 			for columnas in df.columns.tolist(): # Obtener nombre de columnas del excel
 				fecha = df['Fecha'].values
 				hora = df['Hora'].values

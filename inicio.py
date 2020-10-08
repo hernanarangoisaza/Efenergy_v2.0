@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import wx
-import easygui as eg
-import pandas as pd
+import easygui
+import pandas
 
 from hilo_trabajo_barra_espera import WorkerThread
 from AnalisisDatosVoltaje import AnalisisDatosVoltaje
@@ -334,7 +334,7 @@ class Aplicacion(wx.Frame):
 			
 			self.last_path = extension_xls[0]
 		
-		self.url_archivo = eg.fileopenbox(msg=texto_abrir_xls, title=titulo_abrir_xls, default=self.last_path, filetypes=extension_xls)
+		self.url_archivo = easygui.fileopenbox(msg=texto_abrir_xls, title=titulo_abrir_xls, default=self.last_path, filetypes=extension_xls)
 
 		if self.url_archivo == None:
 
@@ -360,21 +360,21 @@ class Aplicacion(wx.Frame):
 			if identificador == 1:
 
 				self.url_voltaje = self.url_archivo
-				self.archivo_voltaje= pd.ExcelFile(self.url_voltaje)
+				self.archivo_voltaje= pandas.ExcelFile(self.url_voltaje)
 				self.tituloArchivo(self.url_voltaje, self.page_1)
 				self.ultima_url_voltaje = self.url_voltaje[0:self.url_voltaje.rfind('\\')]
 
 			if identificador == 2:
 
 				self.url_potencia = self.url_archivo
-				self.archivo_potencia = pd.ExcelFile(self.url_potencia)
+				self.archivo_potencia = pandas.ExcelFile(self.url_potencia)
 				self.tituloArchivo(self.url_potencia, self.page_2)
 				self.ultima_url_potencia = self.url_potencia[0:self.url_potencia.rfind('\\')]
 
 			if identificador == 3:
 
 				self.url_armonico = self.url_archivo
-				self.archivo_armonico = pd.ExcelFile(self.url_armonico)
+				self.archivo_armonico = pandas.ExcelFile(self.url_armonico)
 				self.tituloArchivo(self.url_armonico, self.page_3)
 				self.ultima_url_armonico = self.url_armonico[0:self.url_armonico.rfind('\\')]
 
@@ -476,9 +476,9 @@ class Aplicacion(wx.Frame):
 
 		self.progressDialog = wx.ProgressDialog(
 							texto_cargando_archivo, 
-							texto_cargando_archivo,
+							'',
 							maximum=WorkerThread.MAX_COUNT, parent=self,
-							style=wx.PD_CAN_ABORT|wx.PD_ELAPSED_TIME|wx.PD_REMAINING_TIME)
+							style=wx.PD_CAN_ABORT|wx.PD_ELAPSED_TIME|wx.PD_REMAINING_TIME|wx.PD_APP_MODAL)
 		
 		self.worker(self.threadCallback)
 		self.progressDialog.ShowModal()

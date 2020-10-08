@@ -154,6 +154,6 @@ texto_analizar_potencia_reactiva = "Analizar Potencia reactiva"
 texto_analizar_armonicos_tension = "Analisis armónicos de tensión"
 texto_analizar_armonicos_corriente = "Analizar armónicos de corriente"
 
-texto_cargando_archivo = "Cargando Archivo..."
+texto_cargando_archivo = " Cargando plantilla"
 
 #-------------------------------------------------------------------------------------------------
