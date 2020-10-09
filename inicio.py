@@ -81,8 +81,8 @@ class Aplicacion(wx.Frame):
 
 		# ZONA PARA INFORMACIÓN DE LA NORMA
 		
-		self.panel_informacion_voltage= wx.Panel(self.page_1, -1, size=size5, pos=(20,85))
-		self.panel_informacion_voltage.SetBackgroundColour(blanco)
+		self.panel_informacion_voltaje= wx.Panel(self.page_1, -1, size=size5, pos=(20,85))
+		self.panel_informacion_voltaje.SetBackgroundColour(blanco)
 
 		self.panel_informacion_potencia= wx.Panel(self.page_2, -1, size=size5, pos=(20,85))
 		self.panel_informacion_potencia.SetBackgroundColour(blanco)
@@ -94,7 +94,7 @@ class Aplicacion(wx.Frame):
 
 		# TÍTULOS ENCIMA DE ZONA PARA INFORMACIÓN DE LA NORMA		
 
-		self.componentesComunes(self.page_1, self.panel_informacion_voltage, tab1.upper(), 1, 4)
+		self.componentesComunes(self.page_1, self.panel_informacion_voltaje, tab1.upper(), 1, 4)
 		self.componentesComunes(self.page_2, self.panel_informacion_potencia, tab2.upper(), 2, 5)
 		self.componentesComunes(self.page_3, self.panel_informacion_armonico, tab3.upper(), 3, 6)
 
@@ -103,23 +103,23 @@ class Aplicacion(wx.Frame):
 		# BOTONES DE ACCIONES
 		
 		btn_analizar_voltaje = wx.Button(self.page_1, 4, btn1, size=size7, pos=(600,400))
-		btn_analizar_voltaje.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
+		btn_analizar_voltaje.Bind(wx.EVT_BUTTON, self.OnViewTableVoltajeMayor)
 
 		btn_analizar_factor_potencia = wx.Button(self.page_2, 5, btn2, size=size7, pos=(295,400))
-		btn_analizar_factor_potencia.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
+		btn_analizar_factor_potencia.Bind(wx.EVT_BUTTON, self.OnViewTableVoltajeMayor)
 
 		btn_analizar_potencia_reactiva = wx.Button(self.page_2, 6, btn3, size=size7, pos=(600,400))
-		btn_analizar_potencia_reactiva.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
+		btn_analizar_potencia_reactiva.Bind(wx.EVT_BUTTON, self.OnViewTableVoltajeMayor)
 
 		btn_analizar_armonicos_tension = wx.Button(self.page_3, 7, btn4, size=size7, pos=(295,400))
-		btn_analizar_armonicos_tension.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
+		btn_analizar_armonicos_tension.Bind(wx.EVT_BUTTON, self.OnViewTableVoltajeMayor)
 
 		btn_analizar_armonicos_corriente = wx.Button(self.page_3, 8, btn5, size=size7, pos=(600,400))
-		btn_analizar_armonicos_corriente.Bind(wx.EVT_BUTTON, self.OnViewTableVoltageMayor)
+		btn_analizar_armonicos_corriente.Bind(wx.EVT_BUTTON, self.OnViewTableVoltajeMayor)
 
 		# BOTÓN PDF PARA VER LA NORMA
 		
-		btn_pdf = wx.BitmapButton(self.panel_informacion_voltage, 9, wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY), (800,10), (32,32), wx.NO_BORDER)	
+		btn_pdf = wx.BitmapButton(self.panel_informacion_voltaje, 9, wx.Bitmap(icono1, wx.BITMAP_TYPE_ANY), (800,10), (32,32), wx.NO_BORDER)	
 		btn_pdf.SetBackgroundColour(blanco)
 		btn_pdf.SetToolTip(wx.ToolTip(texto_pdf))
 		btn_pdf.Bind(wx.EVT_BUTTON, self.abrirPDF)
@@ -400,7 +400,7 @@ class Aplicacion(wx.Frame):
 
 		#-------------------------------------------------------------------------------------------------
 
-	def OnViewTableVoltageMayor(self, event):
+	def OnViewTableVoltajeMayor(self, event):
 
 		#-------------------------------------------------------------------------------------------------
 

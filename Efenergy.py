@@ -5,7 +5,6 @@ import wx
 import ctypes
 
 from inicio import Aplicacion
-
 from Definiciones import *
 
 #-------------------------------------------------------------------------------------------------

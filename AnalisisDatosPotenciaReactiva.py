@@ -46,7 +46,7 @@ class AnalisisDatosPotenciaReactiva(wx.Frame):
 		self.bitmap1 = wx.StaticBitmap(header, -1, bmp1, (30,10))
 
 		txt_seleccion_dia = wx.StaticText(self.panel, -1, "Día: ", pos=(520,30))
-		txt_seleccion_estado_voltage = wx.StaticText(self.panel, wx.ID_ANY,  "Voltaje: ", pos=(520,65))
+		txt_seleccion_estado_voltaje = wx.StaticText(self.panel, wx.ID_ANY,  "Voltaje: ", pos=(520,65))
 		txt_seleccion_fase = wx.StaticText(self.panel, wx.ID_ANY,  "Fase: ", pos=(520,95))
 		
 		#-------------------------------------------------------------------------------------------------	
@@ -69,8 +69,8 @@ class AnalisisDatosPotenciaReactiva(wx.Frame):
 		bmp1 = wx.Image(icon_seleccionar_dia, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(self.panel, -1, bmp1, (585, 30))
 
-		icon_estado_voltage = 'imagenes/potencia1.png'
-		bmp1 = wx.Image(icon_estado_voltage, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
+		icon_estado_voltaje = 'imagenes/potencia1.png'
+		bmp1 = wx.Image(icon_estado_voltaje, wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		self.bitmap1 = wx.StaticBitmap(self.panel, -1, bmp1, (585, 65))
 
 		icon_fase = 'imagenes/fase.png'
@@ -99,17 +99,17 @@ class AnalisisDatosPotenciaReactiva(wx.Frame):
 	
 		#----------------------------------------------------------------------------------------------------
 
-		panel_informacion_voltage= wx.Panel(self.panel,-1,size=(300,200),pos=(520,250))
-		panel_informacion_voltage.SetBackgroundColour("#FFFFFF")
+		panel_informacion_voltaje= wx.Panel(self.panel,-1,size=(300,200),pos=(520,250))
+		panel_informacion_voltaje.SetBackgroundColour("#FFFFFF")
 
-		txt_rango_aceptable = wx.StaticText(panel_informacion_voltage, -1, "la potencia reactiva debe ser menor\na la mitad de la potencia activa + 1", pos=(30, 30))
+		txt_rango_aceptable = wx.StaticText(panel_informacion_voltaje, -1, "la potencia reactiva debe ser menor\na la mitad de la potencia activa + 1", pos=(30, 30))
 		font = wx.Font(12, wx.ROMAN, wx.NORMAL, wx.NORMAL)
 		txt_rango_aceptable.SetFont(font)
 
-		decoracion_derecha1_panel_informacion= wx.Panel(panel_informacion_voltage,-1,size=(200,5),pos=(0,0))
-		decoracion_derecha2_panel_informacion= wx.Panel(panel_informacion_voltage,-1,size=(5,100),pos=(0,0))
-		decoracion_izquierda1_panel_informacion= wx.Panel(panel_informacion_voltage,-1,size=(200,5),pos=(100,195))
-		decoracion_izquierda2_panel_informacion= wx.Panel(panel_informacion_voltage,-1,size=(5,100),pos=(295,100))
+		decoracion_derecha1_panel_informacion= wx.Panel(panel_informacion_voltaje,-1,size=(200,5),pos=(0,0))
+		decoracion_derecha2_panel_informacion= wx.Panel(panel_informacion_voltaje,-1,size=(5,100),pos=(0,0))
+		decoracion_izquierda1_panel_informacion= wx.Panel(panel_informacion_voltaje,-1,size=(200,5),pos=(100,195))
+		decoracion_izquierda2_panel_informacion= wx.Panel(panel_informacion_voltaje,-1,size=(5,100),pos=(295,100))
 
 		decoracion_derecha1_panel_informacion.SetBackgroundColour("#FFDF49")
 		decoracion_derecha2_panel_informacion.SetBackgroundColour("#FFDF49")
@@ -162,7 +162,7 @@ class AnalisisDatosPotenciaReactiva(wx.Frame):
 				lista_potencia_reactiva.append(potencia_reactiva[i])
 				posicion_dato = 0
 
-		self.llenarTablaVoltage(lista_hora, lista_fecha, lista_potencia_activa, lista_potencia_reactiva)
+		self.llenarTablaVoltaje(lista_hora, lista_fecha, lista_potencia_activa, lista_potencia_reactiva)
 
 	def determinarPotenciaReactivaMenor(self,potencia_reactiva, potencia_activa ):
 		lista_fecha = []
@@ -185,10 +185,10 @@ class AnalisisDatosPotenciaReactiva(wx.Frame):
 				lista_potencia_activa.append(potencia_activa[posicion_dato])
 				lista_potencia_reactiva.append(potencia_reactiva[i])
 				posicion_dato = 0
-		self.llenarTablaVoltage(lista_hora, lista_fecha, lista_potencia_activa,  lista_potencia_reactiva)
+		self.llenarTablaVoltaje(lista_hora, lista_fecha, lista_potencia_activa,  lista_potencia_reactiva)
 
 	
-	def llenarTablaVoltage(self, lista_hora, lista_fecha, lista_potencia_activa, lista_potencia_reactiva):
+	def llenarTablaVoltaje(self, lista_hora, lista_fecha, lista_potencia_activa, lista_potencia_reactiva):
 		numero_item = 0
 		for data in range(len(lista_potencia_activa)):
 			self.tabla_potencia_reactiva.InsertItem(numero_item, str(lista_fecha[data]))

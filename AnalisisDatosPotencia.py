@@ -49,7 +49,7 @@ class AnalisisDatosPotencia(wx.Frame):
 		self.bitmap1 = wx.StaticBitmap(header, -1, bmp1, (30,10))
 
 		txt_seleccion_dia = wx.StaticText(self.panel, -1, "Día: ", pos=(520,38))
-		txt_seleccion_estado_voltage = wx.StaticText(self.panel, wx.ID_ANY,  "Potencia: ", pos=(520,68))
+		txt_seleccion_estado_voltaje = wx.StaticText(self.panel, wx.ID_ANY,  "Potencia: ", pos=(520,68))
 		txt_seleccion_fase = wx.StaticText(self.panel, wx.ID_ANY,  "Fase: ", pos=(520,100))
 		
 		txt_grafica = wx.StaticText(self.panel, -1, "Grafica ", pos=(558,220))
@@ -74,7 +74,7 @@ class AnalisisDatosPotencia(wx.Frame):
 		icon_seleccionar_dia = wx.StaticBitmap(self.panel, -1, bmp1, (585, 30))
 
 		bmp2 = wx.Image( 'imagenes/potencia1.png', wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
-		icon_estado_voltage = wx.StaticBitmap(self.panel, -1, bmp2, (585, 65))
+		icon_estado_voltaje = wx.StaticBitmap(self.panel, -1, bmp2, (585, 65))
 
 		bmp3 = wx.Image('imagenes/fase.png', wx.BITMAP_TYPE_ANY).ConvertToBitmap() 
 		icon_fase = wx.StaticBitmap(self.panel, -1, bmp3, (585, 95))
@@ -100,22 +100,22 @@ class AnalisisDatosPotencia(wx.Frame):
 		self.list_ctrl.InsertColumn(2, 'Factor de Potencia',width=200)	
 		#----------------------------------------------------------------------------------------------------
 
-		panel_informacion_voltage= wx.Panel(self.panel,-1,size=(300,200),pos=(520,250))
+		panel_informacion_voltaje= wx.Panel(self.panel,-1,size=(300,200),pos=(520,250))
 
-		txt_rango_aceptable = wx.StaticText(panel_informacion_voltage, -1, "El factor de potencia debe estar\nentre 0.9 y 1.0", pos=(30, 30))
+		txt_rango_aceptable = wx.StaticText(panel_informacion_voltaje, -1, "El factor de potencia debe estar\nentre 0.9 y 1.0", pos=(30, 30))
 		font = wx.Font(12, wx.ROMAN, wx.NORMAL, wx.NORMAL)
 		txt_rango_aceptable.SetFont(font)
 
-		decoracion_derecha1_panel_informacion= wx.Panel(panel_informacion_voltage,-1,size=(200,5),pos=(0,0))
-		decoracion_derecha2_panel_informacion= wx.Panel(panel_informacion_voltage,-1,size=(5,100),pos=(0,0))
-		decoracion_izquierda1_panel_informacion= wx.Panel(panel_informacion_voltage,-1,size=(200,5),pos=(100,195))
-		decoracion_izquierda2_panel_informacion= wx.Panel(panel_informacion_voltage,-1,size=(5,100),pos=(295,100))
+		decoracion_derecha1_panel_informacion= wx.Panel(panel_informacion_voltaje,-1,size=(200,5),pos=(0,0))
+		decoracion_derecha2_panel_informacion= wx.Panel(panel_informacion_voltaje,-1,size=(5,100),pos=(0,0))
+		decoracion_izquierda1_panel_informacion= wx.Panel(panel_informacion_voltaje,-1,size=(200,5),pos=(100,195))
+		decoracion_izquierda2_panel_informacion= wx.Panel(panel_informacion_voltaje,-1,size=(5,100),pos=(295,100))
 
 		decoracion_izquierda2_panel_informacion.SetBackgroundColour("#7F7856")
 		decoracion_derecha1_panel_informacion.SetBackgroundColour("#FFDF49")
 		decoracion_derecha2_panel_informacion.SetBackgroundColour("#FFDF49")
 		decoracion_izquierda1_panel_informacion.SetBackgroundColour("#7F7856")
-		panel_informacion_voltage.SetBackgroundColour("#FFFFFF")
+		panel_informacion_voltaje.SetBackgroundColour("#FFFFFF")
 
 		#----------------------------------------------------------------------------------------------------
 
@@ -154,7 +154,7 @@ class AnalisisDatosPotencia(wx.Frame):
 				lista_fecha.append(self.fecha[pos])
 				lista_hora.append(self.hora[pos])
 				pos = 0
-		self.llenarTablaVoltage(lista_rango, lista_hora, lista_fecha)
+		self.llenarTablaVoltaje(lista_rango, lista_hora, lista_fecha)
 	
 	def pruebaMenor(self,potencia_fase, rango_mayor, rango_menor):
 		lista_fecha = []
@@ -169,13 +169,13 @@ class AnalisisDatosPotencia(wx.Frame):
 				lista_fecha.append(self.fecha[pos])
 				lista_hora.append(self.hora[pos])
 				pos = 0
-		self.llenarTablaVoltage(lista_menores, lista_hora, lista_fecha)
+		self.llenarTablaVoltaje(lista_menores, lista_hora, lista_fecha)
 
-	def llenarTablaVoltage(self, datoVoltage,lista_hora,lista_fecha):
+	def llenarTablaVoltaje(self, datoVoltaje,lista_hora,lista_fecha):
 		dato_voltaje = []
 		numero_item = 0
-		for data in range(len(datoVoltage)):
-			dato_voltaje.append(math.fabs(datoVoltage[data]))
+		for data in range(len(datoVoltaje)):
+			dato_voltaje.append(math.fabs(datoVoltaje[data]))
 			self.list_ctrl.InsertItem(numero_item, str(lista_fecha[data]))
 			self.list_ctrl.SetItem(numero_item, 1, str(lista_hora[data]))
 			self.list_ctrl.SetItem(numero_item, 2, str(dato_voltaje[data]))	

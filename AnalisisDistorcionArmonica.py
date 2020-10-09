@@ -63,7 +63,7 @@ class AnalisisDistorcionArmonica(wx.Frame):
 		menu = Menu2()
 		menu.menugeneral(self, self.archivo_excel)
 
-		# Tabla de datos voltage  
+		# Tabla de datos voltaje  
 		self.list_ctrl = wx.ListCtrl(self.panel, pos=(30, 100), size=(1080,400),
 						style=wx.LC_REPORT
 						|wx.BORDER_SUNKEN|wx.LC_HRULES|wx.LC_VRULES
@@ -315,7 +315,7 @@ class AnalisisDistorcionArmonica(wx.Frame):
 					lista_armonico_9.append(armonico_9[i]) 
 					lista_armonico_10.append(armonico_10[i]) 
 
-		self.llenarTablaVoltage(lista_hora1,lista_fecha1,distorcion_4,lista_thd_alterado,mensaje,identifica_btn_11,lista_armonico_11,lista_armonico_1,lista_armonico_2,lista_armonico_3,lista_armonico_4,lista_armonico_5,lista_armonico_6,lista_armonico_7,lista_armonico_8,lista_armonico_9,lista_armonico_10)	
+		self.llenarTablaVoltaje(lista_hora1,lista_fecha1,distorcion_4,lista_thd_alterado,mensaje,identifica_btn_11,lista_armonico_11,lista_armonico_1,lista_armonico_2,lista_armonico_3,lista_armonico_4,lista_armonico_5,lista_armonico_6,lista_armonico_7,lista_armonico_8,lista_armonico_9,lista_armonico_10)	
 		identifica_btn_11 = 0
 		
 		if self.cont1 > 0:
@@ -324,7 +324,7 @@ class AnalisisDistorcionArmonica(wx.Frame):
 		else:
 			self.InformacionDatos0()
 
-	def llenarTablaVoltage(self,lista_hora,lista_fecha,distorcion_armonica,thd_alterado,mensaje,identifica_btn_11,lista_armonico_11,lista_armonico_1,lista_armonico_2,lista_armonico_3,lista_armonico_4,lista_armonico_5,lista_armonico_6,lista_armonico_7,lista_armonico_8,lista_armonico_9,lista_armonico_10):
+	def llenarTablaVoltaje(self,lista_hora,lista_fecha,distorcion_armonica,thd_alterado,mensaje,identifica_btn_11,lista_armonico_11,lista_armonico_1,lista_armonico_2,lista_armonico_3,lista_armonico_4,lista_armonico_5,lista_armonico_6,lista_armonico_7,lista_armonico_8,lista_armonico_9,lista_armonico_10):
 		index = 0
 		self.cont=0
 		self.list_ctrl.DeleteAllItems()
