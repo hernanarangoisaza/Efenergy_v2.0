@@ -76,7 +76,7 @@ class Aplicacion(wx.Frame):
 		notebook.AddPage(self.page_1, tab1)
 		notebook.AddPage(self.page_2, tab2)
 		notebook.AddPage(self.page_3, tab3)
-		
+
 		#-------------------------------------------------------------------------------------------------
 
 		# ZONA PARA INFORMACIÓN DE LA NORMA
@@ -360,7 +360,7 @@ class Aplicacion(wx.Frame):
 			if identificador == 1:
 
 				self.url_voltaje = self.url_archivo
-				self.archivo_voltaje= pandas.ExcelFile(self.url_voltaje)
+				self.archivo_voltaje = pandas.ExcelFile(self.url_voltaje)
 				self.tituloArchivo(self.url_voltaje, self.page_1)
 				self.ultima_url_voltaje = self.url_voltaje[0:self.url_voltaje.rfind('\\')]
 
@@ -411,6 +411,7 @@ class Aplicacion(wx.Frame):
 		if identificador == 4:
 
 			if self.url_voltaje != None:
+
 				frame = AnalisisDatosVoltaje(-1, texto_analizar_voltaje, self.archivo_voltaje)
 				frame.Centre()
 				frame.Show()

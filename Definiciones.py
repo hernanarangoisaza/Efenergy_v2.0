@@ -30,10 +30,10 @@ style4 = (wx.DEFAULT_FRAME_STYLE&~(wx.RESIZE_BORDER|wx.MAXIMIZE_BOX))
 # TAMAÑOS
 #-------------------------------------------------------------------------------------------------
 
-size1 = wx.Size(1000, 730) # Ventana principal
-size2 = wx.Size(1000, 130) # Header Efenergy + Logo
-size3 = wx.Size(1000, 500) # Panel general de pestañas
-size4 = wx.Size(970, 500) # Zona pestañas individuales
+size1 = wx.Size(955, 730) # Ventana principal
+size2 = wx.Size(955, 130) # Header Efenergy + Logo
+size3 = wx.Size(930, 500) # Panel general de pestañas
+size4 = wx.Size(925, 500) # Zona pestañas individuales
 size5 = wx.Size(880, 200) # Zona para texto explicativo de la norma
 size6 = wx.Size(300, 30) # Botón superior para archivos
 size7 = wx.Size(300, 30) # Botones inferiores para acciones
