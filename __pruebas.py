@@ -23,7 +23,7 @@ def collapse( layout, key ):
     :return: A pinned column that can be placed directly into your layout
     :rtype: sg.pin
     """
-    return sg.pin( sg.Column( layout, key=key, background_color='#F2F2F2', pad=( 0, ( 0, 0 ) ) ) )
+    return sg.pin( sg.Column( layout, key=key, background_color='#F2F2F2', pad=( 25, ( 0, 0 ) ) ) )
 
 # Add your new theme colors and settings 
 sg.LOOK_AND_FEEL_TABLE[ 'TemaEfenergyV2' ] = {  'BACKGROUND': '#FCFCFC', 
@@ -36,39 +36,44 @@ sg.LOOK_AND_FEEL_TABLE[ 'TemaEfenergyV2' ] = {  'BACKGROUND': '#FCFCFC',
                                                 'BORDER': 1, 
                                                 'SLIDER_DEPTH': 0,  
                                                 'PROGRESS_DEPTH': 0, } 
-  
+
+# BARRA DE MENÚ PRINCIPAL
+menu1 =     [
+                [ 'Opciones', [ 'Acerca de...', 'Salir' ] ],
+            ]
+
 # VOLTAJE
 seccion1 =  [ 
                 [ 
-                    sg.Button( button_text='Analizar voltaje', key='-BTN VOLTAJE1-', button_color=('black', '#CDCDCD') ),
-                    sg.Button( button_text='Ver norma de referencia', key='-BTN VOLTAJE2-', button_color=('black', '#CDCDCD') ) 
+                    sg.Button( button_text='Analizar voltaje', key='-BTN VOLTAJE1-', button_color=( 'black', '#CDCDCD' ) ),
+                    sg.Button( button_text='Ver norma de referencia', key='-BTN VOLTAJE2-', button_color=( 'black', '#CDCDCD' ) ) 
                 ] 
             ]
 
 # POTENCIA
 seccion2 =  [ 
                 [ 
-                    sg.Button( button_text='Analizar factor de potencia', key='-BTN POTENCIA1-', button_color=('black', '#CDCDCD') ),
-                    sg.Button( button_text='Potencia reactiva', key='-BTN POTENCIA2-', button_color=('black', '#CDCDCD') ),
-                    sg.Button( button_text='Ver norma de referencia', key='-BTN POTENCIA3-', button_color=('black', '#CDCDCD') ) 
+                    sg.Button( button_text='Analizar factor de potencia', key='-BTN POTENCIA1-', button_color=( 'black', '#CDCDCD' ) ),
+                    sg.Button( button_text='Potencia reactiva', key='-BTN POTENCIA2-', button_color=( 'black', '#CDCDCD' ) ),
+                    sg.Button( button_text='Ver norma de referencia', key='-BTN POTENCIA3-', button_color=( 'black', '#CDCDCD' ) ) 
                 ] 
             ]
 
 # ARMÓNICOS
 seccion3 =  [ 
                 [ 
-                    sg.Button( button_text='Analizar armónicos de tensión', key='-BTN ARMONICOS1-', button_color=('black', '#CDCDCD') ),
-                    sg.Button( button_text='Analizar armónicos de corriente', key='-BTN ARMONICOS2-', button_color=('black', '#CDCDCD') ),
-                    sg.Button( button_text='Ver norma de referencia', key='-BTN ARMONICOS3-', button_color=('black', '#CDCDCD') ) 
+                    sg.Button( button_text='Analizar armónicos de tensión', key='-BTN ARMONICOS1-', button_color=( 'black', '#CDCDCD' ) ),
+                    sg.Button( button_text='Analizar armónicos de corriente', key='-BTN ARMONICOS2-', button_color=( 'black', '#CDCDCD' ) ),
+                    sg.Button( button_text='Ver norma de referencia', key='-BTN ARMONICOS3-', button_color=( 'black', '#CDCDCD' ) ) 
                 ] 
             ]
 
 # GESTIÓN DE LAS NORMAS DE REFERENCIA
 seccion4 =  [ 
                 [ 
-                    sg.Button( button_text='Norma para voltaje', key='-BTN NORMA1-', button_color=('black', '#CDCDCD') ),
-                    sg.Button( button_text='Norma para potencia', key='-BTN NORMA2-', button_color=('black', '#CDCDCD') ),
-                    sg.Button( button_text='Norma para armónicos', key='-BTN NORMA3-', button_color=('black', '#CDCDCD') ) 
+                    sg.Button( button_text='Norma para voltaje', key='-BTN NORMA1-', button_color=( 'black', '#CDCDCD' ) ),
+                    sg.Button( button_text='Norma para potencia', key='-BTN NORMA2-', button_color=( 'black', '#CDCDCD' ) ),
+                    sg.Button( button_text='Norma para armónicos', key='-BTN NORMA3-', button_color=( 'black', '#CDCDCD' ) ) 
                 ] 
             ]
 
@@ -76,7 +81,7 @@ columna1 =  [
                 #### Selector de plantilla
                 [ sg.Text( text='Seleccionar plantilla de origen de datos', background_color='#F2F2F2', text_color='black' ) ],
                 [ sg.Input( key='-ARCHIVO PLANTILLA-', visible=True, enable_events=True ), 
-                  sg.FileBrowse( button_text='Buscar', button_color=('black', '#CDCDCD') ) ],
+                  sg.FileBrowse( button_text='Buscar', button_color=( 'black', '#CDCDCD' ) ) ],
                 #### Sección 1 ####
                 [ sg.Text( text=SYMBOL_DOWN, enable_events=True, key='-OPEN SEC1-', background_color='#F2F2F2', text_color='black' ), 
                   sg.Text( text='VOLTAJE', enable_events=True, key='-OPEN SEC1-TEXT', background_color='#F2F2F2', text_color='black' ) ],
@@ -89,9 +94,6 @@ columna1 =  [
                 [ sg.Text( text=SYMBOL_DOWN, enable_events=True, key='-OPEN SEC3-', background_color='#F2F2F2', text_color='black' ),
                   sg.Text( text='ARMÓNICOS', enable_events=True, key='-OPEN SEC3-TEXT', background_color='#F2F2F2', text_color='black' )],
                 [ collapse(seccion3, '-SEC3-') ],
-                #### Botones de la parte inferior ####
-                [ sg.Button( button_text='Salir', key='-BTN SALIR-', button_color=('black', '#CDCDCD') ), 
-                  sg.Button( button_text='Acerca de...', key='-BTN ACERCADE-', button_color=('black', '#CDCDCD') ) ] 
             ]
 
 columna2 =  [
@@ -101,12 +103,12 @@ columna2 =  [
 
 # FULL LAYOUT
 layout =    [
-    [
-
-        sg.Column( columna1, size=(600, 600), background_color='#F2F2F2', vertical_alignment='center', pad=((0, 0), 0) ),
-        sg.Column( columna2, size=(600, 600), background_color='#F2F2F2' ),
-    ]
-]
+                [
+                    sg.Menu( menu1, tearoff=False, pad=( 200, 1) ),
+                    sg.Column( columna1, size=(600, 600), background_color='#F2F2F2', vertical_alignment='center', pad=((0, 0), 0) ),
+                    sg.Column( columna2, size=(600, 600), background_color='#F2F2F2' ),
+                ]
+            ]
 
 # Cambiar al tema personalizado 
 sg.theme('TemaEfenergyV2') 
@@ -122,14 +124,13 @@ window = sg.Window(
         finalize=True 
     )
 
-
 # Run the Event Loop
 while True:
     
     event, values = window.read()
     
     # Salir de la aplicación
-    if event == '-BTN SALIR-' or event == sg.WIN_CLOSED:
+    if event == '-BTN SALIR-' or event == sg.WIN_CLOSED or event == 'Salir':
 
         break
     

@@ -1,80 +1,59 @@
+#!/usr/bin/env python
+'''
+Example of (almost) all widgets, that you can use in PySimpleGUI.
+'''
+
 import PySimpleGUI as sg
 
-"""
-    Demo - "Collapsible" sections of windows
-    This demo shows one techinique for creating a collapsible section (Column) within your window.
-    It uses the "pin" function so you'll need version 4.28.0+
-    A number of "shortcut aliases" are used in the layouts to compact things a bit.
-    In case you've not encountered these shortcuts, the meaning are:
-    B = Button, T = Text, I = Input = InputText, k = key
-    Also, both methods for specifying Button colors were used (tuple / single string)
-    Section #2 uses them the most to show you what it's like to use more compact names.
-    To open/close a section, click on the arrow or name of the section.
-    Section 2 can also be controlled using the checkbox at the top of the window just to
-    show that there are multiple way to trigger events such as these.
-    Copyright 2020 PySimpleGUI.org
-"""
 
+sg.theme('Dark Red')
+# sg.set_options(text_color='black', background_color='#A6B2BE', text_element_background_color='#A6B2BE')
+# ------ Menu Definition ------ #
+menu_def = [['&File', ['&Open', '&Save', 'E&xit', 'Properties']],
+            ['&Edit', ['Paste', ['Special', 'Normal', ], 'Undo'], ],
+            ['&Help', '&About...'], ]
 
-SYMBOL_UP =    '▲'
-SYMBOL_DOWN =  '▼'
+# ------ Column Definition ------ #
+column1 = [[sg.Text('Column 1', justification='center', size=(10, 1))],
+           [sg.Spin(values=('Spin Box 1', '2', '3'),
+                    initial_value='Spin Box 1')],
+           [sg.Spin(values=['Spin Box 1', '2', '3'],
+                    initial_value='Spin Box 2')],
+           [sg.Spin(values=('Spin Box 1', '2', '3'), initial_value='Spin Box 3')]]
 
+layout = [
+    [sg.Menu(menu_def, tearoff=True)],
+    [sg.Text('(Almost) All widgets in one Window!', size=(
+        30, 1), justification='center', font=("Helvetica", 25), relief=sg.RELIEF_RIDGE)],
+    [sg.Text('Here is some text.... and a place to enter text')],
+    [sg.InputText('This is my text')],
+    [sg.Frame(layout=[
+        [sg.CBox('Checkbox', size=(10, 1)),
+         sg.CBox('My second checkbox!', default=True)],
+        [sg.Radio('My first Radio!     ', "RADIO1", default=True, size=(10, 1)),
+         sg.Radio('My second Radio!', "RADIO1")]], title='Options', relief=sg.RELIEF_SUNKEN, tooltip='Use these to set flags')],
+    [sg.MLine(default_text='This is the default Text should you decide not to type anything', size=(35, 3)),
+     sg.MLine(default_text='A second multi-line', size=(35, 3))],
+    [sg.Combo(('Combobox 1', 'Combobox 2'),default_value='Combobox 1', size=(20, 1)),
+     sg.Slider(range=(1, 100), orientation='h', size=(34, 20), default_value=85)],
+    [sg.OptionMenu(('Menu Option 1', 'Menu Option 2', 'Menu Option 3'))],
+    [sg.Listbox(values=('Listbox 1', 'Listbox 2', 'Listbox 3'), size=(30, 3)),
+     sg.Frame('Labelled Group', [[
+         sg.Slider(range=(1, 100), orientation='v', size=(5, 20), default_value=25, tick_interval=25),
+         sg.Slider(range=(1, 100), orientation='v', size=(5, 20), default_value=75),
+         sg.Slider(range=(1, 100), orientation='v', size=(5, 20), default_value=10),
+         sg.Col(column1)]])
+    ],
+    [sg.Text('_' * 80)],
+    [sg.Text('Choose A Folder', size=(35, 1))],
+    [sg.Text('Your Folder', size=(15, 1), justification='right'),
+     sg.InputText('Default Folder'), sg.FolderBrowse()],
+    [sg.Submit(tooltip='Click to submit this form'), sg.Cancel()]]
 
-def collapse(layout, key):
-    """
-    Helper function that creates a Column that can be later made hidden, thus appearing "collapsed"
-    :param layout: The layout for the section
-    :param key: Key used to make this seciton visible / invisible
-    :return: A pinned column that can be placed directly into your layout
-    :rtype: sg.pin
-    """
-    return sg.pin(sg.Column(layout, key=key))
+window = sg.Window('Everything bagel', layout)
 
-
-section1 = [[sg.Input('Input sec 1', key='-IN1-')],
-            [sg.Input(key='-IN11-')],
-            [sg.Button('Button section 1',  button_color='yellow on green'),
-             sg.Button('Button2 section 1', button_color='yellow on green'),
-             sg.Button('Button3 section 1', button_color='yellow on green')]]
-
-section2 = [[sg.I('Input sec 2', k='-IN2-')],
-            [sg.I(k='-IN21-')],
-            [sg.B('Button section 2',  button_color=('yellow', 'purple')),
-             sg.B('Button2 section 2', button_color=('yellow', 'purple')),
-             sg.B('Button3 section 2', button_color=('yellow', 'purple'))]]
-
-
-layout =   [[sg.Text('Window with 2 collapsible sections')],
-            [sg.Checkbox('Blank checkbox'), sg.Checkbox('Hide Section 2', enable_events=True, key='-OPEN SEC2-CHECKBOX')],
-            #### Section 1 part ####
-            [sg.T(SYMBOL_DOWN, enable_events=True, k='-OPEN SEC1-', text_color='yellow'), sg.T('Section 1', enable_events=True, text_color='yellow', k='-OPEN SEC1-TEXT')],
-            [collapse(section1, '-SEC1-')],
-            #### Section 2 part ####
-            [sg.T(SYMBOL_DOWN, enable_events=True, k='-OPEN SEC2-', text_color='purple'),
-             sg.T('Section 2', enable_events=True, text_color='purple', k='-OPEN SEC2-TEXT')],
-            [collapse(section2, '-SEC2-')],
-            #### Buttons at bottom ####
-            [sg.Button('Button1'),sg.Button('Button2'), sg.Button('Exit')]]
-
-window = sg.Window('Visible / Invisible Element Demo', layout)
-
-opened1, opened2 = True, True
-
-while True:             # Event Loop
-    event, values = window.read()
-    print(event, values)
-    if event == sg.WIN_CLOSED or event == 'Exit':
-        break
-
-    if event.startswith('-OPEN SEC1-'):
-        opened1 = not opened1
-        window['-OPEN SEC1-'].update(SYMBOL_DOWN if opened1 else SYMBOL_UP)
-        window['-SEC1-'].update(visible=opened1)
-
-    if event.startswith('-OPEN SEC2-'):
-        opened2 = not opened2
-        window['-OPEN SEC2-'].update(SYMBOL_DOWN if opened2 else SYMBOL_UP)
-        window['-OPEN SEC2-CHECKBOX'].update(not opened2)
-        window['-SEC2-'].update(visible=opened2)
-
-window.close()
+event, values = window.read(close=True)
+sg.popup('Title',
+         'The results of the window.',
+         'The button clicked was "{}"'.format(event),
+         'The values are', values)
