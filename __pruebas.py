@@ -48,7 +48,7 @@ sg.LOOK_AND_FEEL_TABLE[ 'TemaEfenergyV2' ] = {  'BACKGROUND': '#FCFCFC',
 
 
 menuPrincipal =     [
-                        [ 'Opciones', [ 'Acerca de...', 'Salir' ] ],                    
+                        [ 'Opciones', [ 'Acerca de...', '---', 'Salir' ] ],                    
                         [ 'Voltaje', 
                             [ 'Analizar Voltaje' ]
                         ],
@@ -59,7 +59,7 @@ menuPrincipal =     [
                             [ 'Analizar Armónicos de Tensión', 'Analizar Armónicos de Corriente' ],
                         ],
                         [ 'Normatividad',
-                            [ 'Voltaje', 'Potencia', 'Armónicos', '---', 'Gestión de Normas',
+                            [ 'Ver norma sobre Voltaje', 'Ver norma sobre Potencia', 'Ver norma sobre Armónicos', '---', 'Gestión de Normas',
                                 [ 'Voltaje', 'Potencia', 'Armónicos' ]
                             ],
                         ],
