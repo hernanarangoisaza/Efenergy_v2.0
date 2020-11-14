@@ -1,37 +1,59 @@
-#!/usr/bin/env python
+"""  
+Menu Update
+
+How to change menu1 to menu2 and vice versa without creating a second window?
+
+Intially menu1 is loaded, its mode is Neutral, to change to Play mode, we
+press Mode->Play which would bring us to menu2. Press Mode->Neutral to bring
+us to initial Neutral mode again.
+
+"""  
+
 import PySimpleGUI as sg
 
-'''
-    App that shows "how fonts work in PySimpleGUI".
-'''
+# Constants
+menu1 = [
+        ['File', ['Quit']],
+        ['Mode', ['Play']],
+        ['Engine', ['Setting']]
+]
 
-layout = [[sg.Text('This is my sample text', size=(20, 1), key='-text-')],
-          [sg.CB('Bold', key='-bold-', change_submits=True),
-           sg.CB('Italics', key='-italics-', change_submits=True),
-           sg.CB('Underline', key='-underline-', change_submits=True)],
-          [sg.Slider((6, 50), default_value=12, size=(14, 20),
-                     orientation='h', key='-slider-', change_submits=True),
-           sg.Text('Font size')],
-          [sg.Text('Font string = '), sg.Text('', size=(25, 1), key='-fontstring-')],
-          [sg.Button('Exit')]]
+menu2 = [
+        ['File', ['Quit']],
+        ['Mode', ['Neutral']],
+        ['Help', ['How to Play']]
+]
 
-window = sg.Window('Font string builder', layout)
+# Create variables for our elements. We will use this for updates.
+menu_elem = sg.Menu(menu1)
+txt_elem = sg.Text('Layout, mode = Neutral')
 
-text_elem = window['-text-']
-while True:     # Event Loop
-    event, values = window.read()
-    if event in (sg.WIN_CLOSED, 'Exit'):
+# Create layout for our elements
+layout = [
+        [menu_elem],
+        [txt_elem],
+]
+
+w = sg.Window('Menu Update', layout)
+
+while True:
+    e, v = w.Read(timeout=100)
+    
+    # If Quit menu entry is pressed or X is pressed
+    if e == 'Quit' or e is None:
         break
-    font_string = 'Helvitica '
-    font_string += str(values['-slider-'])
-    if values['-bold-']:
-        font_string += ' bold'
-    if values['-italics-']:
-        font_string += ' italic'
-    if values['-underline-']:
-        font_string += ' underline'
-    text_elem.update(font=int(font_string.split(' ')[1].split('.')[0]))
-    window['-fontstring-'].update('"'+font_string+'"')
-    print(event, values)
+    
+    # Change to Play mode, load menu2
+    if e == 'Play':
+        print('Hits Play')
+        menu_elem.Update(menu2)
+        txt_elem.Update('Layout, mode = Play')
+        continue
+        
+    # Change to Neutral mode, load menu1
+    if e == 'Neutral':
+        print('Hits Neutral')
+        menu_elem.Update(menu1)
+        txt_elem.Update('Layout, mode = Neutral')
 
-window.close()
+w.Close()

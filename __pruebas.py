@@ -13,6 +13,7 @@ import os.path
 
 MENU_DISABLED_CHARACTER = '!'
 MENU_KEY_SEPARATOR = '::'
+
 SYMBOL_UP = '▲'
 SYMBOL_DOWN = '▼'
 
@@ -31,8 +32,8 @@ archivoPlantilla = None
 
 # ************************************************************************************************************************
 
-# BARRA DE MENÚ PRINCIPAL
-menuPrincipal =     [
+# BARRA DE MENÚ PRINCIPAL TODO ACTIVO
+menuPrincipal1 =     [
                         [ 'Opciones', [ 'Acerca de...::-OPC ACERCADE-', '---', 'Salir' ] ],                    
                         [ 'Voltaje', 
                             [ 'Analizar Voltaje::-OPC V1-' ]
@@ -50,7 +51,26 @@ menuPrincipal =     [
                         ],
                     ]
 
-# SELECCIONADOR DE PLANTILLAS
+# BARRA DE MENÚ PRINCIPAL ITEMS BLOQUEADOS
+menuPrincipal2 =     [
+                        [ 'Opciones', [ 'Acerca de...::-OPC ACERCADE-', '---', 'Salir' ] ],                    
+                        [ '!Voltaje', 
+                            [ 'Analizar Voltaje::-OPC V1-' ]
+                        ],
+                        [ '!Potencia', 
+                            ['Analizar Factor de Potencia::-OPC P1-', 'Potencia Reactiva::-OPC P2-' ]
+                        ],
+                        [ '!Armónicos',
+                            [ 'Analizar Armónicos de Tensión::-OPC A1-', 'Analizar Armónicos de Corriente::-OPC A2-' ],
+                        ],
+                        [ 'Normatividad',
+                            [ 'Ver norma sobre Voltaje::-OPC N1-', 'Ver norma sobre Potencia::-OPC N2-', 'Ver norma sobre Armónicos::-OPC N3-', '---', 'Gestión de Normas',
+                                [ 'Voltaje::-OPC N4-', 'Potencia::-OPC N5-', 'Armónicos::-OPC N6-' ]
+                            ],
+                        ],
+                    ]
+
+# SELECTOR DE PLANTILLAS DE ORIGEN DE DATOS
 frameLayout1 =  [ 
                     [ 
                         sg.Input(key='-SELECCION PLANTILLA-', visible=True, enable_events=True, size=(85,1), font=("Consolas",9), readonly=True, pad=((10,0),(5,5))),
@@ -66,23 +86,28 @@ frameLayout1 =  [
                     ]
                 ]
 
+barraMenuPrincipal = sg.Menu(menuPrincipal1, key='-MENU PRINCIPAL-')
+frameSelectorPlantilla = sg.Frame('  Seleccionar plantilla de origen de datos  ', frameLayout1, pad=((15,15),(0,0)), title_color=eColor1, background_color=eColor2)
+logoPrincipal = sg.Image(filename=rutaLogoPrincipal, background_color=eColor2, size=(600,100))
+statusBarPrincipal = sg.StatusBar(text=barraEstado, size=(1200,1), pad=((50,50),(20,20)), text_color=eColor1, background_color=eColor2, relief=sg.RELIEF_FLAT, justification='center', visible=True, key='status_bar')
+
 # FULL LAYOUT
 layout =    [
                 #### Barra de Menú superior principal
                 [ 
-                    sg.Menu(menuPrincipal, tearoff=False) 
+                    barraMenuPrincipal
                 ],
                 #### Logo
                 [ 
-                    sg.Image(filename=rutaLogoPrincipal, background_color=eColor2, size=(600,100)) 
+                    logoPrincipal  
                 ],
                 #### Barra de estado
                 [ 
-                    sg.StatusBar(text=barraEstado, size=(1200,1), pad=((50,50),(20,20)), text_color=eColor1, background_color=eColor2, relief=sg.RELIEF_FLAT, justification='center', visible=True, key='status_bar')
+                    statusBarPrincipal
                 ],
                 #### Selector de plantilla
                 [ 
-                    sg.Frame('  Seleccionar plantilla de origen de datos  ', frameLayout1, pad=((15,15),(0,0)), title_color=eColor1, background_color=eColor2)
+                    frameSelectorPlantilla
                 ],
             ]
 
@@ -109,6 +134,13 @@ window = sg.Window(
 
 # ************************************************************************************************************************
 
+barraMenuPrincipal.Update(menuPrincipal2)
+frameSelectorPlantilla.Update(visible=True)
+logoPrincipal.Update(visible=False)
+statusBarPrincipal.Update(visible=False)
+
+# ************************************************************************************************************************
+
 # Run the Event Loop
 while True:
 
@@ -128,15 +160,14 @@ while True:
     
     if event == '-SELECCION PLANTILLA-':
 
-        rutaPlantilla = values[ '-SELECCION PLANTILLA-' ]
+        rutaPlantilla = values['-SELECCION PLANTILLA-']
         archivoPlantilla = rutaPlantilla.split('/')[-1]
         window['-VRUTA PLANTILLA-'].Update(rutaPlantilla.rpartition('/')[0])
         window['-VARCHIVO PLANTILLA-'].Update(archivoPlantilla)
+        barraMenuPrincipal.Update(menuPrincipal1)
 
     # Analizar Voltaje
-    if event.endswith('-OPC V1-'):
-
-        break
+    #if event.endswith('-OPC N1-'):
 
 window.close()
 
@@ -147,5 +178,6 @@ window.close()
 # pad=((left,right), (top,bottom))
 # if event.startswith('-XXXX-'):
 # if event.endswith('-XXXX-'): --> Necesario para identicar los key en las opciones de menús --> (option::-KEY-) 
+# menuPrincipal[1][0] = '!' + menuPrincipal[1][0]
 
 # ************************************************************************************************************************
