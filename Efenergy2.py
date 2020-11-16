@@ -601,19 +601,25 @@ window = sg.Window('Efenergy v2.0',
 
 # ************************************************************************************************************************
 
-# Habilitar barra de menú con opciones deshabilitadas
+# Habilitar barra de menú con opciones deshabilitadas.
+
 barraMenuPrincipal.Update(menuPrincipal2)
+
+# Extender tamaño de algunos Frames para que ocupen el ancho del diseño.
+
 frameFiltros.expand(expand_x=True)
 frameAcercaDe.expand(expand_x=True)
 frame1Navegacion.expand(expand_x=True)
+
 window.refresh()
 
 # Mejorar la nitidez y resolución de la aplicación. Se ve pequeño en monitores de alta resolución como 4K.
+
 # ctypes.windll.shcore.SetProcessDpiAwareness(2)
 
 # ************************************************************************************************************************
 
-# Run the Event Loop
+# Run the Event Loop.
 
 while True:
 
@@ -633,6 +639,8 @@ while True:
 
         break
 
+    # Seleccionar plantilla de origen de datos
+    
     if event == '-seleccionPlantilla-':
 
         rutaPlantilla = values['-seleccionPlantilla-']
@@ -650,7 +658,7 @@ while True:
         hiloCargarPlantilla(rutaPlantillaVoltaje, idVoltaje)
         hiloIndicadorCarga()
       
-    # Mensaje enviado por los hilos al momento de haber finalizado las acciones que toman más tiempo
+    # Mensaje recibido desde los hilos al momento de haber finalizado las acciones que toman más tiempo
 
     if event == '-ThreadDone-':
 
@@ -685,10 +693,13 @@ while True:
             #print('Error controlado por Efenergy v2.0. El valor del Input no corresponde a un número.')
 
     # Ventana Acerca de
+
     if event.endswith('-opcAcercaDe-'):
 
         columna1.Update(visible=False)
         columna2.Update(visible=True)
+
+    # Boton INICIO desde la ventana Acerca de
 
     if event == '-botonInicioV1-': 
 
