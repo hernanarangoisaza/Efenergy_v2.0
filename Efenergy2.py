@@ -19,67 +19,6 @@ import ctypes
 
 # ************************************************************************************************************************
 
-def cargarPlantilla(window, plantilla, identificador):
-
-    if (identificador == idVoltaje):
-        global archivoVoltaje
-        archivoVoltaje = pandas.ExcelFile(plantilla)
-
-    elif (identificador == idPotencia):
-        global archivoPotencia
-        archivoPotencia = pandas.ExcelFile(plantilla)
-
-    elif (identificador == idArmonicos):
-        global archivoArmonicos
-        archivoArmonicos = pandas.ExcelFile(plantilla)
-
-    window.write_event_value('-ThreadDone-','')
-
-def indicadorCarga(window):
-
-    limite = 100
-    i = 0
-    window['-progressBar-'].update_bar(0,0)
-    while (t1.is_alive()):
-        window['-progressBar-'].update_bar(i,limite)
-        i = i + 1
-        if (i==(limite-1)):
-            i = 0
-            window['-progressBar-'].update_bar(0,0)
-    window['-progressBar-'].update_bar(limite,limite)
-
-def hiloCargarPlantilla(plantilla, identificador):
-
-    global t1
-    t1 = threading.Thread(target=cargarPlantilla, args=(window,plantilla,identificador), daemon=True)
-    t1.name = 't1'
-    t1.start()
-
-def hiloIndicadorCarga():
-
-    global t2 
-    t2 = threading.Thread(target=indicadorCarga, args=(window,), daemon=True)
-    t2.name = 't2'
-    t2.start()
-
-# ************************************************************************************************************************
-
-def leerArchivo(file):
-
-	archivo = open(file, "r")
-	contenido = archivo.read()
-	archivo.close()
-	return contenido
-
-def escribirArchivo(file, contenido):
-
-	archivo = open(file, "w")
-	for texto in contenido:
-		archivo.write(texto)
-	archivo.close()
-
-# ************************************************************************************************************************
-
 MENU_DISABLED_CHARACTER = '!'
 MENU_KEY_SEPARATOR = '::'
 SYMBOL_UP = '▲'
@@ -154,18 +93,73 @@ rutaPdfVoltaje = 'archivo\\NormaVoltaje.pdf'
 rutaPdfPotencia = 'archivo\\NormaPotencia.pdf'
 rutaPdfArmonicos = 'archivo\\NormaArmónicos.pdf'
 
-# Carga los textos descriptivos para las normas
-
-informacionVoltaje = leerArchivo(rutaInformacionVoltaje)
-informacionPotencia = leerArchivo(rutaInformacionPotencia)
-informacionArmonicos = leerArchivo(rutaInformacionArmonicos)
-
 # Información para Acerca De...
 
 descripcion = 'Efenergy es un programa diseñado para funcionar bajo Windows el cual usted podrá utilizar en el análisis de la información y presentación oportuna de informes para el control de la eficiencia energética.\n\nDiversos estándares sobre \"Calidad de Energía Eléctrica\" convergen en la necesidad de realizar mediciones con la ayuda de herramientas TRUE RMS y analizar los  datos  recolectados mediante herramientas digitales con finalidad específica como Efenergy.'
 instructores = 'Semillero Energías\nViviana Ramírez Ramírez\nAndrés Tafur Piedrahita\nYuely Adriana Arce Arias'
 desarrolladores = 'Hernán Arango Isaza\nWendy Vanessa Mejía Agudelo\nDiego Alexander Sepúlveda García'
 copyright = '(C) 2020\nSENA - CDITI\nDosquebradas (Risaralda)'
+
+# ************************************************************************************************************************
+
+def cargarPlantilla(window, plantilla, identificador):
+
+    if (identificador == idVoltaje):
+        global archivoVoltaje
+        archivoVoltaje = pandas.ExcelFile(plantilla)
+
+    elif (identificador == idPotencia):
+        global archivoPotencia
+        archivoPotencia = pandas.ExcelFile(plantilla)
+
+    elif (identificador == idArmonicos):
+        global archivoArmonicos
+        archivoArmonicos = pandas.ExcelFile(plantilla)
+
+    window.write_event_value('-ThreadDone-','')
+
+def indicadorCarga(window):
+
+    limite = 100
+    i = 0
+    window['-progressBar-'].update_bar(0,0)
+    while (t1.is_alive()):
+        window['-progressBar-'].update_bar(i,limite)
+        i = i + 1
+        if (i==(limite-1)):
+            i = 0
+            window['-progressBar-'].update_bar(0,0)
+    window['-progressBar-'].update_bar(limite,limite)
+
+def hiloCargarPlantilla(plantilla, identificador):
+
+    global t1
+    t1 = threading.Thread(target=cargarPlantilla, args=(window,plantilla,identificador), daemon=True)
+    t1.name = 't1'
+    t1.start()
+
+def hiloIndicadorCarga():
+
+    global t2 
+    t2 = threading.Thread(target=indicadorCarga, args=(window,), daemon=True)
+    t2.name = 't2'
+    t2.start()
+
+# ************************************************************************************************************************
+
+def leerArchivo(file):
+
+	archivo = open(file, "r")
+	contenido = archivo.read()
+	archivo.close()
+	return contenido
+
+def escribirArchivo(file, contenido):
+
+	archivo = open(file, "w")
+	for texto in contenido:
+		archivo.write(texto)
+	archivo.close()
 
 # ************************************************************************************************************************
 
@@ -605,6 +599,12 @@ window = sg.Window('Efenergy v2.0',
 
 barraMenuPrincipal.Update(menuPrincipal2)
 
+# Carga los textos descriptivos para las normas
+
+informacionVoltaje = leerArchivo(rutaInformacionVoltaje)
+informacionPotencia = leerArchivo(rutaInformacionPotencia)
+informacionArmonicos = leerArchivo(rutaInformacionArmonicos)
+
 # Extender tamaño de algunos Frames para que ocupen el ancho del diseño.
 
 frameFiltros.expand(expand_x=True)
@@ -683,12 +683,15 @@ while True:
     if event == '-variacion-': 
     
         try:
+
             intVariacion = float(window['-variacion-'].get())
             limiteInferior = intVariacion * (1 - porcentajeLimiteInferior)
             limiteSuperior = intVariacion * (1 + porcentajeLimiteSuperior)
             nuevoTooltip = '  El rango establecido para análisis es [ {0:.2f} - {1:.2f} ]  '.format(limiteInferior,limiteSuperior)
             inputVariacion.set_tooltip(nuevoTooltip)
+
         except ValueError:
+
             window['-variacion-'].update(''.join([i for i in window['-variacion-'].get() if i.isdigit()]))
             #print('Error controlado por Efenergy v2.0. El valor del Input no corresponde a un número.')
 
@@ -708,9 +711,9 @@ while True:
 
 
     # Actualizar cambios en componentes de la GUI
+
     window.refresh()     
         
-
 window.close()
 
 # ************************************************************************************************************************
