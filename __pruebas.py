@@ -11,12 +11,24 @@ import os.path
 
 # ************************************************************************************************************************
 
-def long_function_thread1(window, plantilla):
-    global archivo_voltaje
-    archivo_voltaje = pandas.ExcelFile(plantilla)
+def cargarPlantilla(window, plantilla, identificador):
+
+    if (identificador == idVoltaje):
+        global archivoVoltaje
+        archivoVoltaje = pandas.ExcelFile(plantilla)
+
+    elif (identificador == idPotencia):
+        global archivoPotencia
+        archivoPotencia = pandas.ExcelFile(plantilla)
+
+    elif (identificador == idArmonicos):
+        global archivoArmonicos
+        archivoArmonicos = pandas.ExcelFile(plantilla)
+
     window.write_event_value('-THREAD DONE-','')
 
-def long_function_thread2(window):
+def indicadorCarga(window):
+
     limite = 100
     i = 0
     window['-PROGRESSBAR-'].update_bar(0,0)
@@ -28,15 +40,17 @@ def long_function_thread2(window):
             window['-PROGRESSBAR-'].update_bar(0,0)
     window['-PROGRESSBAR-'].update_bar(limite,limite)
 
-def long_function1(plantilla):
+def hiloCargarPlantilla(plantilla, identificador):
+
     global t1
-    t1 = threading.Thread(target=long_function_thread1, args=(window,plantilla), daemon=True)
+    t1 = threading.Thread(target=cargarPlantilla, args=(window,plantilla,identificador), daemon=True)
     t1.name = 't1'
     t1.start()
 
-def long_function2():
+def hiloIndicadorCarga():
+
     global t2 
-    t2 = threading.Thread(target=long_function_thread2, args=(window,), daemon=True)
+    t2 = threading.Thread(target=indicadorCarga, args=(window,), daemon=True)
     t2.name = 't2'
     t2.start()
 
@@ -44,16 +58,26 @@ def long_function2():
 
 MENU_DISABLED_CHARACTER = '!'
 MENU_KEY_SEPARATOR = '::'
-
 SYMBOL_UP = '▲'
 SYMBOL_DOWN = '▼'
 
-sizeFrmPrincipal = (1030,600)
-sizeColumnas = (1000,580)
-sizeSelectorPlantilla = (1000,580)
+# Identificadores de los tipos de procesos
+idVoltaje = 1
+idPotencia = 2
+idArmonicos = 3
 
+# Valores para límites de variación del Voltaje
+valorVariacion = 120
+porcentajeLimiteInferior = 0.1 # 10%
+porcentajeLimiteSuperior = 0.1 # 10%
+
+# Contenidos para filtros presentados con el componente Combo
 filtroVoltaje = ['MENOR','RANGO','MAYOR']
 filtroFases = ['A','B','C']
+
+sizeFrmPrincipal = (1030,600) # Tamaño de la ventana principal
+sizeColumnas = (1000,580) # Tamaño de las columnas que simulan ventanas ocultas
+sizeSelectorPlantilla = (1000,580) # Tamaño del Input para mostrar la ruta completa de la plantilla
 
 fontRutaPartes = ("Consolas",10)+('bold',)
 fontRutaTotal = ("Consolas",10)
@@ -66,21 +90,26 @@ rutaIconoPrincipal = 'imagenes/logo_2020.ico'
 extensionesPlantillas = (("Excel","*.xls*"),)
 barraEstado = 'SENA - CDITI - TEINNOVA - Semillero de Energías. Todos los derechos reservados. (C) 2020'
 
-eColor1 = 'black'
-eColor2 = '#F2F2F2'
-eColor3 = 'white'
-eColor4 = '#FFC000'
-eColores1 = ('black','#CDCDCD')
-eColores2 = ('#F8AF26',eColor2)
+eColor1 = '#000000' # Negro
+eColor2 = '#F2F2F2' # Gris fondo ventana
+eColor3 = '#FFFFFF' # Blanco
+eColor4 = '#F8AF26' # Naranja
+eColor5 = '#CDCDCD' # Gris botones
+eColores1 = (eColor1,eColor5) 
+eColores2 = (eColor4,eColor2) 
 
+# Ubicaciones y nombre de archivo a procesar como plantilla
 rutaPlantilla = None
 archivoPlantilla = None
 
-archivo_voltaje = None
+# Variables contenedoras del procesamiento de la plantilla con la librería Panda 
+archivoVoltaje = None
+archivoPotencia = None
+archivoArmonicos = None
 
-df_xlsx = None
-t1 = None
-t2 = None
+# Variables globales para control de ejecución de Hilos (Threads)
+t1 = None # Hilo para carga y procesamiento de la libreria Panda
+t2 = None # Hilo para representación gráfica del progreso de la carga
 
 # ************************************************************************************************************************
 
@@ -91,10 +120,10 @@ menuPrincipal1 =     [
                             [ 'Analizar Voltaje::-OPC V1-' ]
                         ],
                         [ 'Potencia',
-                            ['Analizar Factor de Potencia::-OPC P1-', 'Potencia Reactiva::-OPC P2-' ]
+                            ['Analizar Factor de Potencia::-OPC P1-', 'Analizar Potencia Reactiva::-OPC P2-' ]
                         ],
                         [ 'Armónicos',
-                            [ 'Analizar Armónicos de Tensión::-OPC A1-', 'Analizar Armónicos de Corriente::-OPC A2-' ],
+                            [ 'Analizar Armónicos de Tensión::-OPC A1-', 'Analizar Armónicos de Corriente::-OPC A2-', '---', 'Analizar Distorsión Armónica::-OPC A3-' ],
                         ],
                         [ 'Normatividad',
                             [ 'Ver norma sobre Voltaje::-OPC N1-', 'Ver norma sobre Potencia::-OPC N2-', 'Ver norma sobre Armónicos::-OPC N3-', '---', 'Gestión de Normas',
@@ -128,7 +157,7 @@ frameLayout1 =  [
                         sg.Input(key='-SELECCION PLANTILLA-', 
                                  visible=True, 
                                  enable_events=True, 
-                                 size=(121,1), 
+                                 size=(122,1), 
                                  font=fontRutaTotal, 
                                  readonly=True, 
                                  pad=((10,0),(5,5))),
@@ -259,7 +288,7 @@ comboFases = sg.Combo(key='-COMBO FASES',
 # FRAME FILTROS
 
 inputVariacion = sg.Input(key='-VARIACION-', 
-                          default_text='120',
+                          default_text=valorVariacion,
                           visible=True, 
                           enable_events=True, 
                           size=(4,1), 
@@ -305,14 +334,14 @@ layoutFiltros =    [
                                     text_color=eColor1,
                                     background_color=eColor2, 
                                     pad=((100,0),(20,22))),
-                            sg.Text(key='-L2 VARIACION-', 
-                                    text='-10%', 
+                            sg.Text(key='-L2 VARIACION-',
+                                    text='-{0:.0f}%'.format(porcentajeLimiteInferior*100),
                                     text_color=eColor1, 
                                     background_color=eColor2, 
                                     pad=((10,5),(20,22))),
                             inputVariacion,
                             sg.Text(key='-L3 VARIACION-', 
-                                    text='+10%', 
+                                    text='+{0:.0f}%'.format(porcentajeLimiteSuperior*100),
                                     text_color=eColor1, 
                                     background_color=eColor2, 
                                     pad=((5,20),(20,22))),
@@ -414,15 +443,26 @@ while True:
 
     # Analizar Voltaje
     if event.endswith('-OPC V1-'):
+
+        idProcesoActual = idVoltaje
         rutaPlantillaVoltaje = values['-SELECCION PLANTILLA-']
-        long_function1(rutaPlantillaVoltaje)
-        long_function2()
+        hiloCargarPlantilla(rutaPlantillaVoltaje, idVoltaje)
+        hiloIndicadorCarga()
         #archivo_voltaje = pandas.ExcelFile(rutaPlantillaVoltaje)
       
     # Mensaje enviado por los hilos al momento de haber finalizado las acciones que toman más tiempo
     if event == '-THREAD DONE-':
+
+        if (idProcesoActual == idVoltaje):
+            comboDias.Update(values=archivoVoltaje.sheet_names)
+
+        elif (idProcesoActual == idPotencia):
+            comboDias.Update(values=archivoPotencia.sheet_names)
+
+        elif (idProcesoActual == idArmonicos):
+            comboDias.Update(values=archivoArmonicos.sheet_names)
+        
         comboDias.Update(disabled=False)
-        comboDias.Update(values=archivo_voltaje.sheet_names)
         comboDias.Update(readonly=True)
         comboFases.Update(disabled=False)
         comboFases.Update(readonly=True)
@@ -431,8 +471,9 @@ while True:
 
     # Rango de variación
     if event.endswith('-VARIACION-'):
-        limiteInferior = int(window['-VARIACION-'].get()) * 0.9
-        limiteSuperior = int(window['-VARIACION-'].get()) * 1.1
+
+        limiteInferior = int(window['-VARIACION-'].get()) * (1 - porcentajeLimiteInferior)
+        limiteSuperior = int(window['-VARIACION-'].get()) * (1 + porcentajeLimiteSuperior)
         nuevoTooltip = '  El rango establecido para análisis es [ {0:.2f} - {1:.2f} ]  '.format(limiteInferior,limiteSuperior)
         inputVariacion.set_tooltip(nuevoTooltip)
 
