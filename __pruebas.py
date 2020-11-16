@@ -11,6 +11,37 @@ import os.path
 
 # ************************************************************************************************************************
 
+def long_function_thread1(window, plantilla):
+    global archivo_voltaje
+    archivo_voltaje = pandas.ExcelFile(plantilla)
+    window.write_event_value('-THREAD DONE-','')
+
+def long_function_thread2(window):
+    limite = 100
+    i = 0
+    window['-PROGRESSBAR-'].update_bar(0,0)
+    while (t1.is_alive()):
+        window['-PROGRESSBAR-'].update_bar(i,limite)
+        i = i + 1
+        if (i==(limite-1)):
+            i = 0
+            window['-PROGRESSBAR-'].update_bar(0,0)
+    window['-PROGRESSBAR-'].update_bar(limite,limite)
+
+def long_function1(plantilla):
+    global t1
+    t1 = threading.Thread(target=long_function_thread1, args=(window,plantilla), daemon=True)
+    t1.name = 't1'
+    t1.start()
+
+def long_function2():
+    global t2 
+    t2 = threading.Thread(target=long_function_thread2, args=(window,), daemon=True)
+    t2.name = 't2'
+    t2.start()
+
+# ************************************************************************************************************************
+
 MENU_DISABLED_CHARACTER = '!'
 MENU_KEY_SEPARATOR = '::'
 
@@ -36,10 +67,17 @@ barraEstado = 'SENA - CDITI - TEINNOVA - Semillero de Energías. Todos los derec
 eColor1 = 'black'
 eColor2 = '#F2F2F2'
 eColor3 = 'white'
+eColor4 = '#FFC000'
 eColores1 = ('black','#CDCDCD')
 
 rutaPlantilla = None
 archivoPlantilla = None
+
+archivo_voltaje = None
+
+df_xlsx = None
+t1 = None
+t2 = None
 
 # ************************************************************************************************************************
 
@@ -171,83 +209,107 @@ frameSelectorPlantilla = sg.Frame(key='-FRAME SELECTORPLANTILLA',
                                   title_color=eColor1,
                                   background_color=eColor2)
 
-comboboxDias = sg.Combo(key='-COMBOBOX DIAS', 
-                        values=[], 
+comboDias = sg.Combo(key='-COMBO DIAS', 
+                     values=[], 
+                     size=(10,1),
+                     auto_size_text=False,
+                     background_color=eColor3,
+                     text_color=eColor1,
+                     disabled=True)
+
+comboVoltaje = sg.Combo(key='-COMBO VOLTAJE', 
+                        values=filtroVoltaje, 
                         size=(10,1),
                         auto_size_text=False,
                         background_color=eColor3,
-                        text_color=eColor1)
+                        text_color=eColor1,
+                        disabled=True)
 
-comboboxVoltaje = sg.Combo(key='-COMBOBOX VOLTAJE', 
-                         values=filtroVoltaje, 
-                         size=(10,1),
-                         auto_size_text=False,
-                         background_color=eColor3,
-                         text_color=eColor1)
-
-comboboxFases = sg.Combo(key='-COMBOBOX FASES', 
-                         values=filtroFases, 
-                         size=(10,1),
-                         auto_size_text=False,
-                         background_color=eColor3,
-                         text_color=eColor1)
+comboFases = sg.Combo(key='-COMBO FASES', 
+                      values=filtroFases, 
+                      size=(10,1),
+                      auto_size_text=False,
+                      background_color=eColor3,
+                      text_color=eColor1,
+                      disabled=True)
 
 # FRAME FILTROS
+
 inputVariacion = sg.Input(key='-VARIACION-', 
+                          #default_text='120',
                           visible=True, 
                           enable_events=True, 
                           size=(4,1), 
-                          pad=((10,0),(2,0)), 
+                          pad=((0,0),(0,0)), 
                           text_color=eColor1, 
                           background_color=eColor3, 
-                          justification='center')
+                          justification='center',
+                          tooltip='Límite para análisis de variaciones en redes eléctricas',
+                          disabled=True)
+
 layoutFiltros =    [
-                    [
-                        #### Días disponibles
-                        sg.Text(key='-LCOMBOBOX DIAS-', 
-                                text='Días:', 
-                                size=(6,1), 
-                                text_color=eColor1, 
-                                background_color=eColor2, 
-                                pad=((10,0),(2,10))),
-                        comboboxDias,
-                        #### Voltaje RANGO, MENOR, MAYOR
-                        sg.Text(key='-LCOMBOBOX VOLTAJE-', 
-                                text='Voltaje:', 
-                                size=(6,1), 
-                                text_color=eColor1, 
-                                background_color=eColor2, 
-                                pad=((10,0),(2,10))),
-                        comboboxVoltaje,
-                        #### Fase A, B, C
-                        sg.Text(key='-LCOMBOBOX FASES-', 
-                                text='Fases:', 
-                                size=(6,1), 
-                                text_color=eColor1, 
-                                background_color=eColor2, 
-                                pad=((10,0),(2,10))),
-                        comboboxFases,
-                        #### Límite variaciones redes eléctricas -10% 120 +10%
-                        sg.Text(key='-L1 VARIACION-', 
-                                text='Límites:', 
-                                size=(6,1), 
-                                text_color=eColor1,
-                                background_color=eColor2, 
-                                pad=((10,0),(2,10))),
-                        sg.Text(key='-L2 VARIACION-', 
-                                text='-10%', 
-                                size=(5,1), 
-                                text_color=eColor1, 
-                                background_color=eColor2, 
-                                pad=((10,0),(2,10))),
-                        inputVariacion,
-                        sg.Text(key='-L3 VARIACION-', 
-                                text='+10%', 
-                                size=(5,1), 
-                                text_color=eColor1, 
-                                background_color=eColor2, 
-                                pad=((10,20),(2,10))),
-                    ],
+                        [
+                            #### Días disponibles
+                            sg.Text(key='-LCOMBO DIAS-', 
+                                    text='Días:', 
+                                    size=(6,1), 
+                                    text_color=eColor1, 
+                                    background_color=eColor2, 
+                                    pad=((10,0),(20,22)),
+                                    tooltip='Días disponibles para análisis según plantilla'),
+                            comboDias,
+                            #### Voltaje MENOR, RANGO, MAYOR
+                            sg.Text(key='-LCOMBO VOLTAJE-', 
+                                    text='Voltaje:', 
+                                    size=(6,1), 
+                                    text_color=eColor1, 
+                                    background_color=eColor2, 
+                                    pad=((80,0),(20,22)),
+                                    tooltip='Rangos a ser analizados conforme al límite de variación establecido'),
+                            comboVoltaje,
+                            #### Fase A, B, C
+                            sg.Text(key='-LCOMBO FASES-', 
+                                    text='Fases:', 
+                                    size=(6,1), 
+                                    text_color=eColor1, 
+                                    background_color=eColor2, 
+                                    pad=((80,0),(20,22))),
+                            comboFases,
+                            #### Límite variaciones redes eléctricas -10% 120 +10%
+                            sg.Text(key='-L1 VARIACION-', 
+                                    text='Límites:', 
+                                    size=(6,1), 
+                                    text_color=eColor1,
+                                    background_color=eColor2, 
+                                    pad=((100,0),(20,22))),
+                            sg.Text(key='-L2 VARIACION-', 
+                                    text='-10%', 
+                                    text_color=eColor1, 
+                                    background_color=eColor2, 
+                                    pad=((10,5),(20,22))),
+                            inputVariacion,
+                            sg.Text(key='-L3 VARIACION-', 
+                                    text='+10%', 
+                                    text_color=eColor1, 
+                                    background_color=eColor2, 
+                                    pad=((5,20),(20,22))),
+                        ],
+                        [
+                            #### ProgressBar para indicar de manera asíncrona la carga de la plantilla
+                            sg.Text(key='-LABEL PROGRESSBAR-', 
+                                    text='Progreso de carga de la planilla:', 
+                                    text_color=eColor1, 
+                                    background_color=eColor2, 
+                                    pad=((10,20),(0,22))),                        
+                            sg.ProgressBar(key='-PROGRESSBAR-', 
+                                           max_value=100, 
+                                           size=(65,20), 
+                                           orientation='h',
+                                           border_width=1,
+                                           bar_color=None,
+                                           pad=((0,20),(0,22)))
+                        ],
+                        
                 ]
 
 inputVariacion.Update = 120
@@ -315,7 +377,7 @@ window = sg.Window(
 
 # Habilitar barra de menú con opciones deshabilitadas
 barraMenuPrincipal.Update(menuPrincipal2)
-
+frameFiltros.expand(expand_x=True)
 window.refresh()
 
 # ************************************************************************************************************************
@@ -348,11 +410,28 @@ while True:
     # Analizar Voltaje
     if event.endswith('-OPC V1-'):
         rutaPlantillaVoltaje = values['-SELECCION PLANTILLA-']
-        archivo_voltaje = pandas.ExcelFile(rutaPlantillaVoltaje)
-        comboboxDias.Update(values=archivo_voltaje.sheet_names)
+        long_function1(rutaPlantillaVoltaje)
+        long_function2()
+        #archivo_voltaje = pandas.ExcelFile(rutaPlantillaVoltaje)
       
-
+    # Mensaje enviado por los hilos al momento de haber finalizado las acciones que toman más tiempo
+    if event == '-THREAD DONE-':
+        comboDias.Update(disabled=False)
+        comboDias.Update(values=archivo_voltaje.sheet_names)
+        comboFases.Update(disabled=False)
+        comboVoltaje.Update(disabled=False)
+        inputVariacion.Update(disabled=False)
         
+
+    # Rango de variación
+    if event.endswith('-VARIACION-'):
+        limiteInferior = int(window['-VARIACION-'].get()) * 0.9
+        limiteSuperior = int(window['-VARIACION-'].get()) * 1.1
+        nuevoTooltip = '  El rango establecido para análisis es [ {0:.2f} - {1:.2f} ]  '.format(limiteInferior,limiteSuperior)
+        inputVariacion.set_tooltip(nuevoTooltip)
+
+    # Actualizar cambios en componentes de la GUI
+    window.refresh()     
         
 
 window.close()
