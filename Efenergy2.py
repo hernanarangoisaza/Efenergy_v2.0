@@ -62,6 +62,8 @@ def hiloIndicadorCarga():
     t2.name = 't2'
     t2.start()
 
+# ************************************************************************************************************************
+
 def leerArchivo(file):
 
 	archivo = open(file, "r")
@@ -84,16 +86,19 @@ SYMBOL_UP = '▲'
 SYMBOL_DOWN = '▼'
 
 # Identificadores de los tipos de procesos
+
 idVoltaje = 1
 idPotencia = 2
 idArmonicos = 3
 
 # Valores para límites de variación del Voltaje
+
 valorVariacion = 120
 porcentajeLimiteInferior = 0.1 # 10%
 porcentajeLimiteSuperior = 0.1 # 10%
 
 # Contenidos para filtros presentados con el componente Combo
+
 filtroVoltaje = ['MENOR','RANGO','MAYOR']
 filtroFases = ['A','B','C']
 
@@ -101,16 +106,17 @@ sizeFrmPrincipal = (1030,600) # Tamaño de la ventana principal
 sizeColumnas = (1000,580) # Tamaño de las columnas que simulan ventanas ocultas
 sizeSelectorPlantilla = (1000,580) # Tamaño del Input para mostrar la ruta completa de la plantilla
 
-fontRutaPartes = ("Consolas",10)+('bold',)
-fontRutaTotal = ("Consolas",10)
-fontMenuPrincipal = ("Helvetica",11)
-fontCombos = ("Helvetica",11)
+fontRutaPartes = ('Consolas',10)+('bold',)
+fontRutaTotal = ('Consolas',10)
+fontMenuPrincipal = ('Helvetica',11)
+fontCombos = ('Helvetica',11)
+fontAcercaDe = ('Helvetica',10)+('bold',)
 
-rutaLogoPrincipal = 'imagenes/logo_texto_2020.png'
-rutaIconoPrincipal = 'imagenes/logo_2020.ico'
+rutaLogoPrincipal = 'imagenes\\logo_texto_2020.png'
+rutaIconoPrincipal = 'imagenes\\logo_2020.ico'
 
-extensionesPlantillas = (("Excel","*.xls*"),)
-extensionPdf = (("Archivo PDF","*.pdf"),)
+extensionesPlantillas = (('Excel','*.xls*'),)
+extensionPdf = (('Archivo PDF','*.pdf'),)
 
 barraEstado = 'SENA - CDITI - TEINNOVA - Semillero de Energías. Todos los derechos reservados. (C) 2020'
 
@@ -123,51 +129,71 @@ eColores1 = (eColor1,eColor5)
 eColores2 = (eColor4,eColor2) 
 
 # Ubicaciones y nombre de archivo a procesar como plantilla
+
 rutaPlantilla = None
 archivoPlantilla = None
 
 # Variables contenedoras del procesamiento de la plantilla con la librería Panda 
+
 archivoVoltaje = None
 archivoPotencia = None
 archivoArmonicos = None
 
 # Variables globales para control de ejecución de Hilos (Threads)
+
 t1 = None # Hilo para carga y procesamiento con la libreria Panda
 t2 = None # Hilo para representación gráfica del progreso de carga de plantillas
 
-clave = "1234" # Clave de edición de la norma
+clave = '1234' # Clave para edición de la norma
 
-rutaInformacionVoltaje = "archivo\InformaciónVoltaje.txt"
-rutaInformacionPotencia = "archivo\InformaciónPotencia.txt"
-rutaInformacionArmonicos = "archivo\InformaciónArmónicos.txt"
+rutaInformacionVoltaje = 'archivo\\InformaciónVoltaje.txt'
+rutaInformacionPotencia = 'archivo\\InformaciónPotencia.txt'
+rutaInformacionArmonicos = 'archivo\\InformaciónArmónicos.txt'
+
+rutaPdfVoltaje = 'archivo\\NormaVoltaje.pdf'
+rutaPdfPotencia = 'archivo\\NormaPotencia.pdf'
+rutaPdfArmonicos = 'archivo\\NormaArmónicos.pdf'
+
+# Carga los textos descriptivos para las normas
 
 informacionVoltaje = leerArchivo(rutaInformacionVoltaje)
 informacionPotencia = leerArchivo(rutaInformacionPotencia)
 informacionArmonicos = leerArchivo(rutaInformacionArmonicos)
 
+# Información para Acerca De...
+
+descripcion = 'Efenergy es un programa diseñado para funcionar bajo Windows el cual usted podrá utilizar en el análisis de la información y presentación oportuna de informes para el control de la eficiencia energética.\n\nDiversos estándares sobre \"Calidad de Energía Eléctrica\" convergen en la necesidad de realizar mediciones con la ayuda de herramientas TRUE RMS y analizar los  datos  recolectados mediante herramientas digitales con finalidad específica como Efenergy.'
+instructores = 'Semillero Energías\nViviana Ramírez Ramírez\nAndrés Tafur Piedrahita\nYuely Adriana Arce Arias'
+desarrolladores = 'Hernán Arango Isaza\nWendy Vanessa Mejía Agudelo\nDiego Alexander Sepúlveda García'
+copyright = '(C) 2020\nSENA - CDITI\nDosquebradas (Risaralda)'
+
 # ************************************************************************************************************************
 
-ruta_pdf_voltaje = "archivo/NormaVoltaje.pdf"
-ruta_pdf_potencia = "archivo/NormaPotencia.pdf"
-ruta_pdf_armonicos = "archivo/NormaArmónicos.pdf"
-url_voltaje_pdf = "archivo\\NormaVoltaje.pdf"
-url_potencia_pdf = "archivo\\NormaPotencia.pdf"
-url_armonicos_pdf = "archivo\\NormaArmónico.pdf"
+def generarNavegacion(idConsecutivo):
 
-descripcion = """
-Efenergy es un programa diseñado para funcionar bajo Windows el 
-cual usted podrá utilizar en el análisis de la información y 
-presentación oportuna de informes para el control de la eficiencia 
-energética. 
+    # Función especial que genera todo lo necesario para la barra de navegación.
+    # pySimpleGUI presenta restricciones en cuanto a la reutilización de elementos en sus Layouts.
+    # Se genera la misma estructura pero con id diferente.
+    # Se utiliza haciendo un llamado con múltiple asignación de variables en línea.
+    # Por ejemplo: layout1Navegacion, frame1Navegacion = generarNavegacion(1)
 
-Diversos estándares sobre "Calidad de Energía Eléctrica" convergen 
-en la necesidad de realizar mediciones con la ayuda de herramientas 
-TRUE RMS y analizar los  datos  recolectados mediante  herramientas 
-digitales con finalidad específica como Efenergy."""
+    layoutNavegacion =  [
+                            [
+                                sg.Button(key='-botonInicioV' + str(idConsecutivo) + '-', 
+                                          button_text='Inicio',
+                                          button_color=eColores1,
+                                          size=(12,1),
+                                          pad=((10,5),(15,20)))
+                            ],
+                        ]
 
-instructores = "\n\nSemillero Energías - TEINNOVA\nViviana Ramírez Ramírez\nAndrés Tafur Piedrahita\nYuely Adriana Arce Arias"
-desarrolladores = "\n\nHernán Arango Isaza\nWendy Vanessa Mejía Agudelo\nDiego Alexander Sepúlveda García"
-copyright = "(C) 2020\nCentro de Diseño e Innovación Tecnológica Industrial\nSENA - CDITI\nDosquebradas (Risaralda)"
+    frameNavegacion = sg.Frame(key='-frameNavegacionV' + str(idConsecutivo) + '-',  
+                               title='  Navegación  ', 
+                               layout=layoutNavegacion, 
+                               title_color=eColor1, 
+                               background_color=eColor2)
+
+    return layoutNavegacion, frameNavegacion
 
 # ************************************************************************************************************************
 
@@ -455,24 +481,70 @@ columna1 = sg.Column(key='-columna1-',
                      background_color=eColor2, 
                      size=sizeColumnas)
 
-layoutAcercaDe = [
-                    [
-                        #### Descripción de la herramienta
-                        sg.Text(key='-descripcionHerramienta-', 
-                                text=descripcion, 
-                                size=(6,1), 
+# Descripción de la herramienta
+
+acercaDeDescripcion = sg.Multiline(key='-descripcionHerramienta-',
+                                   default_text=descripcion, 
+                                   size=(90,7), 
+                                   text_color=eColor1, 
+                                   background_color=eColor2, 
+                                   border_width=0,
+                                   autoscroll=False,
+                                   write_only=True,
+                                   auto_size_text=False,
+                                   pad=((15,0),(15,0)))
+
+acercaDeDesarrolladores = sg.Text(key='-textoDesarrolladores-',
+                                  text=desarrolladores,
+                                  text_color=eColor1, 
+                                  background_color=eColor2, 
+                                  pad=((10,5),(15,20)))
+
+acercaDeInstructores =  sg.Text(key='-textoInstructores-',
+                                text=instructores,
                                 text_color=eColor1, 
                                 background_color=eColor2, 
-                                pad=((10,0),(20,22)),
-                                tooltip='Días disponibles para análisis según plantilla'),
+                                pad=((10,5),(15,20)))
+
+acercaDeCopyright = sg.Text(key='-textoCopyright-',
+                            text=copyright,
+                            text_color=eColor1, 
+                            background_color=eColor2, 
+                            font=fontAcercaDe,
+                            pad=((25,5),(15,0)))
+
+layoutAcercaDe = [
+                    [
+                        acercaDeDescripcion,
+                        acercaDeCopyright
+                    ],
+                    [   
+                        sg.Text(key='-labelDesarrolladores-',
+                                    text='Desarrolladores:',
+                                    text_color=eColor1, 
+                                    background_color=eColor2, 
+                                    font=fontAcercaDe,
+                                    pad=((10,5),(15,20))),
+                        acercaDeDesarrolladores,
+                        sg.Text(key='-labelInstructores-',
+                                    text='Instructores y Asesores:',
+                                    text_color=eColor1, 
+                                    background_color=eColor2,
+                                    font=fontAcercaDe,
+                                    pad=((10,5),(15,20))),
+                        acercaDeInstructores
                     ],
                 ]
 
 frameAcercaDe = sg.Frame(key='-frameAcercaDe-', 
-                         title='  Acerca de Efenergu v2.0  ', 
+                         title='  Acerca de Efenergy v2.0  ', 
                          layout=layoutAcercaDe, 
                          title_color=eColor1, 
                          background_color=eColor2)
+
+# GENERACIÓN DINÁMICA DE FRAMES PARA NAVEGACIÓN. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
+
+layout1Navegacion, frame1Navegacion = generarNavegacion(1)
 
 layoutColumna2 =    [
                         #### Logo + Barra
@@ -482,6 +554,10 @@ layoutColumna2 =    [
                         #### Selector de plantilla
                         [
                             frameAcercaDe
+                        ],
+                        #### Panel de navegación
+                        [
+                            frame1Navegacion
                         ],
                     ]
 
@@ -520,7 +596,7 @@ window = sg.Window('Efenergy v2.0',
                    size=sizeFrmPrincipal,
                    debugger_enabled=False,
                    finalize=True,
-                   font=("Helvetica",11),
+                   font=('Helvetica',11),
                    icon=rutaIconoPrincipal)
 
 # ************************************************************************************************************************
@@ -528,6 +604,8 @@ window = sg.Window('Efenergy v2.0',
 # Habilitar barra de menú con opciones deshabilitadas
 barraMenuPrincipal.Update(menuPrincipal2)
 frameFiltros.expand(expand_x=True)
+frameAcercaDe.expand(expand_x=True)
+frame1Navegacion.expand(expand_x=True)
 window.refresh()
 
 # Mejorar la nitidez y resolución de la aplicación. Se ve pequeño en monitores de alta resolución como 4K.
@@ -604,13 +682,19 @@ while True:
             inputVariacion.set_tooltip(nuevoTooltip)
         except ValueError:
             window['-variacion-'].update(''.join([i for i in window['-variacion-'].get() if i.isdigit()]))
-            #print("Error controlado por Efenergy v2.0. El valor del Input no corresponde a un número.")
+            #print('Error controlado por Efenergy v2.0. El valor del Input no corresponde a un número.')
 
     # Ventana Acerca de
     if event.endswith('-opcAcercaDe-'):
 
         columna1.Update(visible=False)
         columna2.Update(visible=True)
+
+    if event == '-botonInicioV1-': 
+
+        columna1.Update(visible=True)
+        columna2.Update(visible=False)
+
 
     # Actualizar cambios en componentes de la GUI
     window.refresh()     
