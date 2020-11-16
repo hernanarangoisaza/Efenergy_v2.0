@@ -76,7 +76,6 @@ def escribirArchivo(file, contenido):
 		archivo.write(texto)
 	archivo.close()
 
-
 # ************************************************************************************************************************
 
 MENU_DISABLED_CHARACTER = '!'
@@ -146,10 +145,7 @@ informacionVoltaje = leerArchivo(rutaInformacionVoltaje)
 informacionPotencia = leerArchivo(rutaInformacionPotencia)
 informacionArmonicos = leerArchivo(rutaInformacionArmonicos)
 
-
 # ************************************************************************************************************************
-
-
 
 ruta_pdf_voltaje = "archivo/NormaVoltaje.pdf"
 ruta_pdf_potencia = "archivo/NormaPotencia.pdf"
@@ -157,7 +153,6 @@ ruta_pdf_armonicos = "archivo/NormaArmónicos.pdf"
 url_voltaje_pdf = "archivo\\NormaVoltaje.pdf"
 url_potencia_pdf = "archivo\\NormaPotencia.pdf"
 url_armonicos_pdf = "archivo\\NormaArmónico.pdf"
-
 
 descripcion = """
 Efenergy es un programa diseñado para funcionar bajo Windows el 
@@ -174,11 +169,55 @@ instructores = "\n\nSemillero Energías - TEINNOVA\nViviana Ramírez Ramírez\nA
 desarrolladores = "\n\nHernán Arango Isaza\nWendy Vanessa Mejía Agudelo\nDiego Alexander Sepúlveda García"
 copyright = "(C) 2020\nCentro de Diseño e Innovación Tecnológica Industrial\nSENA - CDITI\nDosquebradas (Risaralda)"
 
+# ************************************************************************************************************************
 
+def generarLogo(idConsecutivo):
+
+    # Función especial que genera todo lo necesario para presentar el logo en las páginas que lo requieran.
+    # pySimpleGUI presenta restricciones en cuanto a la reutilización de elementos en sus Layouts.
+    # Se genera la misma estructura pero con id diferente.
+    # Se utiliza haciendo un llamado con múltiple asignación de variables en línea.
+    # Por ejemplo: logo1Principal, statusBar1Principal, layout1Logo, frame1Logo = generarLogo(1)
+
+    logoPrincipal = sg.Image(key='-logoPrincipalV' + str(idConsecutivo) + '-', 
+                             filename=rutaLogoPrincipal, 
+                             background_color=eColor2, 
+                             size=(965,100))
+
+    statusBarPrincipal = sg.StatusBar(key='-statusBarV' + str(idConsecutivo) + '-', 
+                                      text=barraEstado, 
+                                      size=(1,1), 
+                                      pad=((0,0),(20,20)), 
+                                      text_color=eColor1, 
+                                      background_color=eColor2, 
+                                      relief=sg.RELIEF_FLAT, 
+                                      justification='center', 
+                                      visible=True)
+
+    layoutLogo = [
+                    #### Logo
+                    [
+                        logoPrincipal
+                    ],
+                    #### Barra de estado
+                    [
+                        statusBarPrincipal
+                    ],
+                ]
+
+    frameLogo = sg.Frame(key='-frameLogoV' + str(idConsecutivo) + '-', 
+                          title='', 
+                          layout=layoutLogo, 
+                          title_color=eColor1, 
+                          background_color=eColor2)
+
+
+    return logoPrincipal, statusBarPrincipal, layoutLogo, frameLogo
 
 # ************************************************************************************************************************
 
 # BARRA DE MENÚ PRINCIPAL TODO ACTIVO
+
 menuPrincipal1 =     [
                         [ 'Opciones', [ 'Acerca de...::-opcAcercaDe-', '---', 'Salir' ] ],
                         [ 'Voltaje',
@@ -198,6 +237,7 @@ menuPrincipal1 =     [
                     ]
 
 # BARRA DE MENÚ PRINCIPAL ITEMS BLOQUEADOS
+
 menuPrincipal2 =     [
                         [ 'Opciones', [ 'Acerca de...::-opcAcercaDe-', '---', 'Salir' ] ],
                         [ '!Voltaje',
@@ -216,7 +256,13 @@ menuPrincipal2 =     [
                         ],
                     ]
 
+# GENERACIÓN DINÁMICA DE FRAMES PARA EL LOGO. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
+
+logo1Principal, statusBar1Principal, layout1Logo, frame1Logo = generarLogo(1)
+logo2Principal, statusBar2Principal, layout2Logo, frame2Logo = generarLogo(2)
+
 # SELECTOR DE PLANTILLAS DE ORIGEN DE DATOS
+
 frameLayout1 =  [
                     [
                         sg.Input(key='-seleccionPlantilla-', 
@@ -279,72 +325,6 @@ frameLayout1 =  [
                                         pad=((10,0),(0,10)))
                     ],
                 ]
-
-logo1Principal = sg.Image(key='-logo1Principal-', 
-                         filename=rutaLogoPrincipal, 
-                         background_color=eColor2, 
-                         size=(965,100))
-
-logo2Principal = sg.Image(key='-logo2Principal-', 
-                         filename=rutaLogoPrincipal, 
-                         background_color=eColor2, 
-                         size=(965,100))
-
-
-statusBar1Principal = sg.StatusBar(key='-statusBar1-', 
-                                  text=barraEstado, 
-                                  size=(1,1), 
-                                  pad=((0,0),(20,20)), 
-                                  text_color=eColor1, 
-                                  background_color=eColor2, 
-                                  relief=sg.RELIEF_FLAT, 
-                                  justification='center', 
-                                  visible=True)
-
-statusBar2Principal = sg.StatusBar(key='-statusBar2-', 
-                                  text=barraEstado, 
-                                  size=(1,1), 
-                                  pad=((0,0),(20,20)), 
-                                  text_color=eColor1, 
-                                  background_color=eColor2, 
-                                  relief=sg.RELIEF_FLAT, 
-                                  justification='center', 
-                                  visible=True)
-
-# FRAME LOGO
-layout1Logo =    [
-                    #### Logo
-                    [
-                        logo1Principal
-                    ],
-                    #### Barra de estado
-                    [
-                        statusBar1Principal
-                    ],
-                ]
-
-layout2Logo =    [
-                    #### Logo
-                    [
-                        logo2Principal
-                    ],
-                    #### Barra de estado
-                    [
-                        statusBar2Principal
-                    ],
-                ]
-
-frame1Logo = sg.Frame(key='-frame1Logo-', 
-                      title='', 
-                      layout=layout1Logo, 
-                      title_color=eColor1, 
-                      background_color=eColor2)
-
-frame2Logo = sg.Frame(key='-frame2Logo-', 
-                      title='', 
-                      layout=layout2Logo, 
-                      title_color=eColor1, 
-                      background_color=eColor2)
 
 barraMenuPrincipal = sg.Menu(key='-menuPrincipal-', 
                              menu_definition=menuPrincipal1,
@@ -512,6 +492,7 @@ columna2 = sg.Column(key='-columna2-',
                      size=sizeColumnas)
 
 # FULL LAYOUT
+
 layout =    [
                 #### Barra de Menú superior principal
                 [
@@ -527,6 +508,7 @@ layout =    [
 # ************************************************************************************************************************
 
 # Cambiar al tema personalizado
+
 sg.theme('Default1')
 sg.ChangeLookAndFeel('SystemDefault')
 
@@ -554,6 +536,7 @@ window.refresh()
 # ************************************************************************************************************************
 
 # Run the Event Loop
+
 while True:
 
     event, values = window.read()
@@ -561,11 +544,13 @@ while True:
     print(event)
 
     # Salir de la aplicación
+
     if event == sg.WIN_CLOSED or event == 'Salir':
 
         break
 
     # Salir de la aplicación
+
     if event.endswith('-opcSalir-'):
 
         break
@@ -579,15 +564,16 @@ while True:
         barraMenuPrincipal.Update(menuPrincipal1)
 
     # Analizar Voltaje
+
     if event.endswith('-opcV1-'):
 
         idProcesoActual = idVoltaje
         rutaPlantillaVoltaje = values['-seleccionPlantilla-']
         hiloCargarPlantilla(rutaPlantillaVoltaje, idVoltaje)
         hiloIndicadorCarga()
-        #archivo_voltaje = pandas.ExcelFile(rutaPlantillaVoltaje)
       
     # Mensaje enviado por los hilos al momento de haber finalizado las acciones que toman más tiempo
+
     if event == '-ThreadDone-':
 
         if (idProcesoActual == idVoltaje):
@@ -607,19 +593,24 @@ while True:
         comboVoltaje.Update(readonly=True)
 
     # Rango de variación
-    if event.endswith('-variacion-'):
 
-        limiteInferior = int(window['-variacion-'].get()) * (1 - porcentajeLimiteInferior)
-        limiteSuperior = int(window['-variacion-'].get()) * (1 + porcentajeLimiteSuperior)
-        nuevoTooltip = '  El rango establecido para análisis es [ {0:.2f} - {1:.2f} ]  '.format(limiteInferior,limiteSuperior)
-        inputVariacion.set_tooltip(nuevoTooltip)
+    if event == '-variacion-': 
+    
+        try:
+            intVariacion = float(window['-variacion-'].get())
+            limiteInferior = intVariacion * (1 - porcentajeLimiteInferior)
+            limiteSuperior = intVariacion * (1 + porcentajeLimiteSuperior)
+            nuevoTooltip = '  El rango establecido para análisis es [ {0:.2f} - {1:.2f} ]  '.format(limiteInferior,limiteSuperior)
+            inputVariacion.set_tooltip(nuevoTooltip)
+        except ValueError:
+            window['-variacion-'].update(''.join([i for i in window['-variacion-'].get() if i.isdigit()]))
+            #print("Error controlado por Efenergy v2.0. El valor del Input no corresponde a un número.")
 
     # Ventana Acerca de
     if event.endswith('-opcAcercaDe-'):
 
         columna1.Update(visible=False)
         columna2.Update(visible=True)
-
 
     # Actualizar cambios en componentes de la GUI
     window.refresh()     
@@ -641,5 +632,6 @@ window.close()
 # logoPrincipal.set_size((1,None))
 # window.refresh()
 # window['-COLUMNA 2'].Update(visible=False)
+# globals()["layoutLogo" + str(idConsecutivo)] =
 
 # ************************************************************************************************************************
