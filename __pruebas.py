@@ -57,6 +57,7 @@ filtroFases = ['A','B','C']
 
 fontRutaPartes = ("Consolas",10)+('bold',)
 fontRutaTotal = ("Consolas",10)
+fontMenuPrincipal = ("Helvetica",11)
 
 rutaLogoPrincipal = 'imagenes/logo_texto_2020.png'
 rutaIconoPrincipal = 'imagenes/logo_2020.ico'
@@ -165,7 +166,23 @@ frameLayout1 =  [
                                 background_color=eColor2, 
                                 font=fontRutaPartes, 
                                 pad=((10,0),(0,10)))
-                    ]
+                    ],
+                    [
+                        #### ProgressBar para indicar de manera asíncrona la carga de la plantilla
+                        sg.Text(key='-LABEL PROGRESSBAR-', 
+                                text='Carga:', 
+                                size=(6,1), 
+                                text_color=eColor1, 
+                                background_color=eColor2, 
+                                pad=((10,0),(0,10))),                        
+                        sg.ProgressBar(key='-PROGRESSBAR-', 
+                                        max_value=100, 
+                                        size=(71,20), 
+                                        orientation='h',
+                                        border_width=1,
+                                        bar_color=None,
+                                        pad=((10,0),(0,10)))
+                    ],
                 ]
 
 logoPrincipal = sg.Image(key='-LOGO PRINCIPAL-', 
@@ -201,7 +218,9 @@ frameLogo = sg.Frame(key='-FRAME LOGO',
                      title_color=eColor1, 
                      background_color=eColor2)
 
-barraMenuPrincipal = sg.Menu(key='-MENU PRINCIPAL-', menu_definition=menuPrincipal1)
+barraMenuPrincipal = sg.Menu(key='-MENU PRINCIPAL-', 
+                             menu_definition=menuPrincipal1,
+                             font=fontMenuPrincipal)
 
 frameSelectorPlantilla = sg.Frame(key='-FRAME SELECTORPLANTILLA', 
                                   title='  Seleccionar plantilla de origen de datos  ', 
@@ -294,23 +313,7 @@ layoutFiltros =    [
                                     background_color=eColor2, 
                                     pad=((5,20),(20,22))),
                         ],
-                        [
-                            #### ProgressBar para indicar de manera asíncrona la carga de la plantilla
-                            sg.Text(key='-LABEL PROGRESSBAR-', 
-                                    text='Progreso de carga de la planilla:', 
-                                    text_color=eColor1, 
-                                    background_color=eColor2, 
-                                    pad=((10,20),(0,22))),                        
-                            sg.ProgressBar(key='-PROGRESSBAR-', 
-                                           max_value=100, 
-                                           size=(65,20), 
-                                           orientation='h',
-                                           border_width=1,
-                                           bar_color=None,
-                                           pad=((0,20),(0,22)))
-                        ],
-                        
-                ]
+                    ]
 
 inputVariacion.Update = 120
 
