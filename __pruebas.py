@@ -58,6 +58,7 @@ filtroFases = ['A','B','C']
 fontRutaPartes = ("Consolas",10)+('bold',)
 fontRutaTotal = ("Consolas",10)
 fontMenuPrincipal = ("Helvetica",11)
+fontCombos = ("Helvetica",11)
 
 rutaLogoPrincipal = 'imagenes/logo_texto_2020.png'
 rutaIconoPrincipal = 'imagenes/logo_2020.ico'
@@ -70,6 +71,7 @@ eColor2 = '#F2F2F2'
 eColor3 = 'white'
 eColor4 = '#FFC000'
 eColores1 = ('black','#CDCDCD')
+eColores2 = ('#F8AF26',eColor2)
 
 rutaPlantilla = None
 archivoPlantilla = None
@@ -131,8 +133,7 @@ frameLayout1 =  [
                                  readonly=True, 
                                  pad=((10,0),(5,5))),
                         sg.FileBrowse(key='-BTN PLANTILLA-', 
-                                      button_text='Explorar', 
-                                      size=(10,1), 
+                                      button_text='Seleccionar', 
                                       button_color=eColores1, 
                                       file_types=extensionesPlantillas, 
                                       pad=((10,10),(10,10)))
@@ -180,7 +181,7 @@ frameLayout1 =  [
                                         size=(71,20), 
                                         orientation='h',
                                         border_width=1,
-                                        bar_color=None,
+                                        bar_color=eColores2,
                                         pad=((10,0),(0,10)))
                     ],
                 ]
@@ -223,7 +224,7 @@ barraMenuPrincipal = sg.Menu(key='-MENU PRINCIPAL-',
                              font=fontMenuPrincipal)
 
 frameSelectorPlantilla = sg.Frame(key='-FRAME SELECTORPLANTILLA', 
-                                  title='  Seleccionar plantilla de origen de datos  ', 
+                                  title='  Plantilla de origen de datos  ', 
                                   layout=frameLayout1, 
                                   title_color=eColor1,
                                   background_color=eColor2)
@@ -234,6 +235,7 @@ comboDias = sg.Combo(key='-COMBO DIAS',
                      auto_size_text=False,
                      background_color=eColor3,
                      text_color=eColor1,
+                     font=fontCombos,
                      disabled=True)
 
 comboVoltaje = sg.Combo(key='-COMBO VOLTAJE', 
@@ -242,6 +244,7 @@ comboVoltaje = sg.Combo(key='-COMBO VOLTAJE',
                         auto_size_text=False,
                         background_color=eColor3,
                         text_color=eColor1,
+                        font=fontCombos,
                         disabled=True)
 
 comboFases = sg.Combo(key='-COMBO FASES', 
@@ -250,6 +253,7 @@ comboFases = sg.Combo(key='-COMBO FASES',
                       auto_size_text=False,
                       background_color=eColor3,
                       text_color=eColor1,
+                      font=fontCombos,
                       disabled=True)
 
 # FRAME FILTROS
@@ -365,16 +369,14 @@ sg.ChangeLookAndFeel('SystemDefault')
 
 # ************************************************************************************************************************
 
-window = sg.Window(
-        'Efenergy v2.0',
-        layout,
-        use_default_focus=True,
-        size=sizeFrmPrincipal,
-        debugger_enabled=False,
-        finalize=True,
-        font=("Helvetica",11),
-        icon=rutaIconoPrincipal
-   )
+window = sg.Window('Efenergy v2.0',
+                   layout,
+                   use_default_focus=True,
+                   size=sizeFrmPrincipal,
+                   debugger_enabled=False,
+                   finalize=True,
+                   font=("Helvetica",11),
+                   icon=rutaIconoPrincipal)
 
 # ************************************************************************************************************************
 
