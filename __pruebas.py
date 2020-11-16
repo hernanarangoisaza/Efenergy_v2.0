@@ -236,7 +236,7 @@ comboFases = sg.Combo(key='-COMBO FASES',
 # FRAME FILTROS
 
 inputVariacion = sg.Input(key='-VARIACION-', 
-                          #default_text='120',
+                          default_text='120',
                           visible=True, 
                           enable_events=True, 
                           size=(4,1), 
@@ -245,7 +245,7 @@ inputVariacion = sg.Input(key='-VARIACION-',
                           background_color=eColor3, 
                           justification='center',
                           tooltip='Límite para análisis de variaciones en redes eléctricas',
-                          disabled=True)
+                          disabled=False)
 
 layoutFiltros =    [
                         [
@@ -269,7 +269,7 @@ layoutFiltros =    [
                             comboVoltaje,
                             #### Fase A, B, C
                             sg.Text(key='-LCOMBO FASES-', 
-                                    text='Fases:', 
+                                    text='Fase:', 
                                     size=(6,1), 
                                     text_color=eColor1, 
                                     background_color=eColor2, 
@@ -418,10 +418,11 @@ while True:
     if event == '-THREAD DONE-':
         comboDias.Update(disabled=False)
         comboDias.Update(values=archivo_voltaje.sheet_names)
+        comboDias.Update(readonly=True)
         comboFases.Update(disabled=False)
+        comboFases.Update(readonly=True)
         comboVoltaje.Update(disabled=False)
-        inputVariacion.Update(disabled=False)
-        
+        comboVoltaje.Update(readonly=True)
 
     # Rango de variación
     if event.endswith('-VARIACION-'):
