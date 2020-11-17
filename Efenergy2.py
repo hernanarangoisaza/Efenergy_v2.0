@@ -386,6 +386,7 @@ frameLayout1 =  [
                                  font=fontRutaTotal, 
                                  readonly=True, 
                                  pad=((10,0),(5,5))),
+
                         sg.FileBrowse(key='-botonPlantilla-', 
                                       button_text='Seleccionar', 
                                       button_color=eColores1, 
@@ -399,6 +400,7 @@ frameLayout1 =  [
                                 text_color=eColor1, 
                                 background_color=eColor2, 
                                 pad=((10,0),(0,10))),
+
                         sg.Text(key='-valorRutaPlantilla-', 
                                 text='---', 
                                 size=(78,1), 
@@ -414,6 +416,7 @@ frameLayout1 =  [
                                 text_color=eColor1, 
                                 background_color=eColor2, 
                                 pad=((10,0),(0,10))),
+
                         sg.Text(key='-valorArchivoPlantilla-', 
                                 text='---', 
                                 size=(78,1), 
@@ -429,7 +432,8 @@ frameLayout1 =  [
                                 size=(8,1), 
                                 text_color=eColor1, 
                                 background_color=eColor2, 
-                                pad=((10,0),(0,10))),                        
+                                pad=((10,0),(0,10))),    
+                        
                         sg.ProgressBar(key='-progressBar-', 
                                         max_value=100, 
                                         size=(59,20), 
@@ -503,7 +507,9 @@ layoutFiltros =    [
                                     background_color=eColor2, 
                                     pad=((10,0),(20,22)),
                                     tooltip='Días disponibles para análisis según plantilla'),
+
                             comboDias,
+
                             #### Voltaje MENOR, RANGO, MAYOR
                             sg.Text(key='-labelComboVoltaje-', 
                                     text='Voltaje:', 
@@ -512,7 +518,9 @@ layoutFiltros =    [
                                     background_color=eColor2, 
                                     pad=((80,0),(20,22)),
                                     tooltip='Rangos a ser analizados conforme al límite de variación establecido'),
+
                             comboVoltaje,
+
                             #### Fase A, B, C
                             sg.Text(key='-labelComboFases-', 
                                     text='Fase:', 
@@ -520,7 +528,9 @@ layoutFiltros =    [
                                     text_color=eColor1, 
                                     background_color=eColor2, 
                                     pad=((80,0),(20,22))),
+
                             comboFases,
+
                             #### Límite variaciones redes eléctricas -10% 120 +10%
                             sg.Text(key='-label1Variacion-', 
                                     text='Límites:', 
@@ -528,12 +538,14 @@ layoutFiltros =    [
                                     text_color=eColor1,
                                     background_color=eColor2, 
                                     pad=((100,0),(20,22))),
+
                             sg.Text(key='-label2Variacion-',
                                     text='-{0:.0f}%'.format(porcentajeLimiteInferior*100),
                                     text_color=eColor1, 
                                     background_color=eColor2, 
                                     pad=((10,5),(20,22))),
                             inputVariacion,
+
                             sg.Text(key='-label3Variacion-', 
                                     text='+{0:.0f}%'.format(porcentajeLimiteSuperior*100),
                                     text_color=eColor1, 
@@ -621,13 +633,16 @@ layoutAcercaDe = [
                                     background_color=eColor2, 
                                     font=fontAcercaDe,
                                     pad=((10,5),(15,20))),
+
                         acercaDeDesarrolladores,
+
                         sg.Text(key='-labelInstructores-',
                                     text='Instructores y Asesores:',
                                     text_color=eColor1, 
                                     background_color=eColor2,
                                     font=fontAcercaDe,
                                     pad=((10,5),(15,20))),
+
                         acercaDeInstructores
                     ],
                 ]
@@ -685,12 +700,10 @@ layout =    [
 
 # ************************************************************************************************************************
 
-# Cambiar al tema personalizado
+# Ventana principal y ajustes personalizados
 
 sg.theme('Default1')
 sg.ChangeLookAndFeel('SystemDefault')
-
-# ************************************************************************************************************************
 
 window = sg.Window('Efenergy v2.0',
                    layout,
@@ -700,8 +713,6 @@ window = sg.Window('Efenergy v2.0',
                    finalize=True,
                    font=('Helvetica',11),
                    icon=rutaIconoPrincipal)
-
-# ************************************************************************************************************************
 
 # Habilitar barra de menú con opciones deshabilitadas.
 
