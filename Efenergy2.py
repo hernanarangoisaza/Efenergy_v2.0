@@ -9,6 +9,10 @@ import pandas
 
 import os.path
 import ctypes
+from pathlib import Path
+import webbrowser
+
+
 
 #from AnalisisDatosVoltaje import AnalisisDatosVoltaje
 #from AnalisisDatosPotencia import AnalisisDatosPotencia
@@ -31,6 +35,7 @@ idPotencia = 2
 idArmonicos = 3
 
 idNotaActual = None
+idNormaActual = None
 
 # Valores para límites de variación del Voltaje
 
@@ -61,8 +66,8 @@ fontMenuPrincipal = ('Helvetica',11)
 fontCombos = ('Helvetica',11)
 fontAcercaDe = ('Helvetica',10)+('bold',)
 
-rutaLogoPrincipal = 'imagenes/logo_texto_2020.png'
-rutaIconoPrincipal = 'imagenes/logo_2020.ico'
+rutaLogoPrincipal = 'imagenes\\logo_texto_2020.png'
+rutaIconoPrincipal = 'imagenes\\logo_2020.ico'
 
 extensionesPlantillas = (('Excel','*.xls*'),)
 extensionPdf = (('Archivo PDF','*.pdf'),)
@@ -93,13 +98,17 @@ t2 = None # Hilo para representación gráfica del progreso de carga de plantill
 
 # Rutas de archivos de apoyo con información de contexto
 
-rutaInformacionVoltaje = 'archivo/InformaciónVoltaje.txt'
-rutaInformacionPotencia = 'archivo/InformaciónPotencia.txt'
-rutaInformacionArmonicos = 'archivo/InformaciónArmónicos.txt'
+# Rutas relativas
 
-rutaPdfVoltaje = 'archivo/NormaVoltaje.pdf'
-rutaPdfPotencia = 'archivo/NormaPotencia.pdf'
-rutaPdfArmonicos = 'archivo/NormaArmónicos.pdf'
+rutaInformacionVoltaje = 'archivos\\InformaciónVoltaje.txt'
+rutaInformacionPotencia = 'archivos\\InformaciónPotencia.txt'
+rutaInformacionArmonicos = 'archivos\\InformaciónArmónicos.txt'
+
+# Rutas absolutas
+
+rutaPdfVoltaje = str(Path().absolute()) + '\\archivos\\NormaVoltaje.pdf'
+rutaPdfPotencia = str(Path().absolute()) + '\\archivos\\NormaPotencia.pdf'
+rutaPdfArmonicos = str(Path().absolute()) + '\\archivos\\NormaArmónicos.pdf'
 
 clave = '1234' # Clave para edición de la norma
 
@@ -931,6 +940,45 @@ while True:
         elif (idNotaActual == idArmonicos):
             window['-visorEditorNotas-'].update(informacionArmonicos)
 
+    # Ver norma Pdf para Voltaje
+
+    if event.endswith('-opcN1-'):
+
+        idNormaActual = idVoltaje
+        webbrowser.open_new(rutaPdfVoltaje)
+
+    # Ver norma Pdf para Potencia
+
+    if event.endswith('-opcN2-'):
+
+        idNormaActual = idPotencia
+        webbrowser.open_new(rutaPdfPotencia)
+
+    # Ver norma Pdf para Armónicos
+
+    if event.endswith('-opcN3-'):
+
+        idNormaActual = idArmonicos
+        webbrowser.open_new(rutaPdfArmonicos)
+
+    # Gestionar norma Pdf para Voltaje
+
+    if event.endswith('-opcN4-'):
+
+        print()
+
+        #columna1.Update(visible=False)
+        #columna4.Update(visible=True)
+
+        #window['-visorEditorNotas-'].update(informacionVoltaje)
+        #botonEditarNota.update(disabled=False)
+        #botonGrabarNota.update(disabled=True)
+        #botonDescartarGrabacion.update(disabled=True)
+        #visorEditor.update(disabled=True)
+        #visorEditor.update(background_color=eColor2)
+
+
+
     # Actualizar cambios en componentes de la GUI
 
     window.refresh()     
@@ -952,5 +1000,8 @@ window.close()
 # window.refresh()
 # window['-COLUMNA 2'].Update(visible=False)
 # globals()["layoutLogo" + str(idConsecutivo)] =
+# print("File      Path:", Path(__file__).absolute())
+# print("Directory Path:", Path().absolute()) 
+
 
 # ************************************************************************************************************************
