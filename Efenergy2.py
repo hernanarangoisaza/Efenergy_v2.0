@@ -43,6 +43,14 @@ porcentajeLimiteSuperior = 0.1 # 10%
 filtroVoltaje = ['MENOR','RANGO','MAYOR']
 filtroFases = ['A','B','C']
 
+eColor1 = '#000000' # Negro
+eColor2 = '#F2F2F2' # Gris fondo ventana
+eColor3 = '#FFFFFF' # Blanco
+eColor4 = '#F8AF26' # Naranja
+eColor5 = '#CDCDCD' # Gris botones
+eColores1 = (eColor1,eColor5) 
+eColores2 = (eColor4,eColor2) 
+
 sizeFrmPrincipal = (1030,600) # Tamaño de la ventana principal
 sizeColumnas = (1000,580) # Tamaño de las columnas que simulan ventanas ocultas
 sizeSelectorPlantilla = (1000,580) # Tamaño del Input para mostrar la ruta completa de la plantilla
@@ -53,21 +61,13 @@ fontMenuPrincipal = ('Helvetica',11)
 fontCombos = ('Helvetica',11)
 fontAcercaDe = ('Helvetica',10)+('bold',)
 
-rutaLogoPrincipal = 'imagenes\\logo_texto_2020.png'
-rutaIconoPrincipal = 'imagenes\\logo_2020.ico'
+rutaLogoPrincipal = 'imagenes/logo_texto_2020.png'
+rutaIconoPrincipal = 'imagenes/logo_2020.ico'
 
 extensionesPlantillas = (('Excel','*.xls*'),)
 extensionPdf = (('Archivo PDF','*.pdf'),)
 
 barraEstado = 'SENA - CDITI - TEINNOVA - Semillero de Energías. Todos los derechos reservados. (C) 2020'
-
-eColor1 = '#000000' # Negro
-eColor2 = '#F2F2F2' # Gris fondo ventana
-eColor3 = '#FFFFFF' # Blanco
-eColor4 = '#F8AF26' # Naranja
-eColor5 = '#CDCDCD' # Gris botones
-eColores1 = (eColor1,eColor5) 
-eColores2 = (eColor4,eColor2) 
 
 # Ubicaciones y nombre de archivo a procesar como plantilla
 
@@ -91,15 +91,17 @@ informacionArmonicos = None
 t1 = None # Hilo para carga y procesamiento con la libreria Panda
 t2 = None # Hilo para representación gráfica del progreso de carga de plantillas
 
+# Rutas de archivos de apoyo con información de contexto
+
+rutaInformacionVoltaje = 'archivo/InformaciónVoltaje.txt'
+rutaInformacionPotencia = 'archivo/InformaciónPotencia.txt'
+rutaInformacionArmonicos = 'archivo/InformaciónArmónicos.txt'
+
+rutaPdfVoltaje = 'archivo/NormaVoltaje.pdf'
+rutaPdfPotencia = 'archivo/NormaPotencia.pdf'
+rutaPdfArmonicos = 'archivo/NormaArmónicos.pdf'
+
 clave = '1234' # Clave para edición de la norma
-
-rutaInformacionVoltaje = 'archivo\\InformaciónVoltaje.txt'
-rutaInformacionPotencia = 'archivo\\InformaciónPotencia.txt'
-rutaInformacionArmonicos = 'archivo\\InformaciónArmónicos.txt'
-
-rutaPdfVoltaje = 'archivo\\NormaVoltaje.pdf'
-rutaPdfPotencia = 'archivo\\NormaPotencia.pdf'
-rutaPdfArmonicos = 'archivo\\NormaArmónicos.pdf'
 
 # Información para Acerca De...
 
@@ -176,7 +178,7 @@ def generarNavegacion(idConsecutivo):
     # pySimpleGUI presenta restricciones en cuanto a la reutilización de elementos en sus Layouts.
     # Se genera la misma estructura pero con id diferente.
     # Se utiliza haciendo un llamado con múltiple asignación de variables en línea.
-    # Por ejemplo: layout1Navegacion, frame1Navegacion = generarNavegacion(1)
+    # Por ejemplo: frame1Navegacion = generarNavegacion(1)
 
     layoutNavegacion =  [
                             [
@@ -194,7 +196,7 @@ def generarNavegacion(idConsecutivo):
                                title_color=eColor1, 
                                background_color=eColor2)
 
-    return layoutNavegacion, frameNavegacion
+    return frameNavegacion
 
 # ************************************************************************************************************************
 
@@ -204,7 +206,7 @@ def generarLogo(idConsecutivo):
     # pySimpleGUI presenta restricciones en cuanto a la reutilización de elementos en sus Layouts.
     # Se genera la misma estructura pero con id diferente.
     # Se utiliza haciendo un llamado con múltiple asignación de variables en línea.
-    # Por ejemplo: logo1Principal, statusBar1Principal, layout1Logo, frame1Logo = generarLogo(1)
+    # Por ejemplo: frame1Logo = generarLogo(1)
 
     logoPrincipal = sg.Image(key='-logoPrincipalV' + str(idConsecutivo) + '-', 
                              filename=rutaLogoPrincipal, 
@@ -238,19 +240,17 @@ def generarLogo(idConsecutivo):
                           title_color=eColor1, 
                           background_color=eColor2)
 
-    return logoPrincipal, statusBarPrincipal, layoutLogo, frameLogo
+    return frameLogo
 
 # ************************************************************************************************************************
 
-def generarNotasRapidas(idConsecutivo):
+def generarNotasRapidas():
 
     # Función especial que genera todo lo necesario para gestionar las notas rápidas sobre las normas.
     # pySimpleGUI presenta restricciones en cuanto a la reutilización de elementos en sus Layouts.
     # Se genera la misma estructura pero con id diferente.
-    # Se utiliza haciendo un llamado con múltiple asignación de variables en línea.
-    # Por ejemplo: logo1Principal, statusBar1Principal, layout1Logo, frame1Logo = generarLogo(1)
 
-    visorEditor = sg.Multiline(key='-visorEditorNotas-',
+    globals()["visorEditor"] = sg.Multiline(key='-visorEditorNotas-',
                                default_text=None, 
                                size=(90,7), 
                                text_color=eColor1, 
@@ -263,20 +263,20 @@ def generarNotasRapidas(idConsecutivo):
                                disabled=True,
                                pad=((15,15),(15,0)))
 
-    botonEditarNota = sg.Button(key='-botonEditarNota-',
+    globals()["botonEditarNota"] = sg.Button(key='-botonEditarNota-',
                                 button_text='Editar',
                                 button_color=eColores1,
                                 size=(12,1),
                                 pad=((10,5),(15,20)))
 
-    botonGrabarNota = sg.Button(key='-botonGrabarNota-',
+    globals()["botonGrabarNota"] = sg.Button(key='-botonGrabarNota-',
                                 button_text='Grabar',
                                 button_color=eColores1,
                                 size=(12,1),
                                 disabled=True,
                                 pad=((10,5),(15,20)))
 
-    botonDescartarGrabacion = sg.Button(key='-botonDescartarGrabacion-',
+    globals()["botonDescartarGrabacion"] = sg.Button(key='-botonDescartarGrabacion-',
                                         button_text='Descartar',
                                         button_color=eColores1,
                                         size=(12,1),
@@ -292,13 +292,9 @@ def generarNotasRapidas(idConsecutivo):
                         [
                             botonEditarNota, botonGrabarNota, botonDescartarGrabacion
                         ],
-                        #### xxxxxxxxxxxxx
-                        [
-                            #frame2Navegacion
-                        ],
                      ]
 
-    frameNota = sg.Frame(key='-frameNotaRapida-', 
+    globals()["frameNota"] = sg.Frame(key='-frameNotaRapida-', 
                          title='  Gestión de Notas Rápidas  ', 
                          layout=layoutNotas, 
                          title_color=eColor1, 
@@ -319,13 +315,11 @@ def generarNotasRapidas(idConsecutivo):
                            ],
                        ]
 
-    columna = sg.Column(key='-columna3-', 
+    globals()["columna3"] = sg.Column(key='-columna3-', 
                         layout=layoutColumna, 
                         visible=False, 
                         background_color=eColor2, 
                         size=sizeColumnas)
-
-    return columna, layoutColumna, frameNota, layoutNotas, visorEditor, botonEditarNota, botonGrabarNota, botonDescartarGrabacion
 
 # ************************************************************************************************************************
 
@@ -377,9 +371,9 @@ menuPrincipal2 =     [
 
 # GENERACIÓN DINÁMICA DE FRAMES PARA EL LOGO. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
 
-logo1Principal, statusBar1Principal, layout1Logo, frame1Logo = generarLogo(1)
-logo2Principal, statusBar2Principal, layout2Logo, frame2Logo = generarLogo(2)
-logo3Principal, statusBar3Principal, layout3Logo, frame3Logo = generarLogo(3)
+frame1Logo = generarLogo(1)
+frame2Logo = generarLogo(2)
+frame3Logo = generarLogo(3)
 
 # SELECTOR DE PLANTILLAS DE ORIGEN DE DATOS
 
@@ -401,13 +395,13 @@ frameLayout1 =  [
                     [
                         sg.Text(key='-labelRutaPlantilla-', 
                                 text='Ruta:', 
-                                size=(6,1), 
+                                size=(8,1), 
                                 text_color=eColor1, 
                                 background_color=eColor2, 
                                 pad=((10,0),(0,10))),
                         sg.Text(key='-valorRutaPlantilla-', 
                                 text='---', 
-                                size=(80,1), 
+                                size=(78,1), 
                                 text_color=eColor1, 
                                 background_color=eColor2, 
                                 font=fontRutaPartes, 
@@ -415,14 +409,14 @@ frameLayout1 =  [
                     ],
                     [
                         sg.Text(key='-labelArchivoPlantilla-', 
-                                text='Archivo:', 
-                                size=(6,1), 
+                                text='Plantilla:', 
+                                size=(8,1), 
                                 text_color=eColor1, 
                                 background_color=eColor2, 
                                 pad=((10,0),(0,10))),
                         sg.Text(key='-valorArchivoPlantilla-', 
                                 text='---', 
-                                size=(80,1), 
+                                size=(78,1), 
                                 text_color=eColor1, 
                                 background_color=eColor2, 
                                 font=fontRutaPartes, 
@@ -432,13 +426,13 @@ frameLayout1 =  [
                         #### ProgressBar para indicar de manera asíncrona la carga de la plantilla
                         sg.Text(key='-labelProgressBar-', 
                                 text='Carga:', 
-                                size=(6,1), 
+                                size=(8,1), 
                                 text_color=eColor1, 
                                 background_color=eColor2, 
                                 pad=((10,0),(0,10))),                        
                         sg.ProgressBar(key='-progressBar-', 
                                         max_value=100, 
-                                        size=(71,20), 
+                                        size=(59,20), 
                                         orientation='h',
                                         border_width=1,
                                         bar_color=eColores2,
@@ -646,8 +640,8 @@ frameAcercaDe = sg.Frame(key='-frameAcercaDe-',
 
 # GENERACIÓN DINÁMICA DE FRAMES PARA NAVEGACIÓN. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
 
-layout1Navegacion, frame1Navegacion = generarNavegacion(1) # Ventana Acerca de
-layout2Navegacion, frame2Navegacion = generarNavegacion(2) # Ventana Notas Rápidas
+frame1Navegacion = generarNavegacion(1) # Ventana Acerca de
+frame2Navegacion = generarNavegacion(2) # Ventana Notas Rápidas
 
 layoutColumna2 =    [
                         #### Logo + Barra
@@ -672,7 +666,7 @@ columna2 = sg.Column(key='-columna2-',
 
 # GENERACIÓN DINÁMICA DE FRAMES PARA NOTAS RÁPIDAS. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
 
-columna3, layoutColumna3, frameNota, layoutNotasRapidas, visorEditor, botonEditarNota, botonGrabarNota, botonDescartarGrabacion = generarNotasRapidas(1)
+generarNotasRapidas()
 
 # FULL LAYOUT
 
