@@ -30,6 +30,8 @@ idVoltaje = 1
 idPotencia = 2
 idArmonicos = 3
 
+idNotaActual = None
+
 # Valores para límites de variación del Voltaje
 
 valorVariacion = 120
@@ -77,6 +79,12 @@ archivoPlantilla = None
 archivoVoltaje = None
 archivoPotencia = None
 archivoArmonicos = None
+
+# Variables contenedoras para los textos descriptivos de las normas
+
+informacionVoltaje = None
+informacionPotencia = None
+informacionArmonicos = None
 
 # Variables globales para control de ejecución de Hilos (Threads)
 
@@ -149,16 +157,15 @@ def hiloIndicadorCarga():
 
 def leerArchivo(file):
 
-	archivo = open(file, "r")
+	archivo = open(file, "r", encoding="utf8", errors='ignore')
 	contenido = archivo.read()
 	archivo.close()
 	return contenido
 
 def escribirArchivo(file, contenido):
 
-	archivo = open(file, "w")
-	for texto in contenido:
-		archivo.write(texto)
+	archivo = open(file, "w", encoding="utf8")
+	archivo.write(contenido)
 	archivo.close()
 
 # ************************************************************************************************************************
@@ -231,8 +238,94 @@ def generarLogo(idConsecutivo):
                           title_color=eColor1, 
                           background_color=eColor2)
 
-
     return logoPrincipal, statusBarPrincipal, layoutLogo, frameLogo
+
+# ************************************************************************************************************************
+
+def generarNotasRapidas(idConsecutivo):
+
+    # Función especial que genera todo lo necesario para gestionar las notas rápidas sobre las normas.
+    # pySimpleGUI presenta restricciones en cuanto a la reutilización de elementos en sus Layouts.
+    # Se genera la misma estructura pero con id diferente.
+    # Se utiliza haciendo un llamado con múltiple asignación de variables en línea.
+    # Por ejemplo: logo1Principal, statusBar1Principal, layout1Logo, frame1Logo = generarLogo(1)
+
+    visorEditor = sg.Multiline(key='-visorEditorNotas-',
+                               default_text=None, 
+                               size=(90,7), 
+                               text_color=eColor1, 
+                               background_color=eColor2, 
+                               border_width=1,
+                               autoscroll=False,
+                               write_only=False,
+                               auto_refresh=True,
+                               auto_size_text=False,
+                               disabled=True,
+                               pad=((15,15),(15,0)))
+
+    botonEditarNota = sg.Button(key='-botonEditarNota-',
+                                button_text='Editar',
+                                button_color=eColores1,
+                                size=(12,1),
+                                pad=((10,5),(15,20)))
+
+    botonGrabarNota = sg.Button(key='-botonGrabarNota-',
+                                button_text='Grabar',
+                                button_color=eColores1,
+                                size=(12,1),
+                                disabled=True,
+                                pad=((10,5),(15,20)))
+
+    botonDescartarGrabacion = sg.Button(key='-botonDescartarGrabacion-',
+                                        button_text='Descartar',
+                                        button_color=eColores1,
+                                        size=(12,1),
+                                        disabled=True,
+                                        pad=((10,5),(15,20)))
+
+    layoutNotas =   [
+                        #### Visor / Editor de notas rápidas
+                        [
+                            visorEditor
+                        ],
+                        #### Gestión de notas rápidas
+                        [
+                            botonEditarNota, botonGrabarNota, botonDescartarGrabacion
+                        ],
+                        #### xxxxxxxxxxxxx
+                        [
+                            #frame2Navegacion
+                        ],
+                     ]
+
+    frameNota = sg.Frame(key='-frameNotaRapida-', 
+                         title='  Gestión de Notas Rápidas  ', 
+                         layout=layoutNotas, 
+                         title_color=eColor1, 
+                         background_color=eColor2)
+
+    layoutColumna =    [
+                           #### Logo + Barra
+                           [
+                               frame3Logo
+                           ],
+                           #### Sección de notas rápidas
+                           [
+                               frameNota
+                           ],
+                           #### Panel de navegación
+                           [
+                               frame2Navegacion
+                           ],
+                       ]
+
+    columna = sg.Column(key='-columna3-', 
+                        layout=layoutColumna, 
+                        visible=False, 
+                        background_color=eColor2, 
+                        size=sizeColumnas)
+
+    return columna, layoutColumna, frameNota, layoutNotas, visorEditor, botonEditarNota, botonGrabarNota, botonDescartarGrabacion
 
 # ************************************************************************************************************************
 
@@ -250,8 +343,11 @@ menuPrincipal1 =     [
                             [ 'Analizar Armónicos de Tensión::-opcA1-', 'Analizar Armónicos de Corriente::-opcA2-', '---', 'Analizar Distorsión Armónica::-opcA3-' ],
                         ],
                         [ 'Normatividad',
-                            [ 'Ver norma sobre Voltaje::-opcN1-', 'Ver norma sobre Potencia::-opcN2-', 'Ver norma sobre Armónicos::-opcN3-', '---', 'Gestión de Normas',
-                                [ 'Voltaje::-opcN4-', 'Potencia::-opcN5-', 'Armónicos::-opcN6-' ]
+                            [ 'Ver norma sobre Voltaje::-opcN1-', 'Ver norma sobre Potencia::-opcN2-', 'Ver norma sobre Armónicos::-opcN3-', 
+                                '---', 'Gestión de Normas',
+                                [ 'Voltaje::-opcN4-', 'Potencia::-opcN5-', 'Armónicos::-opcN6-' ],
+                                '---', 'Gestión de Notas rápidas',
+                                [ 'Voltaje::-opcN7-', 'Potencia::-opcN8-', 'Armónicos::-opcN9-' ],
                             ],
                         ],
                     ]
@@ -270,8 +366,11 @@ menuPrincipal2 =     [
                             [ 'Analizar Armónicos de Tensión::-opcA1-', 'Analizar Armónicos de Corriente::-opcA2-', '---', 'Analizar Distorsión Armónica::-opcA3-'  ],
                         ],
                         [ 'Normatividad',
-                            [ 'Ver norma sobre Voltaje::-opcN1-', 'Ver norma sobre Potencia::-opcN2-', 'Ver norma sobre Armónicos::-opcN3-', '---', 'Gestión de Normas',
-                                [ 'Voltaje::-opcN4-', 'Potencia::-opcN5-', 'Armónicos::-opcN6-' ]
+                            [ 'Ver norma sobre Voltaje::-opcN1-', 'Ver norma sobre Potencia::-opcN2-', 'Ver norma sobre Armónicos::-opcN3-', 
+                                '---', 'Gestión de Normas',
+                                [ 'Voltaje::-opcN4-', 'Potencia::-opcN5-', 'Armónicos::-opcN6-' ],
+                                '---', 'Gestión de Notas rápidas',
+                                [ 'Voltaje::-opcN7-', 'Potencia::-opcN8-', 'Armónicos::-opcN9-' ],
                             ],
                         ],
                     ]
@@ -280,6 +379,7 @@ menuPrincipal2 =     [
 
 logo1Principal, statusBar1Principal, layout1Logo, frame1Logo = generarLogo(1)
 logo2Principal, statusBar2Principal, layout2Logo, frame2Logo = generarLogo(2)
+logo3Principal, statusBar3Principal, layout3Logo, frame3Logo = generarLogo(3)
 
 # SELECTOR DE PLANTILLAS DE ORIGEN DE DATOS
 
@@ -348,6 +448,8 @@ frameLayout1 =  [
 
 barraMenuPrincipal = sg.Menu(key='-menuPrincipal-', 
                              menu_definition=menuPrincipal1,
+                             text_color=eColor1,
+                             background_color=eColor2,
                              font=fontMenuPrincipal)
 
 frameSelectorPlantilla = sg.Frame(key='-frameSelectorPlantilla-', 
@@ -488,17 +590,23 @@ acercaDeDescripcion = sg.Multiline(key='-descripcionHerramienta-',
                                    auto_size_text=False,
                                    pad=((15,0),(15,0)))
 
+# Información de los desarrolladores
+
 acercaDeDesarrolladores = sg.Text(key='-textoDesarrolladores-',
                                   text=desarrolladores,
                                   text_color=eColor1, 
                                   background_color=eColor2, 
                                   pad=((10,5),(15,20)))
 
+# Información de los instructores y asesores
+
 acercaDeInstructores =  sg.Text(key='-textoInstructores-',
                                 text=instructores,
                                 text_color=eColor1, 
                                 background_color=eColor2, 
                                 pad=((10,5),(15,20)))
+
+# Información del copyright
 
 acercaDeCopyright = sg.Text(key='-textoCopyright-',
                             text=copyright,
@@ -538,7 +646,8 @@ frameAcercaDe = sg.Frame(key='-frameAcercaDe-',
 
 # GENERACIÓN DINÁMICA DE FRAMES PARA NAVEGACIÓN. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
 
-layout1Navegacion, frame1Navegacion = generarNavegacion(1)
+layout1Navegacion, frame1Navegacion = generarNavegacion(1) # Ventana Acerca de
+layout2Navegacion, frame2Navegacion = generarNavegacion(2) # Ventana Notas Rápidas
 
 layoutColumna2 =    [
                         #### Logo + Barra
@@ -561,6 +670,10 @@ columna2 = sg.Column(key='-columna2-',
                      background_color=eColor2, 
                      size=sizeColumnas)
 
+# GENERACIÓN DINÁMICA DE FRAMES PARA NOTAS RÁPIDAS. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
+
+columna3, layoutColumna3, frameNota, layoutNotasRapidas, visorEditor, botonEditarNota, botonGrabarNota, botonDescartarGrabacion = generarNotasRapidas(1)
+
 # FULL LAYOUT
 
 layout =    [
@@ -570,8 +683,9 @@ layout =    [
                 ],
                 #### Columnas ocultables para simular pantallas
                 [
-                    columna1, 
-                    columna2,
+                    columna1, # Inicio
+                    columna2, # Acerca de
+                    columna3, # Gestionar Notas Rápidas
                 ],
             ]
 
@@ -609,7 +723,10 @@ informacionArmonicos = leerArchivo(rutaInformacionArmonicos)
 
 frameFiltros.expand(expand_x=True)
 frameAcercaDe.expand(expand_x=True)
+frameNota.expand(expand_x=True)
+visorEditor.expand(expand_x=True)
 frame1Navegacion.expand(expand_x=True)
+frame2Navegacion.expand(expand_x=True)
 
 window.refresh()
 
@@ -709,6 +826,105 @@ while True:
         columna1.Update(visible=True)
         columna2.Update(visible=False)
 
+    # Boton INICIO desde la ventana Notas Rápidas
+
+    if event == '-botonInicioV2-': 
+
+        columna1.Update(visible=True)
+        columna3.Update(visible=False)
+
+    # Gestionar nota rápida para Voltaje
+
+    if event.endswith('-opcN7-'):
+
+        idNotaActual = idVoltaje
+        columna1.Update(visible=False)
+        columna3.Update(visible=True)
+        window['-visorEditorNotas-'].update(informacionVoltaje)
+        botonEditarNota.update(disabled=False)
+        botonGrabarNota.update(disabled=True)
+        botonDescartarGrabacion.update(disabled=True)
+        visorEditor.update(disabled=True)
+        visorEditor.update(background_color=eColor2)
+
+    # Gestionar nota rápida para Potencia
+
+    if event.endswith('-opcN8-'):
+
+        idNotaActual = idPotencia
+        columna1.Update(visible=False)
+        columna3.Update(visible=True)
+        window['-visorEditorNotas-'].update(informacionPotencia)
+        botonEditarNota.update(disabled=False)
+        botonGrabarNota.update(disabled=True)
+        botonDescartarGrabacion.update(disabled=True)
+        visorEditor.update(disabled=True)
+        visorEditor.update(background_color=eColor2)
+
+    # Gestionar nota rápida para Armónicos
+
+    if event.endswith('-opcN9-'):
+
+        idNotaActual = idArmonicos
+        columna1.Update(visible=False)
+        columna3.Update(visible=True)
+        window['-visorEditorNotas-'].update(informacionArmonicos)
+        botonEditarNota.update(disabled=False)
+        botonGrabarNota.update(disabled=True)
+        botonDescartarGrabacion.update(disabled=True)
+        visorEditor.update(disabled=True)
+        visorEditor.update(background_color=eColor2)
+
+    # Habilitar la zona de edición de texto de las Notas Rápidas
+
+    if event == '-botonEditarNota-': 
+
+        botonEditarNota.update(disabled=True)
+        botonGrabarNota.update(disabled=False)
+        botonDescartarGrabacion.update(disabled=False)
+        visorEditor.update(disabled=False)
+        visorEditor.update(background_color=eColor3)
+      
+    # Actualizar los archivos en disco con el contenido de la zona de edición de las Notas Rápidas
+
+    if event == '-botonGrabarNota-': 
+
+        botonEditarNota.update(disabled=False)
+        botonGrabarNota.update(disabled=True)
+        botonDescartarGrabacion.update(disabled=True)
+        visorEditor.update(disabled=True)
+        visorEditor.update(background_color=eColor2)
+
+        if (idNotaActual == idVoltaje):
+            informacionVoltaje = values['-visorEditorNotas-']
+            escribirArchivo(rutaInformacionVoltaje, informacionVoltaje)
+
+        elif (idNotaActual == idPotencia):
+            informacionPotencia = values['-visorEditorNotas-']
+            escribirArchivo(rutaInformacionPotencia, informacionPotencia)
+
+        elif (idNotaActual == idArmonicos):
+            informacionArmonicos = values['-visorEditorNotas-']
+            escribirArchivo(rutaInformacionArmonicos, informacionArmonicos)
+
+    # Descartar el contenido de la zona de edición de las Notas Rápidas y no grabarlo
+
+    if event == '-botonDescartarGrabacion-': 
+
+        botonEditarNota.update(disabled=False)
+        botonGrabarNota.update(disabled=True)
+        botonDescartarGrabacion.update(disabled=True)
+        visorEditor.update(disabled=True)
+        visorEditor.update(background_color=eColor2)
+ 
+        if (idNotaActual == idVoltaje):
+            window['-visorEditorNotas-'].update(informacionVoltaje)
+
+        elif (idNotaActual == idPotencia):
+            window['-visorEditorNotas-'].update(informacionPotencia)
+
+        elif (idNotaActual == idArmonicos):
+            window['-visorEditorNotas-'].update(informacionArmonicos)
 
     # Actualizar cambios en componentes de la GUI
 
