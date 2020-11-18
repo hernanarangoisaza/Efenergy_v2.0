@@ -11,8 +11,7 @@ import os.path
 import ctypes
 from pathlib import Path
 import webbrowser
-
-
+import shutil
 
 #from AnalisisDatosVoltaje import AnalisisDatosVoltaje
 #from AnalisisDatosPotencia import AnalisisDatosPotencia
@@ -34,8 +33,12 @@ idVoltaje = 1
 idPotencia = 2
 idArmonicos = 3
 
+idOtroPDF = 0
+
 idNotaActual = None
 idNormaActual = None
+tituloNorma = None
+tituloNota = None
 
 # Valores para límites de variación del Voltaje
 
@@ -53,6 +56,7 @@ eColor2 = '#F2F2F2' # Gris fondo ventana
 eColor3 = '#FFFFFF' # Blanco
 eColor4 = '#F8AF26' # Naranja
 eColor5 = '#CDCDCD' # Gris botones
+eColor6 = '#F2EDEA' # Gris popup
 eColores1 = (eColor1,eColor5) 
 eColores2 = (eColor4,eColor2) 
 
@@ -65,6 +69,8 @@ fontRutaTotal = ('Consolas',10)
 fontMenuPrincipal = ('Helvetica',11)
 fontCombos = ('Helvetica',11)
 fontAcercaDe = ('Helvetica',10)+('bold',)
+fontTituloNorma = ('Helvetica',15)+('bold',)
+fontTituloNota = ('Helvetica',15)+('bold',)
 
 rutaLogoPrincipal = 'imagenes\\logo_texto_2020.png'
 rutaIconoPrincipal = 'imagenes\\logo_2020.ico'
@@ -181,6 +187,99 @@ def escribirArchivo(file, contenido):
 
 # ************************************************************************************************************************
 
+def visualizarNorma(idNorma):
+
+    if idNorma == idVoltaje:
+
+        webbrowser.open_new(rutaPdfVoltaje)
+
+    if idNorma == idPotencia:
+
+        webbrowser.open_new(rutaPdfPotencia)
+
+    if idNorma == idArmonicos:
+
+        webbrowser.open_new(rutaPdfArmonicos)
+
+    if idNorma == idOtroPDF:
+
+        rutaPdf = values['-seleccionPDF-']
+        webbrowser.open_new(rutaPdf)
+
+# ************************************************************************************************************************
+
+def definirTituloNorma(idNorma):
+
+    if idNorma == idVoltaje:
+
+        tituloNorma = 'VOLTAJE'
+
+    if idNorma == idPotencia:
+
+        tituloNorma = 'POTENCIA'
+
+    if idNorma == idArmonicos:
+
+        tituloNorma = 'ARMÓNICOS'
+
+    window['-labelTituloNorma-'].update(tituloNorma)
+
+# ************************************************************************************************************************
+
+def definirTituloNota(idNota):
+
+    if idNota == idVoltaje:
+
+        tituloNota = 'VOLTAJE'
+
+    if idNota == idPotencia:
+
+        tituloNota = 'POTENCIA'
+
+    if idNota == idArmonicos:
+
+        tituloNota = 'ARMÓNICOS'
+
+    window['-labelTituloNota-'].update(tituloNota)
+
+# ************************************************************************************************************************
+
+def sustituirNorma(idNorma):
+
+    try:
+
+        if idNorma == idVoltaje:
+
+            shutil.copy(values['-seleccionPDF-'], rutaPdfVoltaje)
+
+        if idNorma == idPotencia:
+
+            shutil.copy(values['-seleccionPDF-'], rutaPdfPotencia)
+
+        if idNorma == idArmonicos:
+
+            shutil.copy(values['-seleccionPDF-'], rutaPdfArmonicos)
+
+        sg.Popup('NOTIFICACIÓN', 
+                 'El archivo PDF de la norma ha sido actualizado correctamente.',
+                 text_color=eColor1, 
+                 background_color=eColor6,
+                 button_color=eColores1,
+                 keep_on_top=True,
+                 no_titlebar=False)
+
+    except:
+
+        sg.Popup('ERROR', 
+                 'Ocurrió un problema al intentar actualizar el archivo PDF de la norma.',
+                 text_color=eColor1, 
+                 background_color=eColor6,
+                 button_color=eColores1,
+                 keep_on_top=True,
+                 no_titlebar=False)
+
+# ************************************************************************************************************************
+
 def generarNavegacion(idConsecutivo):
 
     # Función especial que genera todo lo necesario para la barra de navegación.
@@ -257,7 +356,6 @@ def generarNotasRapidas():
 
     # Función especial que genera todo lo necesario para gestionar las notas rápidas sobre las normas.
     # pySimpleGUI presenta restricciones en cuanto a la reutilización de elementos en sus Layouts.
-    # Se genera la misma estructura pero con id diferente.
 
     globals()["visorEditor"] = sg.Multiline(key='-visorEditorNotas-',
                                default_text=None, 
@@ -303,16 +401,41 @@ def generarNotasRapidas():
                         ],
                      ]
 
+    layoutTituloNota =  [
+                            #### Título de la sección
+                            [
+                                sg.Text(key='-labelTituloNota-', 
+                                        text=tituloNota, 
+                                        size=(15,1), 
+                                        text_color=eColor1, 
+                                        background_color=eColor2, 
+                                        font=fontTituloNota, 
+                                        pad=((0,0),(10,10))),                            
+                            ],
+                         ]
+
     globals()["frameNota"] = sg.Frame(key='-frameNotaRapida-', 
                          title='  Gestión de Notas Rápidas  ', 
                          layout=layoutNotas, 
                          title_color=eColor1, 
                          background_color=eColor2)
 
+    globals()["frameTituloNota"] = sg.Frame(key='-frameTituloNota-', 
+                         title='', 
+                         layout=layoutTituloNota, 
+                         title_color=eColor1, 
+                         background_color=eColor2,
+                         element_justification='center',
+                         vertical_alignment='center')
+
     layoutColumna =    [
                            #### Logo + Barra
                            [
                                frame3Logo
+                           ],
+                           #### Título de la nota
+                           [
+                               frameTituloNota
                            ],
                            #### Sección de notas rápidas
                            [
@@ -325,6 +448,115 @@ def generarNotasRapidas():
                        ]
 
     globals()["columna3"] = sg.Column(key='-columna3-', 
+                        layout=layoutColumna, 
+                        visible=False, 
+                        background_color=eColor2, 
+                        size=sizeColumnas)
+
+# ************************************************************************************************************************
+
+def generarGestionNormas():
+
+    # Función especial que genera todo lo necesario para gestionar las normas en formato PDF.
+    # pySimpleGUI presenta restricciones en cuanto a la reutilización de elementos en sus Layouts.
+
+    globals()["botonVerNorma"] = sg.Button(key='-botonVerNorma-',
+                                button_text='Ver actual',
+                                button_color=eColores1,
+                                size=(12,1),
+                                pad=((10,5),(15,20)))
+
+    globals()["botonVerSeleccionado"] = sg.Button(key='-botonVerSeleccionado-',
+                                button_text='Ver seleccionado',
+                                button_color=eColores1,
+                                size=(20,1),
+                                disabled=True,
+                                pad=((10,5),(15,20)))
+
+    globals()["botonActualizarNorma"] = sg.Button(key='-botonActualizarNorma-',
+                                button_text='Actualizar',
+                                button_color=eColores1,
+                                size=(12,1),
+                                disabled=True,
+                                pad=((10,5),(15,20)))
+
+    globals()["botonDescartarGestion"] = sg.Button(key='-botonDescartarGestion-',
+                                        button_text='Descartar',
+                                        button_color=eColores1,
+                                        size=(12,1),
+                                        disabled=True,
+                                        pad=((10,5),(15,20)))
+
+    layoutNormas =  [
+                        #### Selector de archivos en formato PDF
+                        [
+                            sg.Input(key='-seleccionPDF-', 
+                                     visible=True, 
+                                     enable_events=True, 
+                                     size=(122,1), 
+                                     font=fontRutaTotal, 
+                                     readonly=True, 
+                                     pad=((10,0),(5,5))),
+
+                            sg.FileBrowse(key='-botonPDF-', 
+                                          button_text='Seleccionar', 
+                                          button_color=eColores1, 
+                                          file_types=extensionPdf, 
+                                          pad=((10,10),(10,10)))
+                        ],
+                        #### Gestión de normas en formato PDF
+                        [
+                            botonVerNorma, botonVerSeleccionado, botonActualizarNorma, botonDescartarGestion
+                        ],
+                     ]
+
+    layoutTituloNorma =  [
+                            #### Título de la sección
+                            [
+                                sg.Text(key='-labelTituloNorma-', 
+                                        text=tituloNorma, 
+                                        size=(15,1), 
+                                        text_color=eColor1, 
+                                        background_color=eColor2, 
+                                        font=fontTituloNorma, 
+                                        pad=((0,0),(10,10))),                            
+                            ],
+                         ]
+
+    globals()["frameNorma"] = sg.Frame(key='-frameGestionNorma-', 
+                         title='  Gestión de la Norma en formato PDF  ', 
+                         layout=layoutNormas, 
+                         title_color=eColor1, 
+                         background_color=eColor2)
+
+    globals()["frameTituloNorma"] = sg.Frame(key='-frameTituloNorma-', 
+                         title='', 
+                         layout=layoutTituloNorma, 
+                         title_color=eColor1, 
+                         background_color=eColor2,
+                         element_justification='center',
+                         vertical_alignment='center')
+
+    layoutColumna =    [
+                           #### Logo + Barra
+                           [
+                               frame4Logo
+                           ],
+                           #### Título de la norma
+                           [
+                               frameTituloNorma
+                           ],
+                           #### Sección de notas rápidas
+                           [
+                               frameNorma
+                           ],
+                           #### Panel de navegación
+                           [
+                               frame3Navegacion
+                           ],
+                       ]
+
+    globals()["columna4"] = sg.Column(key='-columna4-', 
                         layout=layoutColumna, 
                         visible=False, 
                         background_color=eColor2, 
@@ -383,6 +615,7 @@ menuPrincipal2 =     [
 frame1Logo = generarLogo(1)
 frame2Logo = generarLogo(2)
 frame3Logo = generarLogo(3)
+frame4Logo = generarLogo(4)
 
 # SELECTOR DE PLANTILLAS DE ORIGEN DE DATOS
 
@@ -666,6 +899,7 @@ frameAcercaDe = sg.Frame(key='-frameAcercaDe-',
 
 frame1Navegacion = generarNavegacion(1) # Ventana Acerca de
 frame2Navegacion = generarNavegacion(2) # Ventana Notas Rápidas
+frame3Navegacion = generarNavegacion(3) # Ventana Notas Rápidas
 
 layoutColumna2 =    [
                         #### Logo + Barra
@@ -688,9 +922,13 @@ columna2 = sg.Column(key='-columna2-',
                      background_color=eColor2, 
                      size=sizeColumnas)
 
-# GENERACIÓN DINÁMICA DE FRAMES PARA NOTAS RÁPIDAS. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
+# GENERACIÓN DINÁMICA DEL FRAME PARA NOTAS RÁPIDAS.
 
 generarNotasRapidas()
+
+# GENERACIÓN DINÁMICA DEL FRAME PARA GESTIÓN DE NORMAS.
+
+generarGestionNormas()
 
 # FULL LAYOUT
 
@@ -704,6 +942,7 @@ layout =    [
                     columna1, # Inicio
                     columna2, # Acerca de
                     columna3, # Gestionar Notas Rápidas
+                    columna4, # Gestionar Normas PDF
                 ],
             ]
 
@@ -738,9 +977,13 @@ informacionArmonicos = leerArchivo(rutaInformacionArmonicos)
 frameFiltros.expand(expand_x=True)
 frameAcercaDe.expand(expand_x=True)
 frameNota.expand(expand_x=True)
+frameNorma.expand(expand_x=True)
+frameTituloNorma.expand(expand_x=True)
+frameTituloNota.expand(expand_x=True)
 visorEditor.expand(expand_x=True)
 frame1Navegacion.expand(expand_x=True)
 frame2Navegacion.expand(expand_x=True)
+frame3Navegacion.expand(expand_x=True)
 
 window.refresh()
 
@@ -847,11 +1090,19 @@ while True:
         columna1.Update(visible=True)
         columna3.Update(visible=False)
 
+    # Boton INICIO desde la ventana Notas Rápidas
+
+    if event == '-botonInicioV3-': 
+
+        columna1.Update(visible=True)
+        columna4.Update(visible=False)
+
     # Gestionar nota rápida para Voltaje
 
     if event.endswith('-opcN7-'):
 
         idNotaActual = idVoltaje
+        definirTituloNota(idNotaActual)
         columna1.Update(visible=False)
         columna3.Update(visible=True)
         window['-visorEditorNotas-'].update(informacionVoltaje)
@@ -866,6 +1117,7 @@ while True:
     if event.endswith('-opcN8-'):
 
         idNotaActual = idPotencia
+        definirTituloNota(idNotaActual)
         columna1.Update(visible=False)
         columna3.Update(visible=True)
         window['-visorEditorNotas-'].update(informacionPotencia)
@@ -880,6 +1132,7 @@ while True:
     if event.endswith('-opcN9-'):
 
         idNotaActual = idArmonicos
+        definirTituloNota(idNotaActual)
         columna1.Update(visible=False)
         columna3.Update(visible=True)
         window['-visorEditorNotas-'].update(informacionArmonicos)
@@ -945,37 +1198,86 @@ while True:
     if event.endswith('-opcN1-'):
 
         idNormaActual = idVoltaje
-        webbrowser.open_new(rutaPdfVoltaje)
+        visualizarNorma(idNormaActual)
 
     # Ver norma Pdf para Potencia
 
     if event.endswith('-opcN2-'):
 
         idNormaActual = idPotencia
-        webbrowser.open_new(rutaPdfPotencia)
+        visualizarNorma(idNormaActual)
 
     # Ver norma Pdf para Armónicos
 
     if event.endswith('-opcN3-'):
 
         idNormaActual = idArmonicos
-        webbrowser.open_new(rutaPdfArmonicos)
+        visualizarNorma(idNormaActual)
 
     # Gestionar norma Pdf para Voltaje
 
     if event.endswith('-opcN4-'):
 
-        print()
+        idNormaActual = idVoltaje
+        definirTituloNorma(idNormaActual)
+        columna1.Update(visible=False)
+        columna4.Update(visible=True)
 
-        #columna1.Update(visible=False)
-        #columna4.Update(visible=True)
+    # Gestionar norma Pdf para Potencia
 
-        #window['-visorEditorNotas-'].update(informacionVoltaje)
-        #botonEditarNota.update(disabled=False)
-        #botonGrabarNota.update(disabled=True)
-        #botonDescartarGrabacion.update(disabled=True)
-        #visorEditor.update(disabled=True)
-        #visorEditor.update(background_color=eColor2)
+    if event.endswith('-opcN5-'):
+
+        idNormaActual = idPotencia
+        definirTituloNorma(idNormaActual)
+        columna1.Update(visible=False)
+        columna4.Update(visible=True)
+
+    # Gestionar norma Pdf para Armónicos
+
+    if event.endswith('-opcN6-'):
+
+        idNormaActual = idArmonicos
+        definirTituloNorma(idNormaActual)
+        columna1.Update(visible=False)
+        columna4.Update(visible=True)
+
+    # Control de la barra de botones para la gestión de normas
+
+    if event == ('-seleccionPDF-'):
+
+        botonActualizarNorma.update(disabled=False)
+        botonDescartarGestion.update(disabled=False)
+        botonVerSeleccionado.update(disabled=False)
+
+    if event == ('-botonVerNorma-'):
+
+        visualizarNorma(idNormaActual)
+ 
+    if event == ('-botonVerSeleccionado-'):
+
+        visualizarNorma(idOtroPDF)
+       
+    # Control de la barra de botones para la gestión de normas
+
+    if event == ('-botonDescartarGestion-'):
+
+        botonActualizarNorma.update(disabled=True)
+        botonDescartarGestion.update(disabled=True)
+        botonVerSeleccionado.update(disabled=True)
+        window['-seleccionPDF-'].update('')
+        
+    # Sustituir el archivo PDF actual de la norma con el contenido del nuevo recién seleccionado
+
+    if event == ('-botonActualizarNorma-'):
+
+        sustituirNorma(idNormaActual)
+
+        botonActualizarNorma.update(disabled=True)
+        botonDescartarGestion.update(disabled=True)
+        botonVerSeleccionado.update(disabled=True)
+        window['-seleccionPDF-'].update('')
+
+
 
 
 
