@@ -822,18 +822,116 @@ def generarGestionNormas():
 
 # ************************************************************************************************************************
 
+def generarAnalisisVoltaje():
+
+    # Función especial que genera todo lo necesario para la sección de Análisis de Voltaje.
+    # pySimpleGUI presenta restricciones en cuanto a la reutilización de elementos en sus Layouts.
+
+    layoutTabFiltros =  [
+                            [
+                                sg.Text(text='Tab filtros',
+                                        size=(100,20))
+                            ]
+                        ]
+
+    layoutTabTabla = [[]]
+
+    layoutTabGrafica = [[]]
+
+    layoutTabNotasRapidas = [[]]
+
+    layoutTabSeccionVoltaje =   [
+                                    [
+                                        sg.Tab('     Filtros     ', layoutTabFiltros, visible=True, element_justification="left", key='-tabFiltrosVoltaje-'),
+                                        sg.Tab('     Tabla     ', layoutTabTabla, visible=True, element_justification="left", key='-tabTablaVoltaje-'),
+                                        sg.Tab('     Gráfica     ', layoutTabGrafica, visible=True, element_justification="left", key='-tabGraficaVoltaje-'),
+                                        sg.Tab('     Notas     ', layoutTabNotasRapidas, visible=True, element_justification="left", key='-tabNotasRapidasVoltaje-'),
+                                    ]
+                                ]
+        
+    layoutSeccionVoltaje =  [
+                                #### Diseño por pestañas y tabulación
+                                [
+                                    sg.TabGroup(layoutTabSeccionVoltaje,
+                                                key='-tabSeccionVoltaje-',
+                                                enable_events=True,
+                                                tab_location='top',
+                                                border_width=1,
+                                                title_color=eColor1,
+                                                tab_background_color=eColor2,
+                                                selected_title_color=eColor1,
+                                                selected_background_color=eColor5,
+                                                background_color=eColor2)
+                                ],
+                            ]
+
+    globals()["frameSeccionVoltaje"] = sg.Frame(key='-frameSeccionVoltaje-', 
+                         title='', 
+                         layout=layoutSeccionVoltaje, 
+                         size=(100, 20),
+                         title_color=eColor1, 
+                         background_color=eColor2,
+                         element_justification='left',
+                         vertical_alignment='top')
+
+    layoutTituloSeccionVoltaje =    [
+                                        #### Título de la sección
+                                        [
+                                            sg.Text(key='-labelTituloSeccionVoltaje-', 
+                                                    text='ANÁLISIS DE VOLTAJE', 
+                                                    size=(19,1), 
+                                                    text_color=eColor1, 
+                                                    background_color=eColor2, 
+                                                    font=fontTituloNota, 
+                                                    pad=((0,0),(10,10))),                            
+                                        ],
+                                    ]
+
+    globals()["frameTituloSeccionVoltaje"] = sg.Frame(key='-frameTituloSeccionVoltaje-', 
+                         title='', 
+                         layout=layoutTituloSeccionVoltaje, 
+                         title_color=eColor1, 
+                         background_color=eColor2,
+                         element_justification='center',
+                         vertical_alignment='center')
+
+    layoutColumna =    [
+                           #### Título de la sección
+                           [
+                               frameTituloSeccionVoltaje
+                           ],
+                           #### Sección de notas rápidas
+                           [
+                               frameSeccionVoltaje
+                           ],
+                           #### Panel de navegación
+                           [
+                               frame4Navegacion
+                           ],
+                       ]
+
+    globals()["columna5"] = sg.Column(key='-columna5-', 
+                        layout=layoutColumna, 
+                        visible=False, 
+                        background_color=eColor2, 
+                        size=sizeColumnas)
+
+# ************************************************************************************************************************
+
 # GENERACIÓN DINÁMICA DE FRAMES PARA EL LOGO. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
 
 frame1Logo = generarLogo(1)
 frame2Logo = generarLogo(2)
 frame3Logo = generarLogo(3)
 frame4Logo = generarLogo(4)
+frame5Logo = generarLogo(5)
 
 # GENERACIÓN DINÁMICA DE FRAMES PARA NAVEGACIÓN. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
 
 frame1Navegacion = generarNavegacion(1) # Ventana Acerca de
 frame2Navegacion = generarNavegacion(2) # Ventana Notas Rápidas
 frame3Navegacion = generarNavegacion(3) # Ventana Notas Rápidas
+frame4Navegacion = generarNavegacion(4) # Ventana Análisis de Voltaje
 
 # GENERACIÓN DINÁMICA DEL FRAME PARA NOTAS RÁPIDAS.
 
@@ -842,6 +940,10 @@ generarNotasRapidas()
 # GENERACIÓN DINÁMICA DEL FRAME PARA GESTIÓN DE NORMAS.
 
 generarGestionNormas()
+
+# GENERACIÓN DINÁMICA DEL FRAME PARA ANÁLISIS DE VOLTAJE.
+
+generarAnalisisVoltaje()
 
 # ************************************************************************************************************************
 
@@ -1155,6 +1257,7 @@ layout =    [
                     columna2, # Acerca de
                     columna3, # Gestionar Notas Rápidas
                     columna4, # Gestionar Normas PDF
+                    columna5, # Análisis de Voltaje
                 ],
             ]
 
@@ -1197,9 +1300,12 @@ frameNorma.expand(expand_x=True)
 frameTituloNorma.expand(expand_x=True)
 frameTituloNota.expand(expand_x=True)
 visorEditor.expand(expand_x=True)
+frameSeccionVoltaje.expand(expand_x=True)
+frameTituloSeccionVoltaje.expand(expand_x=True)
 frame1Navegacion.expand(expand_x=True)
 frame2Navegacion.expand(expand_x=True)
 frame3Navegacion.expand(expand_x=True)
+frame4Navegacion.expand(expand_x=True)
 
 window.refresh()
 
@@ -1229,6 +1335,8 @@ while True:
 
         idProcesoActual = idVoltaje
         cargarDatosPreliminares(idProcesoActual)
+        columna1.Update(visible=False)
+        columna5.Update(visible=True)
 
     elif event == '-ThreadDone-': # Mensaje recibido desde los hilos al momento de haber finalizado las acciones que toman más tiempo
 
@@ -1257,6 +1365,11 @@ while True:
 
         columna1.Update(visible=True)
         columna4.Update(visible=False)
+
+    elif event == '-botonInicioV4-': # Boton INICIO desde la ventana Análisis de Voltaje
+
+        columna1.Update(visible=True)
+        columna5.Update(visible=False)
 
     elif event.endswith('-opcN7-'): # Gestionar nota rápida para Voltaje
 
