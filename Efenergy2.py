@@ -35,10 +35,16 @@ idArmonicos = 3
 
 idOtroPDF = 0
 
-idTipoNotaActual = None
-idTipoNormaActual = None
+idProcesoActual = None
+
 tituloNorma = None
 tituloNota = None
+
+# Variables contenedoras del procesamiento de la plantilla con la librería Panda 
+
+datosVoltaje = None
+datosPotencia = None
+datosArmonicos = None
 
 # Valores para límites de variación del Voltaje
 
@@ -84,12 +90,6 @@ barraEstado = 'SENA - CDITI - TEINNOVA - Semillero de Energías. Todos los derec
 
 rutaPlantilla = None
 archivoPlantilla = None
-
-# Variables contenedoras del procesamiento de la plantilla con la librería Panda 
-
-archivoVoltaje = None
-archivoPotencia = None
-archivoArmonicos = None
 
 # Variables contenedoras para los textos descriptivos de las normas
 
@@ -175,21 +175,26 @@ menuPrincipal2 =     [
 
 # ************************************************************************************************************************
 
-def cargarPlantilla(window, plantilla, identificador):
+def cargarPlantilla(window, rutaPlantilla, tipoProceso):
 
-    if (identificador == idVoltaje):
-        global archivoVoltaje
-        archivoVoltaje = pandas.ExcelFile(plantilla)
+    if (tipoProceso == idVoltaje):
 
-    elif (identificador == idPotencia):
-        global archivoPotencia
-        archivoPotencia = pandas.ExcelFile(plantilla)
+        global datosVoltaje
+        datosVoltaje = pandas.ExcelFile(rutaPlantilla)
 
-    elif (identificador == idArmonicos):
-        global archivoArmonicos
-        archivoArmonicos = pandas.ExcelFile(plantilla)
+    elif (tipoProceso == idPotencia):
+
+        global datosPotencia
+        datosPotencia = pandas.ExcelFile(rutaPlantilla)
+
+    elif (tipoProceso == idArmonicos):
+
+        global datosArmonicos
+        datosArmonicos = pandas.ExcelFile(rutaPlantilla)
 
     window.write_event_value('-ThreadDone-','')
+
+# ************************************************************************************************************************
 
 def indicadorCarga(window):
 
@@ -204,12 +209,16 @@ def indicadorCarga(window):
             window['-progressBar-'].update_bar(0,0)
     window['-progressBar-'].update_bar(limite,limite)
 
-def hiloCargarPlantilla(plantilla, identificador):
+# ************************************************************************************************************************
+
+def hiloCargarPlantilla(rutaPlantilla, tipoProceso):
 
     global t1
-    t1 = threading.Thread(target=cargarPlantilla, args=(window,plantilla,identificador), daemon=True)
+    t1 = threading.Thread(target=cargarPlantilla, args=(window,rutaPlantilla,tipoProceso), daemon=True)
     t1.name = 't1'
     t1.start()
+
+# ************************************************************************************************************************
 
 def hiloIndicadorCarga():
 
@@ -222,54 +231,86 @@ def hiloIndicadorCarga():
 
 def leerArchivo(file):
 
-	archivo = open(file, "r", encoding="utf8", errors='ignore')
-	contenido = archivo.read()
-	archivo.close()
-	return contenido
+    try:
 
-def escribirArchivo(file, contenido):
+        archivo = open(file, "r", encoding="utf8", errors='ignore')
+        contenido = archivo.read()
+        return contenido
 
-	archivo = open(file, "w", encoding="utf8")
-	archivo.write(contenido)
-	archivo.close()
+    except:
+
+        sg.Popup('ERROR', 
+                 'Ocurrió un problema al leer el archivo de texto de Notas Rápidas.',
+                 text_color=eColor1, 
+                 background_color=eColor6,
+                 button_color=eColores1,
+                 keep_on_top=True,
+                 no_titlebar=False)
+    
+    finally:
+    
+        archivo.close()
 
 # ************************************************************************************************************************
 
-def visualizarNorma(tipoNorma):
+def escribirArchivo(file, contenido):
 
-    if tipoNorma == idVoltaje:
+    try:
+
+        archivo = open(file, "w", encoding="utf8")
+        archivo.write(contenido)
+
+    except:
+
+        sg.Popup('ERROR', 
+                 'Ocurrió un problema al escribir el archivo de texto de Notas Rápidas.',
+                 text_color=eColor1, 
+                 background_color=eColor6,
+                 button_color=eColores1,
+                 keep_on_top=True,
+                 no_titlebar=False)
+
+    finally:
+        
+        archivo.close()
+
+# ************************************************************************************************************************
+
+def visualizarNorma(tipoProceso):
+
+    if tipoProceso == idVoltaje:
 
         webbrowser.open_new(rutaPdfVoltaje)
 
-    elif tipoNorma == idPotencia:
+    elif tipoProceso == idPotencia:
 
         webbrowser.open_new(rutaPdfPotencia)
 
-    elif tipoNorma == idArmonicos:
+    elif tipoProceso == idArmonicos:
 
         webbrowser.open_new(rutaPdfArmonicos)
 
-    elif tipoNorma == idOtroPDF:
+    elif tipoProceso == idOtroPDF:
 
         rutaPdf = values['-seleccionPDF-']
         webbrowser.open_new(rutaPdf)
 
 # ************************************************************************************************************************
 
-def definirTituloNorma(tipoNorma):
+def definirTituloNorma(tipoProceso):
 
     columna1.Update(visible=False)
     columna4.Update(visible=True)
 
-    if tipoNorma == idVoltaje:
+    if tipoProceso == idVoltaje:
 
         tituloNorma = 'VOLTAJE'
 
-    elif tipoNorma == idPotencia:
+    elif tipoProceso == idPotencia:
 
         tituloNorma = 'POTENCIA'
 
-    elif tipoNorma == idArmonicos:
+    elif tipoProceso == idArmonicos:
 
         tituloNorma = 'ARMÓNICOS'
 
@@ -277,17 +318,17 @@ def definirTituloNorma(tipoNorma):
 
 # ************************************************************************************************************************
 
-def definirTituloNota(tipoNota):
+def definirTituloNota(tipoProceso):
 
-    if tipoNota == idVoltaje:
+    if tipoProceso == idVoltaje:
 
         tituloNota = 'VOLTAJE'
 
-    elif tipoNota == idPotencia:
+    elif tipoProceso == idPotencia:
 
         tituloNota = 'POTENCIA'
 
-    elif tipoNota == idArmonicos:
+    elif tipoProceso == idArmonicos:
 
         tituloNota = 'ARMÓNICOS'
 
@@ -295,19 +336,19 @@ def definirTituloNota(tipoNota):
 
 # ************************************************************************************************************************
 
-def sustituirNorma(tipoNorma):
+def sustituirNorma(tipoProceso):
 
     try:
 
-        if tipoNorma == idVoltaje:
+        if tipoProceso == idVoltaje:
 
             shutil.copy(values['-seleccionPDF-'], rutaPdfVoltaje)
 
-        elif tipoNorma == idPotencia:
+        elif tipoProceso == idPotencia:
 
             shutil.copy(values['-seleccionPDF-'], rutaPdfPotencia)
 
-        elif tipoNorma == idArmonicos:
+        elif tipoProceso == idArmonicos:
 
             shutil.copy(values['-seleccionPDF-'], rutaPdfArmonicos)
 
@@ -336,7 +377,7 @@ def sustituirNorma(tipoNorma):
 
 # ************************************************************************************************************************
 
-def descartarGrabacion():
+def descartarGrabacion(tipoProceso):
 
     botonEditarNota.update(disabled=False)
     botonGrabarNota.update(disabled=True)
@@ -344,18 +385,21 @@ def descartarGrabacion():
     visorEditor.update(disabled=True)
     visorEditor.update(background_color=eColor2)
  
-    if (idTipoNotaActual == idVoltaje):
+    if (tipoProceso == idVoltaje):
+
         window['-visorEditorNotas-'].update(informacionVoltaje)
 
-    elif (idTipoNotaActual == idPotencia):
+    elif (tipoProceso == idPotencia):
+
         window['-visorEditorNotas-'].update(informacionPotencia)
 
-    elif (idTipoNotaActual == idArmonicos):
+    elif (tipoProceso == idArmonicos):
+
         window['-visorEditorNotas-'].update(informacionArmonicos)
 
 # ************************************************************************************************************************
 
-def grabarNota():
+def grabarNota(tipoProceso):
 
     botonEditarNota.update(disabled=False)
     botonGrabarNota.update(disabled=True)
@@ -363,15 +407,21 @@ def grabarNota():
     visorEditor.update(disabled=True)
     visorEditor.update(background_color=eColor2)
 
-    if (idTipoNotaActual == idVoltaje):
+    if (tipoProceso == idVoltaje):
+
+        global informacionVoltaje
         informacionVoltaje = values['-visorEditorNotas-']
         escribirArchivo(rutaInformacionVoltaje, informacionVoltaje)
 
-    elif (idTipoNotaActual == idPotencia):
+    elif (tipoProceso == idPotencia):
+
+        global informacionPotencia
         informacionPotencia = values['-visorEditorNotas-']
         escribirArchivo(rutaInformacionPotencia, informacionPotencia)
 
-    elif (idTipoNotaActual == idArmonicos):
+    elif (tipoProceso == idArmonicos):
+
+        global informacionArmonicos
         informacionArmonicos = values['-visorEditorNotas-']
         escribirArchivo(rutaInformacionArmonicos, informacionArmonicos)
 
@@ -387,9 +437,9 @@ def editarNota():
 
 # ************************************************************************************************************************
 
-def gestionarNota(tipoNota):
+def gestionarNota(tipoProceso):
 
-    definirTituloNota(tipoNota)
+    definirTituloNota(tipoProceso)
     columna1.Update(visible=False)
     columna3.Update(visible=True)
     botonEditarNota.update(disabled=False)
@@ -398,15 +448,15 @@ def gestionarNota(tipoNota):
     visorEditor.update(disabled=True)
     visorEditor.update(background_color=eColor2)
 
-    if (tipoNota == idVoltaje):
+    if (tipoProceso == idVoltaje):
 
         window['-visorEditorNotas-'].update(informacionVoltaje)
 
-    elif (tipoNota == idPotencia):
+    elif (tipoProceso == idPotencia):
 
         window['-visorEditorNotas-'].update(informacionPotencia)
 
-    elif (tipoNota == idArmonicos):
+    elif (tipoProceso == idArmonicos):
 
         window['-visorEditorNotas-'].update(informacionArmonicos)
 
@@ -437,16 +487,16 @@ def calcularRangoVariacion():
 
 # ************************************************************************************************************************
 
-def actualizarFiltrosPlantilla():
+def actualizarFiltrosPlantilla(tipoProceso):
 
-    if (idProcesoActual == idVoltaje):
-        comboDias.Update(values=archivoVoltaje.sheet_names)
+    if (tipoProceso == idVoltaje):
+        comboDias.Update(values=datosVoltaje.sheet_names)
 
-    elif (idProcesoActual == idPotencia):
-        comboDias.Update(values=archivoPotencia.sheet_names)
+    elif (tipoProceso == idPotencia):
+        comboDias.Update(values=datosPotencia.sheet_names)
 
-    elif (idProcesoActual == idArmonicos):
-        comboDias.Update(values=archivoArmonicos.sheet_names)
+    elif (tipoProceso == idArmonicos):
+        comboDias.Update(values=datosArmonicos.sheet_names)
         
     comboDias.Update(disabled=False)
     comboDias.Update(readonly=True)
@@ -464,6 +514,27 @@ def seleccionarPlantilla():
     window['-valorRutaPlantilla-'].Update(rutaPlantilla.rpartition('/')[0])
     window['-valorArchivoPlantilla-'].Update(archivoPlantilla)
     barraMenuPrincipal.Update(menuPrincipal1)
+
+# ************************************************************************************************************************
+
+def cargarDatosPreliminares(tipoProceso):
+
+    if (tipoProceso == idVoltaje):
+
+        rutaPlantillaVoltaje = values['-seleccionPlantilla-']
+        hiloCargarPlantilla(rutaPlantillaVoltaje, idVoltaje)
+
+    elif (tipoProceso == idPotencia):
+
+        rutaPlantillaPotencia = values['-seleccionPlantilla-']
+        hiloCargarPlantilla(rutaPlantillaPotencia, idPotencia)
+
+    elif (tipoProceso == idArmonicos):
+
+        rutaPlantillaArmonicos = values['-seleccionPlantilla-']
+        hiloCargarPlantilla(rutaPlantillaArmonicos, idArmonicos)
+
+    hiloIndicadorCarga()
 
 # ************************************************************************************************************************
 
@@ -1146,181 +1217,127 @@ while True:
 
     print(event)
 
-    # Salir de la aplicación
-
-    if event == sg.WIN_CLOSED or event == 'Salir':
+    if event == sg.WIN_CLOSED or event == 'Salir': # Salir de la aplicación
 
         break
-
-    # Seleccionar plantilla de origen de datos
     
-    elif event == '-seleccionPlantilla-':
+    elif event == '-seleccionPlantilla-': # Seleccionar plantilla de origen de datos
 
         seleccionarPlantilla()
-        
-    # Analizar Voltaje
 
-    elif event.endswith('-opcV1-'):
+    elif event.endswith('-opcV1-'): # Analizar Voltaje
 
         idProcesoActual = idVoltaje
-        rutaPlantillaVoltaje = values['-seleccionPlantilla-']
-        hiloCargarPlantilla(rutaPlantillaVoltaje, idVoltaje)
-        hiloIndicadorCarga()
-      
-    # Mensaje recibido desde los hilos al momento de haber finalizado las acciones que toman más tiempo
+        cargarDatosPreliminares(idProcesoActual)
 
-    elif event == '-ThreadDone-':
+    elif event == '-ThreadDone-': # Mensaje recibido desde los hilos al momento de haber finalizado las acciones que toman más tiempo
 
-        actualizarFiltrosPlantilla()
+        actualizarFiltrosPlantilla(idProcesoActual)
 
-    # Rango de variación
-
-    elif event == '-variacion-': 
+    elif event == '-variacion-': # Rango de variación
     
         calcularRangoVariacion()
 
-    # Ventana Acerca de
-
-    elif event.endswith('-opcAcercaDe-'):
+    elif event.endswith('-opcAcercaDe-'): # Ventana Acerca de
 
         columna1.Update(visible=False)
         columna2.Update(visible=True)
 
-    # Boton INICIO desde la ventana Acerca de
-
-    elif event == '-botonInicioV1-': 
+    elif event == '-botonInicioV1-': # Boton INICIO desde la ventana Acerca de
 
         columna1.Update(visible=True)
         columna2.Update(visible=False)
 
-    # Boton INICIO desde la ventana Notas Rápidas
-
-    elif event == '-botonInicioV2-': 
+    elif event == '-botonInicioV2-': # Boton INICIO desde la ventana Notas Rápidas
 
         columna1.Update(visible=True)
         columna3.Update(visible=False)
 
-    # Boton INICIO desde la ventana Notas Rápidas
-
-    elif event == '-botonInicioV3-': 
+    elif event == '-botonInicioV3-': # Boton INICIO desde la ventana Notas Rápidas
 
         columna1.Update(visible=True)
         columna4.Update(visible=False)
 
-    # Gestionar nota rápida para Voltaje
+    elif event.endswith('-opcN7-'): # Gestionar nota rápida para Voltaje
 
-    elif event.endswith('-opcN7-'):
+        idProcesoActual = idVoltaje
+        gestionarNota(idProcesoActual)
 
-        idTipoNotaActual = idVoltaje
-        gestionarNota(idTipoNotaActual)
+    elif event.endswith('-opcN8-'): # Gestionar nota rápida para Potencia
 
-    # Gestionar nota rápida para Potencia
+        idProcesoActual = idPotencia
+        gestionarNota(idProcesoActual)
 
-    elif event.endswith('-opcN8-'):
+    elif event.endswith('-opcN9-'): # Gestionar nota rápida para Armónicos
 
-        idTipoNotaActual = idPotencia
-        gestionarNota(idTipoNotaActual)
+        idProcesoActual = idArmonicos
+        gestionarNota(idProcesoActual)
 
-    # Gestionar nota rápida para Armónicos
-
-    elif event.endswith('-opcN9-'):
-
-        idTipoNotaActual = idArmonicos
-        gestionarNota(idTipoNotaActual)
-
-    # Habilitar la zona de edición de texto de las Notas Rápidas
-
-    elif event == '-botonEditarNota-': 
+    elif event == '-botonEditarNota-': # Habilitar la zona de edición de texto de las Notas Rápidas
 
         editarNota()
-      
-    # Actualizar los archivos en disco con el contenido de la zona de edición de las Notas Rápidas
 
-    elif event == '-botonGrabarNota-': 
+    elif event == '-botonGrabarNota-': # Actualizar los archivos en disco con el contenido de la zona de edición de las Notas Rápidas
 
-        grabarNota()
+        grabarNota(idProcesoActual)
 
-    # Descartar el contenido de la zona de edición de las Notas Rápidas y no grabarlo
+    elif event == '-botonDescartarGrabacion-': # Descartar el contenido de la zona de edición de las Notas Rápidas y no grabarlo
 
-    elif event == '-botonDescartarGrabacion-': 
+        descartarGrabacion(idProcesoActual)
 
-        descartarGrabacion()
+    elif event.endswith('-opcN1-'): # Ver norma Pdf para Voltaje
 
-    # Ver norma Pdf para Voltaje
+        idProcesoActual = idVoltaje
+        visualizarNorma(idProcesoActual)
 
-    elif event.endswith('-opcN1-'):
+    elif event.endswith('-opcN2-'): # Ver norma Pdf para Potencia
 
-        idTipoNormaActual = idVoltaje
-        visualizarNorma(idTipoNormaActual)
+        idProcesoActual = idPotencia
+        visualizarNorma(idProcesoActual)
 
-    # Ver norma Pdf para Potencia
+    elif event.endswith('-opcN3-'): # Ver norma Pdf para Armónicos
 
-    elif event.endswith('-opcN2-'):
+        idProcesoActual = idArmonicos
+        visualizarNorma(idProcesoActual)
 
-        idTipoNormaActual = idPotencia
-        visualizarNorma(idTipoNormaActual)
+    elif event.endswith('-opcN4-'): # Gestionar norma Pdf para Voltaje
 
-    # Ver norma Pdf para Armónicos
+        idProcesoActual = idVoltaje
+        definirTituloNorma(idProcesoActual)
 
-    elif event.endswith('-opcN3-'):
+    elif event.endswith('-opcN5-'): # Gestionar norma Pdf para Potencia
 
-        idTipoNormaActual = idArmonicos
-        visualizarNorma(idTipoNormaActual)
+        idProcesoActual = idPotencia
+        definirTituloNorma(idProcesoActual)
 
-    # Gestionar norma Pdf para Voltaje
+    elif event.endswith('-opcN6-'): # Gestionar norma Pdf para Armónicos
 
-    elif event.endswith('-opcN4-'):
+        idProcesoActual = idArmonicos
+        definirTituloNorma(idProcesoActual)
 
-        idTipoNormaActual = idVoltaje
-        definirTituloNorma(idTipoNormaActual)
-
-    # Gestionar norma Pdf para Potencia
-
-    elif event.endswith('-opcN5-'):
-
-        idTipoNormaActual = idPotencia
-        definirTituloNorma(idTipoNormaActual)
-
-    # Gestionar norma Pdf para Armónicos
-
-    elif event.endswith('-opcN6-'):
-
-        idTipoNormaActual = idArmonicos
-        definirTituloNorma(idTipoNormaActual)
-
-    # Control de la barra de botones para la gestión de normas
-
-    elif event == ('-seleccionPDF-'):
+    elif event == ('-seleccionPDF-'): # Control de la barra de botones para la gestión de normas
 
         botonesGestionarNorma(False)
 
-    elif event == ('-botonVerNorma-'):
+    elif event == ('-botonVerNorma-'): # Ver archivo PDF para el contenido de la norma actual
 
-        visualizarNorma(idTipoNormaActual)
+        visualizarNorma(idProcesoActual)
  
-    elif event == ('-botonVerSeleccionado-'):
+    elif event == ('-botonVerSeleccionado-'): # Ver archivo PDF para el contenido de la nueva norma seleccionada
 
         visualizarNorma(idOtroPDF)
-       
-    # Control de la barra de botones para la gestión de normas
 
-    elif event == ('-botonDescartarGestion-'):
+    elif event == ('-botonDescartarGestion-'): # Control de la barra de botones para la gestión de normas
 
         botonesGestionarNorma(True)
         window['-seleccionPDF-'].update('')
-        
-    # Sustituir el archivo PDF actual de la norma con el contenido del nuevo recién seleccionado
 
-    elif event == ('-botonActualizarNorma-'):
+    elif event == ('-botonActualizarNorma-'): # Sustituir el archivo PDF actual de la norma con el contenido del nuevo recién seleccionado
 
-        sustituirNorma(idTipoNormaActual)
+        sustituirNorma(idProcesoActual)
+   
 
-
-
-
-    # Actualizar cambios en componentes de la GUI
-
-    window.refresh()     
+    window.refresh() # Actualizar cambios en componentes de la GUI
         
 window.close()
 
