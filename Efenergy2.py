@@ -35,8 +35,8 @@ idArmonicos = 3
 
 idOtroPDF = 0
 
-idNotaActual = None
-idNormaActual = None
+idTipoNotaActual = None
+idTipoNormaActual = None
 tituloNorma = None
 tituloNota = None
 
@@ -127,6 +127,54 @@ copyright = '(C) 2020\nSENA - CDITI\nDosquebradas (Risaralda)'
 
 # ************************************************************************************************************************
 
+# BARRA DE MENÚ PRINCIPAL TODO ACTIVO
+
+menuPrincipal1 =     [
+                        [ 'Opciones', [ 'Acerca de...::-opcAcercaDe-', '---', 'Salir' ] ],
+                        [ 'Voltaje',
+                            [ 'Analizar Voltaje::-opcV1-' ]
+                        ],
+                        [ 'Potencia',
+                            ['Analizar Factor de Potencia::-opcP1-', 'Analizar Potencia Reactiva::-opcP2-' ]
+                        ],
+                        [ 'Armónicos',
+                            [ 'Analizar Armónicos de Tensión::-opcA1-', 'Analizar Armónicos de Corriente::-opcA2-', '---', 'Analizar Distorsión Armónica::-opcA3-' ],
+                        ],
+                        [ 'Normatividad',
+                            [ 'Ver norma sobre Voltaje::-opcN1-', 'Ver norma sobre Potencia::-opcN2-', 'Ver norma sobre Armónicos::-opcN3-', 
+                                '---', 'Gestión de Normas',
+                                [ 'Voltaje::-opcN4-', 'Potencia::-opcN5-', 'Armónicos::-opcN6-' ],
+                                '---', 'Gestión de Notas rápidas',
+                                [ 'Voltaje::-opcN7-', 'Potencia::-opcN8-', 'Armónicos::-opcN9-' ],
+                            ],
+                        ],
+                    ]
+
+# BARRA DE MENÚ PRINCIPAL ITEMS BLOQUEADOS
+
+menuPrincipal2 =     [
+                        [ 'Opciones', [ 'Acerca de...::-opcAcercaDe-', '---', 'Salir' ] ],
+                        [ '!Voltaje',
+                            [ 'Analizar Voltaje::-opcV1-' ]
+                        ],
+                        [ '!Potencia',
+                            ['Analizar Factor de Potencia::-opcP1-', 'Analizar Potencia Reactiva::-opcP2-' ]
+                        ],
+                        [ '!Armónicos',
+                            [ 'Analizar Armónicos de Tensión::-opcA1-', 'Analizar Armónicos de Corriente::-opcA2-', '---', 'Analizar Distorsión Armónica::-opcA3-'  ],
+                        ],
+                        [ 'Normatividad',
+                            [ 'Ver norma sobre Voltaje::-opcN1-', 'Ver norma sobre Potencia::-opcN2-', 'Ver norma sobre Armónicos::-opcN3-', 
+                                '---', 'Gestión de Normas',
+                                [ 'Voltaje::-opcN4-', 'Potencia::-opcN5-', 'Armónicos::-opcN6-' ],
+                                '---', 'Gestión de Notas rápidas',
+                                [ 'Voltaje::-opcN7-', 'Potencia::-opcN8-', 'Armónicos::-opcN9-' ],
+                            ],
+                        ],
+                    ]
+
+# ************************************************************************************************************************
+
 def cargarPlantilla(window, plantilla, identificador):
 
     if (identificador == idVoltaje):
@@ -187,38 +235,41 @@ def escribirArchivo(file, contenido):
 
 # ************************************************************************************************************************
 
-def visualizarNorma(idNorma):
+def visualizarNorma(tipoNorma):
 
-    if idNorma == idVoltaje:
+    if tipoNorma == idVoltaje:
 
         webbrowser.open_new(rutaPdfVoltaje)
 
-    if idNorma == idPotencia:
+    elif tipoNorma == idPotencia:
 
         webbrowser.open_new(rutaPdfPotencia)
 
-    if idNorma == idArmonicos:
+    elif tipoNorma == idArmonicos:
 
         webbrowser.open_new(rutaPdfArmonicos)
 
-    if idNorma == idOtroPDF:
+    elif tipoNorma == idOtroPDF:
 
         rutaPdf = values['-seleccionPDF-']
         webbrowser.open_new(rutaPdf)
 
 # ************************************************************************************************************************
 
-def definirTituloNorma(idNorma):
+def definirTituloNorma(tipoNorma):
 
-    if idNorma == idVoltaje:
+    columna1.Update(visible=False)
+    columna4.Update(visible=True)
+
+    if tipoNorma == idVoltaje:
 
         tituloNorma = 'VOLTAJE'
 
-    if idNorma == idPotencia:
+    elif tipoNorma == idPotencia:
 
         tituloNorma = 'POTENCIA'
 
-    if idNorma == idArmonicos:
+    elif tipoNorma == idArmonicos:
 
         tituloNorma = 'ARMÓNICOS'
 
@@ -226,17 +277,17 @@ def definirTituloNorma(idNorma):
 
 # ************************************************************************************************************************
 
-def definirTituloNota(idNota):
+def definirTituloNota(tipoNota):
 
-    if idNota == idVoltaje:
+    if tipoNota == idVoltaje:
 
         tituloNota = 'VOLTAJE'
 
-    if idNota == idPotencia:
+    elif tipoNota == idPotencia:
 
         tituloNota = 'POTENCIA'
 
-    if idNota == idArmonicos:
+    elif tipoNota == idArmonicos:
 
         tituloNota = 'ARMÓNICOS'
 
@@ -244,19 +295,19 @@ def definirTituloNota(idNota):
 
 # ************************************************************************************************************************
 
-def sustituirNorma(idNorma):
+def sustituirNorma(tipoNorma):
 
     try:
 
-        if idNorma == idVoltaje:
+        if tipoNorma == idVoltaje:
 
             shutil.copy(values['-seleccionPDF-'], rutaPdfVoltaje)
 
-        if idNorma == idPotencia:
+        elif tipoNorma == idPotencia:
 
             shutil.copy(values['-seleccionPDF-'], rutaPdfPotencia)
 
-        if idNorma == idArmonicos:
+        elif tipoNorma == idArmonicos:
 
             shutil.copy(values['-seleccionPDF-'], rutaPdfArmonicos)
 
@@ -268,15 +319,151 @@ def sustituirNorma(idNorma):
                  keep_on_top=True,
                  no_titlebar=False)
 
+        botonActualizarNorma.update(disabled=True)
+        botonDescartarGestion.update(disabled=True)
+        botonVerSeleccionado.update(disabled=True)
+        window['-seleccionPDF-'].update('')
+
     except:
 
         sg.Popup('ERROR', 
-                 'Ocurrió un problema al intentar actualizar el archivo PDF de la norma.',
+                 'Ocurrió un problema al intentar actualizar el archivo PDF de la norma. Revise que el archivo actual no esté abierto para visualización y que sean diferentes. Ciérrelo e intente de nuevo.',
                  text_color=eColor1, 
                  background_color=eColor6,
                  button_color=eColores1,
                  keep_on_top=True,
                  no_titlebar=False)
+
+# ************************************************************************************************************************
+
+def descartarGrabacion():
+
+    botonEditarNota.update(disabled=False)
+    botonGrabarNota.update(disabled=True)
+    botonDescartarGrabacion.update(disabled=True)
+    visorEditor.update(disabled=True)
+    visorEditor.update(background_color=eColor2)
+ 
+    if (idTipoNotaActual == idVoltaje):
+        window['-visorEditorNotas-'].update(informacionVoltaje)
+
+    elif (idTipoNotaActual == idPotencia):
+        window['-visorEditorNotas-'].update(informacionPotencia)
+
+    elif (idTipoNotaActual == idArmonicos):
+        window['-visorEditorNotas-'].update(informacionArmonicos)
+
+# ************************************************************************************************************************
+
+def grabarNota():
+
+    botonEditarNota.update(disabled=False)
+    botonGrabarNota.update(disabled=True)
+    botonDescartarGrabacion.update(disabled=True)
+    visorEditor.update(disabled=True)
+    visorEditor.update(background_color=eColor2)
+
+    if (idTipoNotaActual == idVoltaje):
+        informacionVoltaje = values['-visorEditorNotas-']
+        escribirArchivo(rutaInformacionVoltaje, informacionVoltaje)
+
+    elif (idTipoNotaActual == idPotencia):
+        informacionPotencia = values['-visorEditorNotas-']
+        escribirArchivo(rutaInformacionPotencia, informacionPotencia)
+
+    elif (idTipoNotaActual == idArmonicos):
+        informacionArmonicos = values['-visorEditorNotas-']
+        escribirArchivo(rutaInformacionArmonicos, informacionArmonicos)
+
+# ************************************************************************************************************************
+
+def editarNota():
+
+    botonEditarNota.update(disabled=True)
+    botonGrabarNota.update(disabled=False)
+    botonDescartarGrabacion.update(disabled=False)
+    visorEditor.update(disabled=False)
+    visorEditor.update(background_color=eColor3)
+
+# ************************************************************************************************************************
+
+def gestionarNota(tipoNota):
+
+    definirTituloNota(tipoNota)
+    columna1.Update(visible=False)
+    columna3.Update(visible=True)
+    botonEditarNota.update(disabled=False)
+    botonGrabarNota.update(disabled=True)
+    botonDescartarGrabacion.update(disabled=True)
+    visorEditor.update(disabled=True)
+    visorEditor.update(background_color=eColor2)
+
+    if (tipoNota == idVoltaje):
+
+        window['-visorEditorNotas-'].update(informacionVoltaje)
+
+    elif (tipoNota == idPotencia):
+
+        window['-visorEditorNotas-'].update(informacionPotencia)
+
+    elif (tipoNota == idArmonicos):
+
+        window['-visorEditorNotas-'].update(informacionArmonicos)
+
+# ************************************************************************************************************************
+
+def botonesGestionarNorma(estado):
+
+    botonActualizarNorma.update(disabled=estado)
+    botonDescartarGestion.update(disabled=estado)
+    botonVerSeleccionado.update(disabled=estado)
+
+# ************************************************************************************************************************
+
+def calcularRangoVariacion():
+
+    try:
+
+        intVariacion = float(window['-variacion-'].get())
+        limiteInferior = intVariacion * (1 - porcentajeLimiteInferior)
+        limiteSuperior = intVariacion * (1 + porcentajeLimiteSuperior)
+        nuevoTooltip = '  El rango establecido para análisis es [ {0:.2f} - {1:.2f} ]  '.format(limiteInferior,limiteSuperior)
+        inputVariacion.set_tooltip(nuevoTooltip)
+
+    except ValueError:
+
+        window['-variacion-'].update(''.join([i for i in window['-variacion-'].get() if i.isdigit()]))
+        #print('Error controlado por Efenergy v2.0. El valor del Input no corresponde a un número.')
+
+# ************************************************************************************************************************
+
+def actualizarFiltrosPlantilla():
+
+    if (idProcesoActual == idVoltaje):
+        comboDias.Update(values=archivoVoltaje.sheet_names)
+
+    elif (idProcesoActual == idPotencia):
+        comboDias.Update(values=archivoPotencia.sheet_names)
+
+    elif (idProcesoActual == idArmonicos):
+        comboDias.Update(values=archivoArmonicos.sheet_names)
+        
+    comboDias.Update(disabled=False)
+    comboDias.Update(readonly=True)
+    comboFases.Update(disabled=False)
+    comboFases.Update(readonly=True)
+    comboVoltaje.Update(disabled=False)
+    comboVoltaje.Update(readonly=True)
+
+# ************************************************************************************************************************
+
+def seleccionarPlantilla():
+
+    rutaPlantilla = values['-seleccionPlantilla-']
+    archivoPlantilla = rutaPlantilla.split('/')[-1]
+    window['-valorRutaPlantilla-'].Update(rutaPlantilla.rpartition('/')[0])
+    window['-valorArchivoPlantilla-'].Update(archivoPlantilla)
+    barraMenuPrincipal.Update(menuPrincipal1)
 
 # ************************************************************************************************************************
 
@@ -564,58 +751,28 @@ def generarGestionNormas():
 
 # ************************************************************************************************************************
 
-# BARRA DE MENÚ PRINCIPAL TODO ACTIVO
-
-menuPrincipal1 =     [
-                        [ 'Opciones', [ 'Acerca de...::-opcAcercaDe-', '---', 'Salir' ] ],
-                        [ 'Voltaje',
-                            [ 'Analizar Voltaje::-opcV1-' ]
-                        ],
-                        [ 'Potencia',
-                            ['Analizar Factor de Potencia::-opcP1-', 'Analizar Potencia Reactiva::-opcP2-' ]
-                        ],
-                        [ 'Armónicos',
-                            [ 'Analizar Armónicos de Tensión::-opcA1-', 'Analizar Armónicos de Corriente::-opcA2-', '---', 'Analizar Distorsión Armónica::-opcA3-' ],
-                        ],
-                        [ 'Normatividad',
-                            [ 'Ver norma sobre Voltaje::-opcN1-', 'Ver norma sobre Potencia::-opcN2-', 'Ver norma sobre Armónicos::-opcN3-', 
-                                '---', 'Gestión de Normas',
-                                [ 'Voltaje::-opcN4-', 'Potencia::-opcN5-', 'Armónicos::-opcN6-' ],
-                                '---', 'Gestión de Notas rápidas',
-                                [ 'Voltaje::-opcN7-', 'Potencia::-opcN8-', 'Armónicos::-opcN9-' ],
-                            ],
-                        ],
-                    ]
-
-# BARRA DE MENÚ PRINCIPAL ITEMS BLOQUEADOS
-
-menuPrincipal2 =     [
-                        [ 'Opciones', [ 'Acerca de...::-opcAcercaDe-', '---', 'Salir' ] ],
-                        [ '!Voltaje',
-                            [ 'Analizar Voltaje::-opcV1-' ]
-                        ],
-                        [ '!Potencia',
-                            ['Analizar Factor de Potencia::-opcP1-', 'Analizar Potencia Reactiva::-opcP2-' ]
-                        ],
-                        [ '!Armónicos',
-                            [ 'Analizar Armónicos de Tensión::-opcA1-', 'Analizar Armónicos de Corriente::-opcA2-', '---', 'Analizar Distorsión Armónica::-opcA3-'  ],
-                        ],
-                        [ 'Normatividad',
-                            [ 'Ver norma sobre Voltaje::-opcN1-', 'Ver norma sobre Potencia::-opcN2-', 'Ver norma sobre Armónicos::-opcN3-', 
-                                '---', 'Gestión de Normas',
-                                [ 'Voltaje::-opcN4-', 'Potencia::-opcN5-', 'Armónicos::-opcN6-' ],
-                                '---', 'Gestión de Notas rápidas',
-                                [ 'Voltaje::-opcN7-', 'Potencia::-opcN8-', 'Armónicos::-opcN9-' ],
-                            ],
-                        ],
-                    ]
-
 # GENERACIÓN DINÁMICA DE FRAMES PARA EL LOGO. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
 
 frame1Logo = generarLogo(1)
 frame2Logo = generarLogo(2)
 frame3Logo = generarLogo(3)
 frame4Logo = generarLogo(4)
+
+# GENERACIÓN DINÁMICA DE FRAMES PARA NAVEGACIÓN. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
+
+frame1Navegacion = generarNavegacion(1) # Ventana Acerca de
+frame2Navegacion = generarNavegacion(2) # Ventana Notas Rápidas
+frame3Navegacion = generarNavegacion(3) # Ventana Notas Rápidas
+
+# GENERACIÓN DINÁMICA DEL FRAME PARA NOTAS RÁPIDAS.
+
+generarNotasRapidas()
+
+# GENERACIÓN DINÁMICA DEL FRAME PARA GESTIÓN DE NORMAS.
+
+generarGestionNormas()
+
+# ************************************************************************************************************************
 
 # SELECTOR DE PLANTILLAS DE ORIGEN DE DATOS
 
@@ -796,8 +953,6 @@ layoutFiltros =    [
                         ],
                     ]
 
-inputVariacion.Update = 120
-
 frameFiltros = sg.Frame(key='-frameFiltros-', 
                         title='  Filtros  ', 
                         layout=layoutFiltros, 
@@ -895,12 +1050,6 @@ frameAcercaDe = sg.Frame(key='-frameAcercaDe-',
                          title_color=eColor1, 
                          background_color=eColor2)
 
-# GENERACIÓN DINÁMICA DE FRAMES PARA NAVEGACIÓN. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
-
-frame1Navegacion = generarNavegacion(1) # Ventana Acerca de
-frame2Navegacion = generarNavegacion(2) # Ventana Notas Rápidas
-frame3Navegacion = generarNavegacion(3) # Ventana Notas Rápidas
-
 layoutColumna2 =    [
                         #### Logo + Barra
                         [
@@ -921,14 +1070,6 @@ columna2 = sg.Column(key='-columna2-',
                      visible=False, 
                      background_color=eColor2, 
                      size=sizeColumnas)
-
-# GENERACIÓN DINÁMICA DEL FRAME PARA NOTAS RÁPIDAS.
-
-generarNotasRapidas()
-
-# GENERACIÓN DINÁMICA DEL FRAME PARA GESTIÓN DE NORMAS.
-
-generarGestionNormas()
 
 # FULL LAYOUT
 
@@ -961,6 +1102,10 @@ window = sg.Window('Efenergy v2.0',
                    finalize=True,
                    font=('Helvetica',11),
                    icon=rutaIconoPrincipal)
+
+# Establecer en la ventana de filtros el valor base para la Variación.
+
+inputVariacion.Update = valorVariacion
 
 # Habilitar barra de menú con opciones deshabilitadas.
 
@@ -1017,12 +1162,8 @@ while True:
     
     if event == '-seleccionPlantilla-':
 
-        rutaPlantilla = values['-seleccionPlantilla-']
-        archivoPlantilla = rutaPlantilla.split('/')[-1]
-        window['-valorRutaPlantilla-'].Update(rutaPlantilla.rpartition('/')[0])
-        window['-valorArchivoPlantilla-'].Update(archivoPlantilla)
-        barraMenuPrincipal.Update(menuPrincipal1)
-
+        seleccionarPlantilla()
+        
     # Analizar Voltaje
 
     if event.endswith('-opcV1-'):
@@ -1036,38 +1177,13 @@ while True:
 
     if event == '-ThreadDone-':
 
-        if (idProcesoActual == idVoltaje):
-            comboDias.Update(values=archivoVoltaje.sheet_names)
-
-        elif (idProcesoActual == idPotencia):
-            comboDias.Update(values=archivoPotencia.sheet_names)
-
-        elif (idProcesoActual == idArmonicos):
-            comboDias.Update(values=archivoArmonicos.sheet_names)
-        
-        comboDias.Update(disabled=False)
-        comboDias.Update(readonly=True)
-        comboFases.Update(disabled=False)
-        comboFases.Update(readonly=True)
-        comboVoltaje.Update(disabled=False)
-        comboVoltaje.Update(readonly=True)
+        actualizarFiltrosPlantilla()
 
     # Rango de variación
 
     if event == '-variacion-': 
     
-        try:
-
-            intVariacion = float(window['-variacion-'].get())
-            limiteInferior = intVariacion * (1 - porcentajeLimiteInferior)
-            limiteSuperior = intVariacion * (1 + porcentajeLimiteSuperior)
-            nuevoTooltip = '  El rango establecido para análisis es [ {0:.2f} - {1:.2f} ]  '.format(limiteInferior,limiteSuperior)
-            inputVariacion.set_tooltip(nuevoTooltip)
-
-        except ValueError:
-
-            window['-variacion-'].update(''.join([i for i in window['-variacion-'].get() if i.isdigit()]))
-            #print('Error controlado por Efenergy v2.0. El valor del Input no corresponde a un número.')
+        calcularRangoVariacion()
 
     # Ventana Acerca de
 
@@ -1101,157 +1217,92 @@ while True:
 
     if event.endswith('-opcN7-'):
 
-        idNotaActual = idVoltaje
-        definirTituloNota(idNotaActual)
-        columna1.Update(visible=False)
-        columna3.Update(visible=True)
-        window['-visorEditorNotas-'].update(informacionVoltaje)
-        botonEditarNota.update(disabled=False)
-        botonGrabarNota.update(disabled=True)
-        botonDescartarGrabacion.update(disabled=True)
-        visorEditor.update(disabled=True)
-        visorEditor.update(background_color=eColor2)
+        idTipoNotaActual = idVoltaje
+        gestionarNota(idTipoNotaActual)
 
     # Gestionar nota rápida para Potencia
 
     if event.endswith('-opcN8-'):
 
-        idNotaActual = idPotencia
-        definirTituloNota(idNotaActual)
-        columna1.Update(visible=False)
-        columna3.Update(visible=True)
-        window['-visorEditorNotas-'].update(informacionPotencia)
-        botonEditarNota.update(disabled=False)
-        botonGrabarNota.update(disabled=True)
-        botonDescartarGrabacion.update(disabled=True)
-        visorEditor.update(disabled=True)
-        visorEditor.update(background_color=eColor2)
+        idTipoNotaActual = idPotencia
+        gestionarNota(idTipoNotaActual)
 
     # Gestionar nota rápida para Armónicos
 
     if event.endswith('-opcN9-'):
 
-        idNotaActual = idArmonicos
-        definirTituloNota(idNotaActual)
-        columna1.Update(visible=False)
-        columna3.Update(visible=True)
-        window['-visorEditorNotas-'].update(informacionArmonicos)
-        botonEditarNota.update(disabled=False)
-        botonGrabarNota.update(disabled=True)
-        botonDescartarGrabacion.update(disabled=True)
-        visorEditor.update(disabled=True)
-        visorEditor.update(background_color=eColor2)
+        idTipoNotaActual = idArmonicos
+        gestionarNota(idTipoNotaActual)
 
     # Habilitar la zona de edición de texto de las Notas Rápidas
 
     if event == '-botonEditarNota-': 
 
-        botonEditarNota.update(disabled=True)
-        botonGrabarNota.update(disabled=False)
-        botonDescartarGrabacion.update(disabled=False)
-        visorEditor.update(disabled=False)
-        visorEditor.update(background_color=eColor3)
+        editarNota()
       
     # Actualizar los archivos en disco con el contenido de la zona de edición de las Notas Rápidas
 
     if event == '-botonGrabarNota-': 
 
-        botonEditarNota.update(disabled=False)
-        botonGrabarNota.update(disabled=True)
-        botonDescartarGrabacion.update(disabled=True)
-        visorEditor.update(disabled=True)
-        visorEditor.update(background_color=eColor2)
-
-        if (idNotaActual == idVoltaje):
-            informacionVoltaje = values['-visorEditorNotas-']
-            escribirArchivo(rutaInformacionVoltaje, informacionVoltaje)
-
-        elif (idNotaActual == idPotencia):
-            informacionPotencia = values['-visorEditorNotas-']
-            escribirArchivo(rutaInformacionPotencia, informacionPotencia)
-
-        elif (idNotaActual == idArmonicos):
-            informacionArmonicos = values['-visorEditorNotas-']
-            escribirArchivo(rutaInformacionArmonicos, informacionArmonicos)
+        grabarNota()
 
     # Descartar el contenido de la zona de edición de las Notas Rápidas y no grabarlo
 
     if event == '-botonDescartarGrabacion-': 
 
-        botonEditarNota.update(disabled=False)
-        botonGrabarNota.update(disabled=True)
-        botonDescartarGrabacion.update(disabled=True)
-        visorEditor.update(disabled=True)
-        visorEditor.update(background_color=eColor2)
- 
-        if (idNotaActual == idVoltaje):
-            window['-visorEditorNotas-'].update(informacionVoltaje)
-
-        elif (idNotaActual == idPotencia):
-            window['-visorEditorNotas-'].update(informacionPotencia)
-
-        elif (idNotaActual == idArmonicos):
-            window['-visorEditorNotas-'].update(informacionArmonicos)
+        descartarGrabacion()
 
     # Ver norma Pdf para Voltaje
 
     if event.endswith('-opcN1-'):
 
-        idNormaActual = idVoltaje
-        visualizarNorma(idNormaActual)
+        idTipoNormaActual = idVoltaje
+        visualizarNorma(idTipoNormaActual)
 
     # Ver norma Pdf para Potencia
 
     if event.endswith('-opcN2-'):
 
-        idNormaActual = idPotencia
-        visualizarNorma(idNormaActual)
+        idTipoNormaActual = idPotencia
+        visualizarNorma(idTipoNormaActual)
 
     # Ver norma Pdf para Armónicos
 
     if event.endswith('-opcN3-'):
 
-        idNormaActual = idArmonicos
-        visualizarNorma(idNormaActual)
+        idTipoNormaActual = idArmonicos
+        visualizarNorma(idTipoNormaActual)
 
     # Gestionar norma Pdf para Voltaje
 
     if event.endswith('-opcN4-'):
 
-        idNormaActual = idVoltaje
-        definirTituloNorma(idNormaActual)
-        columna1.Update(visible=False)
-        columna4.Update(visible=True)
+        idTipoNormaActual = idVoltaje
+        definirTituloNorma(idTipoNormaActual)
 
     # Gestionar norma Pdf para Potencia
 
     if event.endswith('-opcN5-'):
 
-        idNormaActual = idPotencia
-        definirTituloNorma(idNormaActual)
-        columna1.Update(visible=False)
-        columna4.Update(visible=True)
+        idTipoNormaActual = idPotencia
+        definirTituloNorma(idTipoNormaActual)
 
     # Gestionar norma Pdf para Armónicos
 
     if event.endswith('-opcN6-'):
 
-        idNormaActual = idArmonicos
-        definirTituloNorma(idNormaActual)
-        columna1.Update(visible=False)
-        columna4.Update(visible=True)
+        idTipoNormaActual = idArmonicos
+        definirTituloNorma(idTipoNormaActual)
 
     # Control de la barra de botones para la gestión de normas
 
     if event == ('-seleccionPDF-'):
 
-        botonActualizarNorma.update(disabled=False)
-        botonDescartarGestion.update(disabled=False)
-        botonVerSeleccionado.update(disabled=False)
+        botonesGestionarNorma(False)
 
     if event == ('-botonVerNorma-'):
 
-        visualizarNorma(idNormaActual)
+        visualizarNorma(idTipoNormaActual)
  
     if event == ('-botonVerSeleccionado-'):
 
@@ -1261,22 +1312,14 @@ while True:
 
     if event == ('-botonDescartarGestion-'):
 
-        botonActualizarNorma.update(disabled=True)
-        botonDescartarGestion.update(disabled=True)
-        botonVerSeleccionado.update(disabled=True)
+        botonesGestionarNorma(True)
         window['-seleccionPDF-'].update('')
         
     # Sustituir el archivo PDF actual de la norma con el contenido del nuevo recién seleccionado
 
     if event == ('-botonActualizarNorma-'):
 
-        sustituirNorma(idNormaActual)
-
-        botonActualizarNorma.update(disabled=True)
-        botonDescartarGestion.update(disabled=True)
-        botonVerSeleccionado.update(disabled=True)
-        window['-seleccionPDF-'].update('')
-
+        sustituirNorma(idTipoNormaActual)
 
 
 
