@@ -1152,21 +1152,15 @@ while True:
 
         break
 
-    # Salir de la aplicación
-
-    if event.endswith('-opcSalir-'):
-
-        break
-
     # Seleccionar plantilla de origen de datos
     
-    if event == '-seleccionPlantilla-':
+    elif event == '-seleccionPlantilla-':
 
         seleccionarPlantilla()
         
     # Analizar Voltaje
 
-    if event.endswith('-opcV1-'):
+    elif event.endswith('-opcV1-'):
 
         idProcesoActual = idVoltaje
         rutaPlantillaVoltaje = values['-seleccionPlantilla-']
@@ -1175,149 +1169,149 @@ while True:
       
     # Mensaje recibido desde los hilos al momento de haber finalizado las acciones que toman más tiempo
 
-    if event == '-ThreadDone-':
+    elif event == '-ThreadDone-':
 
         actualizarFiltrosPlantilla()
 
     # Rango de variación
 
-    if event == '-variacion-': 
+    elif event == '-variacion-': 
     
         calcularRangoVariacion()
 
     # Ventana Acerca de
 
-    if event.endswith('-opcAcercaDe-'):
+    elif event.endswith('-opcAcercaDe-'):
 
         columna1.Update(visible=False)
         columna2.Update(visible=True)
 
     # Boton INICIO desde la ventana Acerca de
 
-    if event == '-botonInicioV1-': 
+    elif event == '-botonInicioV1-': 
 
         columna1.Update(visible=True)
         columna2.Update(visible=False)
 
     # Boton INICIO desde la ventana Notas Rápidas
 
-    if event == '-botonInicioV2-': 
+    elif event == '-botonInicioV2-': 
 
         columna1.Update(visible=True)
         columna3.Update(visible=False)
 
     # Boton INICIO desde la ventana Notas Rápidas
 
-    if event == '-botonInicioV3-': 
+    elif event == '-botonInicioV3-': 
 
         columna1.Update(visible=True)
         columna4.Update(visible=False)
 
     # Gestionar nota rápida para Voltaje
 
-    if event.endswith('-opcN7-'):
+    elif event.endswith('-opcN7-'):
 
         idTipoNotaActual = idVoltaje
         gestionarNota(idTipoNotaActual)
 
     # Gestionar nota rápida para Potencia
 
-    if event.endswith('-opcN8-'):
+    elif event.endswith('-opcN8-'):
 
         idTipoNotaActual = idPotencia
         gestionarNota(idTipoNotaActual)
 
     # Gestionar nota rápida para Armónicos
 
-    if event.endswith('-opcN9-'):
+    elif event.endswith('-opcN9-'):
 
         idTipoNotaActual = idArmonicos
         gestionarNota(idTipoNotaActual)
 
     # Habilitar la zona de edición de texto de las Notas Rápidas
 
-    if event == '-botonEditarNota-': 
+    elif event == '-botonEditarNota-': 
 
         editarNota()
       
     # Actualizar los archivos en disco con el contenido de la zona de edición de las Notas Rápidas
 
-    if event == '-botonGrabarNota-': 
+    elif event == '-botonGrabarNota-': 
 
         grabarNota()
 
     # Descartar el contenido de la zona de edición de las Notas Rápidas y no grabarlo
 
-    if event == '-botonDescartarGrabacion-': 
+    elif event == '-botonDescartarGrabacion-': 
 
         descartarGrabacion()
 
     # Ver norma Pdf para Voltaje
 
-    if event.endswith('-opcN1-'):
+    elif event.endswith('-opcN1-'):
 
         idTipoNormaActual = idVoltaje
         visualizarNorma(idTipoNormaActual)
 
     # Ver norma Pdf para Potencia
 
-    if event.endswith('-opcN2-'):
+    elif event.endswith('-opcN2-'):
 
         idTipoNormaActual = idPotencia
         visualizarNorma(idTipoNormaActual)
 
     # Ver norma Pdf para Armónicos
 
-    if event.endswith('-opcN3-'):
+    elif event.endswith('-opcN3-'):
 
         idTipoNormaActual = idArmonicos
         visualizarNorma(idTipoNormaActual)
 
     # Gestionar norma Pdf para Voltaje
 
-    if event.endswith('-opcN4-'):
+    elif event.endswith('-opcN4-'):
 
         idTipoNormaActual = idVoltaje
         definirTituloNorma(idTipoNormaActual)
 
     # Gestionar norma Pdf para Potencia
 
-    if event.endswith('-opcN5-'):
+    elif event.endswith('-opcN5-'):
 
         idTipoNormaActual = idPotencia
         definirTituloNorma(idTipoNormaActual)
 
     # Gestionar norma Pdf para Armónicos
 
-    if event.endswith('-opcN6-'):
+    elif event.endswith('-opcN6-'):
 
         idTipoNormaActual = idArmonicos
         definirTituloNorma(idTipoNormaActual)
 
     # Control de la barra de botones para la gestión de normas
 
-    if event == ('-seleccionPDF-'):
+    elif event == ('-seleccionPDF-'):
 
         botonesGestionarNorma(False)
 
-    if event == ('-botonVerNorma-'):
+    elif event == ('-botonVerNorma-'):
 
         visualizarNorma(idTipoNormaActual)
  
-    if event == ('-botonVerSeleccionado-'):
+    elif event == ('-botonVerSeleccionado-'):
 
         visualizarNorma(idOtroPDF)
        
     # Control de la barra de botones para la gestión de normas
 
-    if event == ('-botonDescartarGestion-'):
+    elif event == ('-botonDescartarGestion-'):
 
         botonesGestionarNorma(True)
         window['-seleccionPDF-'].update('')
         
     # Sustituir el archivo PDF actual de la norma con el contenido del nuevo recién seleccionado
 
-    if event == ('-botonActualizarNorma-'):
+    elif event == ('-botonActualizarNorma-'):
 
         sustituirNorma(idTipoNormaActual)
 
