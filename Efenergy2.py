@@ -13,7 +13,11 @@ from pathlib import Path
 import webbrowser
 import shutil
 
-#from AnalisisDatosVoltaje import AnalisisDatosVoltaje
+#import wx
+import wx.grid
+
+from AnalisisDatosVoltaje import AnalisisDatosVoltaje
+
 #from AnalisisDatosPotencia import AnalisisDatosPotencia
 #from AnalisisDatosPotenciaReactiva import AnalisisDatosPotenciaReactiva
 #from AnalisisDatosArmonicos import AnalisisDatosArmonicos
@@ -29,6 +33,7 @@ SYMBOL_DOWN = '▼'
 
 # Identificadores de los tipos de procesos
 
+idGeneral = 0
 idVoltaje = 1
 idPotencia = 2
 idArmonicos = 3
@@ -42,6 +47,7 @@ tituloNota = None
 
 # Variables contenedoras del procesamiento de la plantilla con la librería Panda 
 
+datosPreliminares = None
 datosVoltaje = None
 datosPotencia = None
 datosArmonicos = None
@@ -51,6 +57,12 @@ datosArmonicos = None
 valorVariacion = 120
 porcentajeLimiteInferior = 0.1 # 10%
 porcentajeLimiteSuperior = 0.1 # 10%
+voltajeLimiteInferior = None
+voltajeLimiteSuperior = None
+rangoMenor = None
+rangoMayor = None
+
+dataTable = [['','',''],]
 
 # Contenidos para filtros presentados con el componente Combo
 
@@ -65,6 +77,15 @@ eColor5 = '#CDCDCD' # Gris botones
 eColor6 = '#F2EDEA' # Gris popup
 eColores1 = (eColor1,eColor5) 
 eColores2 = (eColor4,eColor2) 
+
+# Paleta colores datatables en grises y amarillo
+
+eColor10a = '#E8E9EB' # Gris oscuro
+eColor10b = '#FCFCFC' # Gris claro
+eColor10c = '#F9F9F9' # Gris intermedio
+eColor10d = '#FFFFEE' # Amarillo campo activo
+eColor10e = '#333333' # Negro/Gris disimulado
+eColor10f = '#AAAAAA' # Gris bordes campo
 
 sizeFrmPrincipal = (1030,600) # Tamaño de la ventana principal
 sizeColumnas = (1000,580) # Tamaño de las columnas que simulan ventanas ocultas
@@ -90,6 +111,7 @@ barraEstado = 'SENA - CDITI - TEINNOVA - Semillero de Energías. Todos los derec
 
 rutaPlantilla = None
 archivoPlantilla = None
+rutaPlantillaPreliminar = None
 
 # Variables contenedoras para los textos descriptivos de las normas
 
@@ -177,20 +199,11 @@ menuPrincipal2 =     [
 
 def cargarPlantilla(window, rutaPlantilla, tipoProceso):
 
-    if (tipoProceso == idVoltaje):
+    global datosPreliminares
 
-        global datosVoltaje
-        datosVoltaje = pandas.ExcelFile(rutaPlantilla)
+    if (tipoProceso == idGeneral):
 
-    elif (tipoProceso == idPotencia):
-
-        global datosPotencia
-        datosPotencia = pandas.ExcelFile(rutaPlantilla)
-
-    elif (tipoProceso == idArmonicos):
-
-        global datosArmonicos
-        datosArmonicos = pandas.ExcelFile(rutaPlantilla)
+        datosPreliminares = pandas.ExcelFile(rutaPlantilla)
 
     window.write_event_value('-ThreadDone-','')
 
@@ -201,12 +214,15 @@ def indicadorCarga(window):
     limite = 100
     i = 0
     window['-progressBar-'].update_bar(0,0)
+
     while (t1.is_alive()):
+
         window['-progressBar-'].update_bar(i,limite)
         i = i + 1
         if (i==(limite-1)):
             i = 0
             window['-progressBar-'].update_bar(0,0)
+
     window['-progressBar-'].update_bar(limite,limite)
 
 # ************************************************************************************************************************
@@ -214,6 +230,7 @@ def indicadorCarga(window):
 def hiloCargarPlantilla(rutaPlantilla, tipoProceso):
 
     global t1
+
     t1 = threading.Thread(target=cargarPlantilla, args=(window,rutaPlantilla,tipoProceso), daemon=True)
     t1.name = 't1'
     t1.start()
@@ -223,6 +240,7 @@ def hiloCargarPlantilla(rutaPlantilla, tipoProceso):
 def hiloIndicadorCarga():
 
     global t2 
+
     t2 = threading.Thread(target=indicadorCarga, args=(window,), daemon=True)
     t2.name = 't2'
     t2.start()
@@ -235,6 +253,7 @@ def leerArchivo(file):
 
         archivo = open(file, "r", encoding="utf8", errors='ignore')
         contenido = archivo.read()
+
         return contenido
 
     except:
@@ -401,6 +420,10 @@ def descartarGrabacion(tipoProceso):
 
 def grabarNota(tipoProceso):
 
+    global informacionVoltaje
+    global informacionPotencia
+    global informacionArmonicos
+
     botonEditarNota.update(disabled=False)
     botonGrabarNota.update(disabled=True)
     botonDescartarGrabacion.update(disabled=True)
@@ -409,19 +432,16 @@ def grabarNota(tipoProceso):
 
     if (tipoProceso == idVoltaje):
 
-        global informacionVoltaje
         informacionVoltaje = values['-visorEditorNotas-']
         escribirArchivo(rutaInformacionVoltaje, informacionVoltaje)
 
     elif (tipoProceso == idPotencia):
 
-        global informacionPotencia
         informacionPotencia = values['-visorEditorNotas-']
         escribirArchivo(rutaInformacionPotencia, informacionPotencia)
 
     elif (tipoProceso == idArmonicos):
 
-        global informacionArmonicos
         informacionArmonicos = values['-visorEditorNotas-']
         escribirArchivo(rutaInformacionArmonicos, informacionArmonicos)
 
@@ -472,38 +492,39 @@ def botonesGestionarNorma(estado):
 
 def calcularRangoVariacion():
 
+    global voltajeLimiteInferior
+    global voltajeLimiteSuperior
+
     try:
 
         intVariacion = float(window['-variacion-'].get())
-        limiteInferior = intVariacion * (1 - porcentajeLimiteInferior)
-        limiteSuperior = intVariacion * (1 + porcentajeLimiteSuperior)
-        nuevoTooltip = '  El rango establecido para análisis es [ {0:.2f} - {1:.2f} ]  '.format(limiteInferior,limiteSuperior)
+        voltajeLimiteInferior = intVariacion * (1 - porcentajeLimiteInferior)
+        voltajeLimiteSuperior = intVariacion * (1 + porcentajeLimiteSuperior)
+        nuevoTooltip = '  El rango establecido para análisis es [ {0:.2f} - {1:.2f} ]  '.format(voltajeLimiteInferior,voltajeLimiteSuperior)
         inputVariacion.set_tooltip(nuevoTooltip)
 
     except ValueError:
 
-        window['-variacion-'].update(''.join([i for i in window['-variacion-'].get() if i.isdigit()]))
-        #print('Error controlado por Efenergy v2.0. El valor del Input no corresponde a un número.')
-
+        # Validar que la representación del string corresponde a un número
+        
+        window['-variacion-'].update(''.join([i for i in window['-variacion-'].get() if i.isdigit()])) 
+        
 # ************************************************************************************************************************
 
-def actualizarFiltrosPlantilla(tipoProceso):
+def actualizarFiltrosPlantilla():
 
-    if (tipoProceso == idVoltaje):
-        comboDias.Update(values=datosVoltaje.sheet_names)
-
-    elif (tipoProceso == idPotencia):
-        comboDias.Update(values=datosPotencia.sheet_names)
-
-    elif (tipoProceso == idArmonicos):
-        comboDias.Update(values=datosArmonicos.sheet_names)
-        
+    comboDias.Update(values=datosPreliminares.sheet_names)
     comboDias.Update(disabled=False)
     comboDias.Update(readonly=True)
+    comboDias.Update(set_to_index=0)
+
     comboFases.Update(disabled=False)
     comboFases.Update(readonly=True)
+    comboFases.Update(set_to_index=0)
+
     comboVoltaje.Update(disabled=False)
     comboVoltaje.Update(readonly=True)
+    comboVoltaje.Update(set_to_index=1)
 
 # ************************************************************************************************************************
 
@@ -519,22 +540,32 @@ def seleccionarPlantilla():
 
 def cargarDatosPreliminares(tipoProceso):
 
+    if (tipoProceso == idGeneral):
+
+        rutaPlantillaPreliminar = values['-seleccionPlantilla-']
+        hiloCargarPlantilla(rutaPlantillaPreliminar, tipoProceso)
+
+    hiloIndicadorCarga()
+
+# ************************************************************************************************************************
+
+def asignarDatosPreliminares(tipoProceso):
+
+    global datosVoltaje
+    global datosPotencia
+    global datosArmonicos
+
     if (tipoProceso == idVoltaje):
 
-        rutaPlantillaVoltaje = values['-seleccionPlantilla-']
-        hiloCargarPlantilla(rutaPlantillaVoltaje, idVoltaje)
+        datosVoltaje = datosPreliminares
 
     elif (tipoProceso == idPotencia):
 
-        rutaPlantillaPotencia = values['-seleccionPlantilla-']
-        hiloCargarPlantilla(rutaPlantillaPotencia, idPotencia)
+        datosPotencia = datosPreliminares
 
     elif (tipoProceso == idArmonicos):
 
-        rutaPlantillaArmonicos = values['-seleccionPlantilla-']
-        hiloCargarPlantilla(rutaPlantillaArmonicos, idArmonicos)
-
-    hiloIndicadorCarga()
+        datosArmonicos = datosPreliminares
 
 # ************************************************************************************************************************
 
@@ -556,13 +587,11 @@ def generarNavegacion(idConsecutivo):
                             ],
                         ]
 
-    frameNavegacion = sg.Frame(key='-frameNavegacionV' + str(idConsecutivo) + '-',  
-                               title='  Navegación  ', 
-                               layout=layoutNavegacion, 
-                               title_color=eColor1, 
-                               background_color=eColor2)
-
-    return frameNavegacion
+    globals()['frame' + str(idConsecutivo) + 'Navegacion'] = sg.Frame(key='-frameNavegacionV' + str(idConsecutivo) + '-',  
+                                                                      title='  Navegación  ', 
+                                                                      layout=layoutNavegacion, 
+                                                                      title_color=eColor1, 
+                                                                      background_color=eColor2)
 
 # ************************************************************************************************************************
 
@@ -600,13 +629,11 @@ def generarLogo(idConsecutivo):
                     ],
                 ]
 
-    frameLogo = sg.Frame(key='-frameLogoV' + str(idConsecutivo) + '-', 
-                          title='', 
-                          layout=layoutLogo, 
-                          title_color=eColor1, 
-                          background_color=eColor2)
-
-    return frameLogo
+    globals()['frame' + str(idConsecutivo) + 'Logo'] = sg.Frame(key='-frameLogoV' + str(idConsecutivo) + '-', 
+                                                                title='', 
+                                                                layout=layoutLogo, 
+                                                                title_color=eColor1, 
+                                                                background_color=eColor2)
 
 # ************************************************************************************************************************
 
@@ -615,7 +642,15 @@ def generarNotasRapidas():
     # Función especial que genera todo lo necesario para gestionar las notas rápidas sobre las normas.
     # pySimpleGUI presenta restricciones en cuanto a la reutilización de elementos en sus Layouts.
 
-    globals()["visorEditor"] = sg.Multiline(key='-visorEditorNotas-',
+    global visorEditor
+    global botonEditarNota
+    global botonGrabarNota
+    global botonDescartarGrabacion
+    global frameNota
+    global frameTituloNota
+    global columna3
+
+    visorEditor = sg.Multiline(key='-visorEditorNotas-',
                                default_text=None, 
                                size=(90,7), 
                                text_color=eColor1, 
@@ -628,20 +663,20 @@ def generarNotasRapidas():
                                disabled=True,
                                pad=((15,15),(15,0)))
 
-    globals()["botonEditarNota"] = sg.Button(key='-botonEditarNota-',
+    botonEditarNota = sg.Button(key='-botonEditarNota-',
                                 button_text='Editar',
                                 button_color=eColores1,
                                 size=(12,1),
                                 pad=((10,5),(15,20)))
 
-    globals()["botonGrabarNota"] = sg.Button(key='-botonGrabarNota-',
+    botonGrabarNota = sg.Button(key='-botonGrabarNota-',
                                 button_text='Grabar',
                                 button_color=eColores1,
                                 size=(12,1),
                                 disabled=True,
                                 pad=((10,5),(15,20)))
 
-    globals()["botonDescartarGrabacion"] = sg.Button(key='-botonDescartarGrabacion-',
+    botonDescartarGrabacion = sg.Button(key='-botonDescartarGrabacion-',
                                         button_text='Descartar',
                                         button_color=eColores1,
                                         size=(12,1),
@@ -672,19 +707,19 @@ def generarNotasRapidas():
                             ],
                          ]
 
-    globals()["frameNota"] = sg.Frame(key='-frameNotaRapida-', 
+    frameNota = sg.Frame(key='-frameNotaRapida-', 
                          title='  Gestión de Notas Rápidas  ', 
                          layout=layoutNotas, 
                          title_color=eColor1, 
                          background_color=eColor2)
 
-    globals()["frameTituloNota"] = sg.Frame(key='-frameTituloNota-', 
-                         title='', 
-                         layout=layoutTituloNota, 
-                         title_color=eColor1, 
-                         background_color=eColor2,
-                         element_justification='center',
-                         vertical_alignment='center')
+    frameTituloNota = sg.Frame(key='-frameTituloNota-', 
+                               title='', 
+                               layout=layoutTituloNota, 
+                               title_color=eColor1, 
+                               background_color=eColor2,
+                               element_justification='center',
+                               vertical_alignment='center')
 
     layoutColumna =    [
                            #### Logo + Barra
@@ -705,11 +740,11 @@ def generarNotasRapidas():
                            ],
                        ]
 
-    globals()["columna3"] = sg.Column(key='-columna3-', 
-                        layout=layoutColumna, 
-                        visible=False, 
-                        background_color=eColor2, 
-                        size=sizeColumnas)
+    columna3 = sg.Column(key='-columna3-', 
+                         layout=layoutColumna, 
+                         visible=False, 
+                         background_color=eColor2, 
+                         size=sizeColumnas)
 
 # ************************************************************************************************************************
 
@@ -718,32 +753,40 @@ def generarGestionNormas():
     # Función especial que genera todo lo necesario para gestionar las normas en formato PDF.
     # pySimpleGUI presenta restricciones en cuanto a la reutilización de elementos en sus Layouts.
 
-    globals()["botonVerNorma"] = sg.Button(key='-botonVerNorma-',
-                                button_text='Ver actual',
-                                button_color=eColores1,
-                                size=(12,1),
-                                pad=((10,5),(15,20)))
+    global botonVerNorma
+    global botonVerSeleccionado
+    global botonActualizarNorma
+    global botonDescartarGestion
+    global frameNorma
+    global frameTituloNorma
+    global columna4
 
-    globals()["botonVerSeleccionado"] = sg.Button(key='-botonVerSeleccionado-',
-                                button_text='Ver seleccionado',
-                                button_color=eColores1,
-                                size=(20,1),
-                                disabled=True,
-                                pad=((10,5),(15,20)))
+    botonVerNorma = sg.Button(key='-botonVerNorma-',
+                              button_text='Ver actual',
+                              button_color=eColores1,
+                              size=(12,1),
+                              pad=((10,5),(15,20)))
 
-    globals()["botonActualizarNorma"] = sg.Button(key='-botonActualizarNorma-',
-                                button_text='Actualizar',
-                                button_color=eColores1,
-                                size=(12,1),
-                                disabled=True,
-                                pad=((10,5),(15,20)))
+    botonVerSeleccionado = sg.Button(key='-botonVerSeleccionado-',
+                                     button_text='Ver seleccionado',
+                                     button_color=eColores1,
+                                     size=(20,1),
+                                     disabled=True,
+                                     pad=((10,5),(15,20)))
 
-    globals()["botonDescartarGestion"] = sg.Button(key='-botonDescartarGestion-',
-                                        button_text='Descartar',
-                                        button_color=eColores1,
-                                        size=(12,1),
-                                        disabled=True,
-                                        pad=((10,5),(15,20)))
+    botonActualizarNorma = sg.Button(key='-botonActualizarNorma-',
+                                     button_text='Actualizar',
+                                     button_color=eColores1,
+                                     size=(12,1),
+                                     disabled=True,
+                                     pad=((10,5),(15,20)))
+
+    botonDescartarGestion = sg.Button(key='-botonDescartarGestion-',
+                                      button_text='Descartar',
+                                      button_color=eColores1,
+                                      size=(12,1),
+                                      disabled=True,
+                                      pad=((10,5),(15,20)))
 
     layoutNormas =  [
                         #### Selector de archivos en formato PDF
@@ -781,19 +824,19 @@ def generarGestionNormas():
                             ],
                          ]
 
-    globals()["frameNorma"] = sg.Frame(key='-frameGestionNorma-', 
-                         title='  Gestión de la Norma en formato PDF  ', 
-                         layout=layoutNormas, 
-                         title_color=eColor1, 
-                         background_color=eColor2)
+    frameNorma = sg.Frame(key='-frameGestionNorma-', 
+                          title='  Gestión de la Norma en formato PDF  ', 
+                          layout=layoutNormas, 
+                          title_color=eColor1, 
+                          background_color=eColor2)
 
-    globals()["frameTituloNorma"] = sg.Frame(key='-frameTituloNorma-', 
-                         title='', 
-                         layout=layoutTituloNorma, 
-                         title_color=eColor1, 
-                         background_color=eColor2,
-                         element_justification='center',
-                         vertical_alignment='center')
+    frameTituloNorma = sg.Frame(key='-frameTituloNorma-', 
+                                title='', 
+                                layout=layoutTituloNorma, 
+                                title_color=eColor1, 
+                                background_color=eColor2,
+                                element_justification='center',
+                                vertical_alignment='center')
 
     layoutColumna =    [
                            #### Logo + Barra
@@ -814,11 +857,11 @@ def generarGestionNormas():
                            ],
                        ]
 
-    globals()["columna4"] = sg.Column(key='-columna4-', 
-                        layout=layoutColumna, 
-                        visible=False, 
-                        background_color=eColor2, 
-                        size=sizeColumnas)
+    columna4 = sg.Column(key='-columna4-', 
+                         layout=layoutColumna, 
+                         visible=False, 
+                         background_color=eColor2, 
+                         size=sizeColumnas)
 
 # ************************************************************************************************************************
 
@@ -827,28 +870,72 @@ def generarAnalisisVoltaje():
     # Función especial que genera todo lo necesario para la sección de Análisis de Voltaje.
     # pySimpleGUI presenta restricciones en cuanto a la reutilización de elementos en sus Layouts.
 
+    global layoutTabTablaContenido
+    global frameSeccionVoltaje
+    global frameTituloSeccionVoltaje
+    global columna5
+
     layoutTabFiltros =  [
                             [
-                                sg.Text(text='Tab filtros',
-                                        size=(100,20))
-                            ]
+                                sg.Text(text='', size=(105,1), visible=True, border_width=0)
+                            ],
                         ]
 
-    layoutTabTabla = [[]]
+    layoutTabTablaContenido =  [
+                                                [
+                                                    # Lugar disponible para insertar la tabla generada desde el análisis de datos.
+                                                ],
+                                            ]
 
-    layoutTabGrafica = [[]]
+    layoutTabTabla =    [
+                            [
+                                #layoutTabTablaContenido,
+                            ],
+                        ]
 
-    layoutTabNotasRapidas = [[]]
+    layoutTabGrafica =  [
+                            [
+                            ]
+                        ]   
+
+    layoutTabNotasRapidas = [
+                                [
+                                ]
+                            ]
 
     layoutTabSeccionVoltaje =   [
                                     [
-                                        sg.Tab('     Filtros     ', layoutTabFiltros, visible=True, element_justification="left", key='-tabFiltrosVoltaje-'),
-                                        sg.Tab('     Tabla     ', layoutTabTabla, visible=True, element_justification="left", key='-tabTablaVoltaje-'),
-                                        sg.Tab('     Gráfica     ', layoutTabGrafica, visible=True, element_justification="left", key='-tabGraficaVoltaje-'),
-                                        sg.Tab('     Notas     ', layoutTabNotasRapidas, visible=True, element_justification="left", key='-tabNotasRapidasVoltaje-'),
+                                        sg.Tab('     Filtros     ', 
+                                               layoutTabFiltros, 
+                                               visible=True, 
+                                               element_justification="left", 
+                                               key='-tabFiltrosVoltaje-',
+                                               background_color=eColor10c),
+
+                                        sg.Tab('     Tabla     ', 
+                                               layoutTabTabla, 
+                                               visible=True, 
+                                               element_justification="left", 
+                                               key='-tabTablaVoltaje-',
+                                               background_color=eColor10c,
+                                               border_width=0),
+
+                                        sg.Tab('     Gráfica     ', 
+                                               layoutTabGrafica, 
+                                               visible=True, 
+                                               element_justification="left", 
+                                               key='-tabGraficaVoltaje-',
+                                               background_color=eColor10c),
+
+                                        sg.Tab('     Notas     ', 
+                                               layoutTabNotasRapidas, 
+                                               visible=True, 
+                                               element_justification="left", 
+                                               key='-tabNotasRapidasVoltaje-',
+                                               background_color=eColor10c),
                                     ]
                                 ]
-        
+
     layoutSeccionVoltaje =  [
                                 #### Diseño por pestañas y tabulación
                                 [
@@ -860,19 +947,19 @@ def generarAnalisisVoltaje():
                                                 title_color=eColor1,
                                                 tab_background_color=eColor2,
                                                 selected_title_color=eColor1,
-                                                selected_background_color=eColor5,
+                                                selected_background_color=eColor10a,
                                                 background_color=eColor2)
                                 ],
                             ]
 
-    globals()["frameSeccionVoltaje"] = sg.Frame(key='-frameSeccionVoltaje-', 
-                         title='', 
-                         layout=layoutSeccionVoltaje, 
-                         size=(100, 20),
-                         title_color=eColor1, 
-                         background_color=eColor2,
-                         element_justification='left',
-                         vertical_alignment='top')
+    frameSeccionVoltaje = sg.Frame(key='-frameSeccionVoltaje-', 
+                                   title='', 
+                                   layout=layoutSeccionVoltaje, 
+                                   size=(100, 20),
+                                   title_color=eColor1, 
+                                   background_color=eColor2,
+                                   element_justification='left',
+                                   vertical_alignment='top')
 
     layoutTituloSeccionVoltaje =    [
                                         #### Título de la sección
@@ -887,13 +974,13 @@ def generarAnalisisVoltaje():
                                         ],
                                     ]
 
-    globals()["frameTituloSeccionVoltaje"] = sg.Frame(key='-frameTituloSeccionVoltaje-', 
-                         title='', 
-                         layout=layoutTituloSeccionVoltaje, 
-                         title_color=eColor1, 
-                         background_color=eColor2,
-                         element_justification='center',
-                         vertical_alignment='center')
+    frameTituloSeccionVoltaje = sg.Frame(key='-frameTituloSeccionVoltaje-', 
+                                         title='', 
+                                         layout=layoutTituloSeccionVoltaje, 
+                                         title_color=eColor1, 
+                                         background_color=eColor2,
+                                         element_justification='center',
+                                         vertical_alignment='center')
 
     layoutColumna =    [
                            #### Título de la sección
@@ -910,28 +997,28 @@ def generarAnalisisVoltaje():
                            ],
                        ]
 
-    globals()["columna5"] = sg.Column(key='-columna5-', 
-                        layout=layoutColumna, 
-                        visible=False, 
-                        background_color=eColor2, 
-                        size=sizeColumnas)
+    columna5 = sg.Column(key='-columna5-', 
+                         layout=layoutColumna, 
+                         visible=False, 
+                         background_color=eColor2, 
+                         size=sizeColumnas)
 
 # ************************************************************************************************************************
 
 # GENERACIÓN DINÁMICA DE FRAMES PARA EL LOGO. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
 
-frame1Logo = generarLogo(1)
-frame2Logo = generarLogo(2)
-frame3Logo = generarLogo(3)
-frame4Logo = generarLogo(4)
-frame5Logo = generarLogo(5)
+generarLogo(1)
+generarLogo(2)
+generarLogo(3)
+generarLogo(4)
+generarLogo(5)
 
 # GENERACIÓN DINÁMICA DE FRAMES PARA NAVEGACIÓN. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
 
-frame1Navegacion = generarNavegacion(1) # Ventana Acerca de
-frame2Navegacion = generarNavegacion(2) # Ventana Notas Rápidas
-frame3Navegacion = generarNavegacion(3) # Ventana Notas Rápidas
-frame4Navegacion = generarNavegacion(4) # Ventana Análisis de Voltaje
+generarNavegacion(1) # Ventana Acerca de
+generarNavegacion(2) # Ventana Notas Rápidas
+generarNavegacion(3) # Ventana Notas Rápidas
+generarNavegacion(4) # Ventana Análisis de Voltaje
 
 # GENERACIÓN DINÁMICA DEL FRAME PARA NOTAS RÁPIDAS.
 
@@ -948,6 +1035,14 @@ generarAnalisisVoltaje()
 # ************************************************************************************************************************
 
 # SELECTOR DE PLANTILLAS DE ORIGEN DE DATOS
+
+botonCargarPlantilla = sg.Button(key='-botonCargarPlantilla-', 
+                                 button_text='Cargar',
+                                 button_color=eColores1,
+                                 disabled=True,
+                                 size=(9,1),
+                                 pad=((10,5),(15,20)))
+
 
 frameLayout1 =  [
                     [
@@ -1008,11 +1103,14 @@ frameLayout1 =  [
                         
                         sg.ProgressBar(key='-progressBar-', 
                                         max_value=100, 
-                                        size=(59,20), 
+                                        size=(59,15), 
                                         orientation='h',
                                         border_width=1,
                                         bar_color=eColores2,
-                                        pad=((10,0),(0,10)))
+                                        pad=((10,0),(0,10))),
+
+                        botonCargarPlantilla
+
                     ],
                 ]
 
@@ -1330,17 +1428,37 @@ while True:
     elif event == '-seleccionPlantilla-': # Seleccionar plantilla de origen de datos
 
         seleccionarPlantilla()
+        botonCargarPlantilla.update(disabled=False)
+
+    elif event == '-botonCargarPlantilla-': # Cargar plantilla de origen de datos
+
+        cargarDatosPreliminares(idGeneral)
 
     elif event.endswith('-opcV1-'): # Analizar Voltaje
 
         idProcesoActual = idVoltaje
-        cargarDatosPreliminares(idProcesoActual)
         columna1.Update(visible=False)
         columna5.Update(visible=True)
 
+        asignarDatosPreliminares(idVoltaje)
+
+        calcularRangoVariacion()
+
+        AnalisisDatosVoltaje(datosVoltaje, 
+                             float(voltajeLimiteInferior), 
+                             float(voltajeLimiteSuperior), 
+                             values['-comboDias-'], 
+                             values['-comboFases-'],
+                             values['-comboVoltaje-'],
+                             layoutTabTablaContenido)
+
+		# 'límites de variaciones de\nredes eléctricas\n\nEn el rango de 127-10% - 127+10% \nMayor a 127+10% \nMenor a 127-10%'
+
+
+
     elif event == '-ThreadDone-': # Mensaje recibido desde los hilos al momento de haber finalizado las acciones que toman más tiempo
 
-        actualizarFiltrosPlantilla(idProcesoActual)
+        actualizarFiltrosPlantilla()
 
     elif event == '-variacion-': # Rango de variación
     
@@ -1468,9 +1586,9 @@ window.close()
 # logoPrincipal.set_size((1,None))
 # window.refresh()
 # window['-COLUMNA 2'].Update(visible=False)
-# globals()["layoutLogo" + str(idConsecutivo)] =
 # print("File      Path:", Path(__file__).absolute())
 # print("Directory Path:", Path().absolute()) 
+# globals()["layoutLogo" + str(idConsecutivo)] =
 
 
 # ************************************************************************************************************************

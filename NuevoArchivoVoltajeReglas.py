@@ -1,16 +1,15 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-
 import xlwt
-import pandas
+import pandas as pd
 import os
-import easygui
+import easygui as eg 
 import os.path as path
 
 class NuevoArchivoVoltajeReglas:
 	def CrearArchivo(self,archivo_excel,estado_voltaje):
 		extension = "*.xls"
-		nombre = easygui.filesavebox(msg="Guardar archivo",
+		nombre = eg.filesavebox(msg="Guardar archivo",
 							title="Control: filesavebox",
 							default=extension,
 							filetypes=extension)
@@ -34,7 +33,7 @@ class NuevoArchivoVoltajeReglas:
 				agregar_hojas.write(0,9,'Hora')
 				agregar_hojas.write(0,10,'Vrms ph-n CN Med')
 
-				df = pandas.read_excel(archivo_excel, i)
+				df = pd.read_excel(archivo_excel, i)
 				for columna in df.columns.tolist():
 					if columna == ('Vrms ph-n CN Med'):
 						self.fecha = []
@@ -113,44 +112,44 @@ class NuevoArchivoVoltajeReglas:
 			return ruta
 
 
-	def pruebaRango(self, voltaje_fase):
+	def pruebaRango(self, voltage_fase):
 		lista_fecha = []
 		lista_hora = []
 		lista_rango = []
 		posicion_item = 0
-		for i in range(len(voltaje_fase)):
-			if voltaje_fase[i] < self.rango_mayor and voltaje_fase[i] > self.rango_menor:
+		for i in range(len(voltage_fase)):
+			if voltage_fase[i] < self.rango_mayor and voltage_fase[i] > self.rango_menor:
 				posicion_item += i
-				lista_rango.append(voltaje_fase[posicion_item])
+				lista_rango.append(voltage_fase[posicion_item])
 				lista_fecha.append(self.fecha[posicion_item])
 				lista_hora.append(self.hora[posicion_item])
 				posicion_item = 0
 		return lista_fecha, lista_hora,lista_rango 
 	
-	def pruebaMenor(self,voltaje_fase):
+	def pruebaMenor(self,voltage_fase):
 		lista_fecha = []
 		lista_hora = []
 		lista_menores = []
 		posicion_item = 0
 
-		for i in range(len(voltaje_fase)):
-			if voltaje_fase[i] < self.rango_menor:
+		for i in range(len(voltage_fase)):
+			if voltage_fase[i] < self.rango_menor:
 				posicion_item += i
-				lista_menores.append(voltaje_fase[posicion_item])
+				lista_menores.append(voltage_fase[posicion_item])
 				lista_fecha.append(self.fecha[posicion_item])
 				lista_hora.append(self.hora[posicion_item])
 				posicion_item = 0
 		return lista_fecha, lista_hora,lista_menores 
 			
-	def pruebaMayor(self,voltaje_fase):
+	def pruebaMayor(self,voltage_fase):
 		lista_fecha = []
 		lista_hora = []
 		lista_mayores = []
 		posicion_item = 0
-		for i in range(len(voltaje_fase)):
-			if voltaje_fase[i] > self.rango_mayor:
+		for i in range(len(voltage_fase)):
+			if voltage_fase[i] > self.rango_mayor:
 				posicion_item += i
-				lista_mayores.append(voltaje_fase[posicion_item])
+				lista_mayores.append(voltage_fase[posicion_item])
 				lista_fecha.append(self.fecha[posicion_item])
 				lista_hora.append(self.hora[posicion_item])
 				posicion_item = 0

@@ -1,17 +1,17 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 import math
 import matplotlib.pyplot as plt
 from matplotlib.widgets import CheckButtons
 
 class GraficaPotencia:
+
 	def __init__(self):
+
 		self.txt_fase_a = []
 		self.txt_fase_b = []
 		self.txt_fase_c = []
 
-	def grafica(self,parametro_en_analisis,ls_hora,ls_minuto,ls_tiempo,datos_potencia_reactiva_fase_a,datos_potencia_reactiva_fase_b,datos_potencia_reactiva_fase_c,txt_vs_horizontal,txt_vs_vertical):
+	def generar(self,parametro_en_analisis,ls_hora,ls_minuto,ls_tiempo,datos_potencia_reactiva_fase_a,datos_potencia_reactiva_fase_b,datos_potencia_reactiva_fase_c,txt_vs_horizontal,txt_vs_vertical):
+		
 		self.parametro_en_analisis = parametro_en_analisis
 		
 		potencia_reactiva_fase_b = []
