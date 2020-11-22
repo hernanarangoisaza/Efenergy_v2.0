@@ -1,0 +1,20 @@
+# ************************************************************************************************************************
+
+# https://www.programiz.com/python-programming
+# size(width,height)
+# pad=((left,right), (top,bottom))
+# if event.startswith('-XXXX-'):
+# if event.endswith('-XXXX-'): --> Necesario para identicar los key en las opciones de menús --> (option::-KEY-)
+# menuPrincipal[1][0] = '!' + menuPrincipal[1][0]
+# window['-logoPrincipal-'].hide_row()
+# window['-logoPrincipal-'].unhide_row()
+# bkSizeLogo = logoPrincipal.get_size()
+# logoPrincipal.set_size((1,None))
+# window.refresh()
+# window['-COLUMNA 2'].Update(visible=False)
+# print("File      Path:", Path(__file__).absolute())
+# print("Directory Path:", Path().absolute()) 
+# globals()["layoutLogo" + str(idConsecutivo)] =
+# print( [v for v in globals().keys() if not v.startswith('_')] )
+
+# ************************************************************************************************************************
