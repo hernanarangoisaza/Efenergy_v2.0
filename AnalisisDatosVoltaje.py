@@ -18,7 +18,7 @@ from NuevoArchivoVoltajeReglas import NuevoArchivoVoltajeReglas
 
 class AnalisisDatosVoltaje(wx.Frame):
 
-	def __init__(self, datosVoltaje, rangoMenor, rangoMayor, dia, fase, voltaje, layoutTabTablaContenido):
+	def __init__(self, datosVoltaje, rangoMenor, rangoMayor, dia, fase, voltaje):
 
 		self.datosVoltaje = datosVoltaje
 		self.rangoMenor = rangoMenor
@@ -26,7 +26,6 @@ class AnalisisDatosVoltaje(wx.Frame):
 		self.dia = dia
 		self.fase = fase
 		self.voltaje = voltaje
-		self.layoutTabTablaContenido = layoutTabTablaContenido
 
 		self.txt_fase_a = []
 		self.txt_fase_b = []
@@ -113,13 +112,27 @@ class AnalisisDatosVoltaje(wx.Frame):
 		
 	def llenarTablaVoltaje(self, listaFechas, listaHoras, listaVoltajes):
 
-		#self.tablaVoltaje.DeleteAllItems()
+		#global layoutTabTablaContenido
 
+		#layoutTabTablaContenido = []
 		encabezadoVoltaje = ['Fecha', 'Hora', 'Voltaje']
 
-		prueba = sg.Text('Acá va la tabla', key="-prueba-")
+		prueba = sg.Text(text='Acá va la tabla 22222222222', key="-prueba-")
 
-		self.layoutTabTablaContenido.append([prueba])
+		print( [v for v in globals().keys() if not v.startswith('_')] )
+		#print( [v for v in globals().values() if not v.startswith('_')] )
+
+		globals()['layoutTabTablaContenido'].update([prueba])
+
+		#layoutTabTablaContenido.update([prueba])
+		#layoutTabTablaContenido.Update([prueba])
+		#layoutTabTablaContenido.update(values=[prueba])
+		#layoutTabTablaContenido.Update(values=[prueba])
+
+
+		#print('Depuración: ', self.layoutTabTablaContenido)
+
+
 
 
 #		tablaVoltaje = sg.Table(key='-tablaVoltaje-',

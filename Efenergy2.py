@@ -63,6 +63,7 @@ rangoMenor = None
 rangoMayor = None
 
 dataTable = [['','',''],]
+layoutTabTablaContenido = []
 
 # Contenidos para filtros presentados con el componente Combo
 
@@ -877,20 +878,18 @@ def generarAnalisisVoltaje():
 
     layoutTabFiltros =  [
                             [
-                                sg.Text(text='', size=(105,1), visible=True, border_width=0)
+                                sg.Text(text='Filtros', size=(105,1), visible=True, border_width=0),
                             ],
                         ]
 
-    layoutTabTablaContenido =  [
-                                                [
-                                                    # Lugar disponible para insertar la tabla generada desde el análisis de datos.
-                                                ],
-                                            ]
+    layoutTabTablaContenido =   [
+                                    sg.Text(text='Acá va la tabla', key="-prueba-"),   
+                                ]
 
     layoutTabTabla =    [
-                            [
-                                #layoutTabTablaContenido,
-                            ],
+                            
+                            layoutTabTablaContenido,
+                            
                         ]
 
     layoutTabGrafica =  [
@@ -1395,11 +1394,13 @@ frameFiltros.expand(expand_x=True)
 frameAcercaDe.expand(expand_x=True)
 frameNota.expand(expand_x=True)
 frameNorma.expand(expand_x=True)
-frameTituloNorma.expand(expand_x=True)
-frameTituloNota.expand(expand_x=True)
 visorEditor.expand(expand_x=True)
 frameSeccionVoltaje.expand(expand_x=True)
+
+frameTituloNota.expand(expand_x=True)
+frameTituloNorma.expand(expand_x=True)
 frameTituloSeccionVoltaje.expand(expand_x=True)
+
 frame1Navegacion.expand(expand_x=True)
 frame2Navegacion.expand(expand_x=True)
 frame3Navegacion.expand(expand_x=True)
@@ -1449,8 +1450,7 @@ while True:
                              float(voltajeLimiteSuperior), 
                              values['-comboDias-'], 
                              values['-comboFases-'],
-                             values['-comboVoltaje-'],
-                             layoutTabTablaContenido)
+                             values['-comboVoltaje-'])
 
 		# 'límites de variaciones de\nredes eléctricas\n\nEn el rango de 127-10% - 127+10% \nMayor a 127+10% \nMenor a 127-10%'
 
@@ -1589,6 +1589,8 @@ window.close()
 # print("File      Path:", Path(__file__).absolute())
 # print("Directory Path:", Path().absolute()) 
 # globals()["layoutLogo" + str(idConsecutivo)] =
+# print( [v for v in globals().keys() if not v.startswith('_')] )
+
 
 
 # ************************************************************************************************************************
