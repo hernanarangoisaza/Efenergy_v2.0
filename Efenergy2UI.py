@@ -641,16 +641,16 @@ def generarAnalisisVoltaje(frameNavegacion):
                             ],
                         ]
 
-    encabezadoVoltaje = ['Fecha', 'Hora', 'Voltaje']
+    encabezadoVoltaje = ['Registro', 'Fecha', 'Hora', 'Voltaje']
 
     tablaVoltaje = sg.Table(key='-tablaVoltaje-',
-							values=[['','','']],
+							values=[['','','','']],
 							headings=encabezadoVoltaje,
 							num_rows=17,
 							row_height=20,
-                            def_col_width=30,
+                            def_col_width=25,
 							auto_size_columns=False,
-							display_row_numbers=True,
+							display_row_numbers=False,
                             vertical_scroll_only=False,
 							justification='center',
 							background_color=eColor3,

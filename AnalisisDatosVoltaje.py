@@ -122,12 +122,12 @@ class AnalisisDatosVoltaje():
 	def llenarTablaVoltaje(self, listaFechas, listaHoras, listaVoltajes, tablaVoltaje):
 
 		numRows = len(listaVoltajes)
-		numCols = 3
+		numCols = 4
 		
 		data = [[j for j in range(numCols)] for i in range(numRows)]
 
 		for fila in range(0, numRows):
-			data[fila] = [str(listaFechas[fila]), str(listaHoras[fila]), str(listaVoltajes[fila])]
+			data[fila] = [str(fila+1), str(listaFechas[fila]), str(listaHoras[fila]), str(listaVoltajes[fila])]
 
 		tablaVoltaje.update(values=data)
 
