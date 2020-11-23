@@ -59,16 +59,14 @@ columna4, botonVerNorma, botonVerSeleccionado, botonActualizarNorma, botonDescar
 
 # GENERACIÓN DINÁMICA DEL FRAME PARA ANÁLISIS DE VOLTAJE.
 
-columna5, frameSeccionVoltaje, frameTituloSeccionVoltaje, tablaVoltaje = Efenergy2UI.generarAnalisisVoltaje(frameNavegacionV4)
+frameFiltrosVoltaje, comboDias, comboVoltaje, comboFases, inputVariacion = Efenergy2UI.generarFiltrosVoltaje()
+columna5, frameSeccionVoltaje, frameTituloSeccionVoltaje, tablaVoltaje = Efenergy2UI.generarAnalisisVoltaje(frameNavegacionV4, frameFiltrosVoltaje)
  
 # ************************************************************************************************************************
 
 # GENERACIÓN DE LA INTERFAZ DE USUARIO PRINCIPAL
 
-global columna1
-
-frameFiltrosVoltaje, comboDias, comboVoltaje, comboFases, inputVariacion = Efenergy2UI.generarFiltrosVoltaje()
-columna1, barraMenuPrincipal, frameSelectorPlantilla, inputSeleccionPlantilla, botonCargarPlantilla = Efenergy2UI.generarUIPrincipal(frameLogoV1, frameFiltrosVoltaje)
+columna1, barraMenuPrincipal, frameSelectorPlantilla, inputSeleccionPlantilla, botonCargarPlantilla = Efenergy2UI.generarUIPrincipal(frameLogoV1)
 columna2, frameAcercaDe = Efenergy2UI.generarAcercaDe(frameLogoV2, frameNavegacionV1)
 
 # ************************************************************************************************************************

@@ -308,7 +308,7 @@ def generarFiltrosVoltaje():
 
     labelComboDias = sg.Text(key='-labelComboDias-', 
                              text='Días:', 
-                             size=(6,1), 
+                             size=(5,1), 
                              text_color=eColor1, 
                              background_color=eColor2, 
                              pad=((10,0),(20,22)),
@@ -325,7 +325,7 @@ def generarFiltrosVoltaje():
 
     labelComboVoltaje = sg.Text(key='-labelComboVoltaje-', 
                                 text='Voltaje:', 
-                                size=(6,1), 
+                                size=(5,1), 
                                 text_color=eColor1, 
                                 background_color=eColor2, 
                                 pad=((80,0),(20,22)),
@@ -342,7 +342,7 @@ def generarFiltrosVoltaje():
 
     labelComboFases = sg.Text(key='-labelComboFases-', 
                               text='Fase:', 
-                              size=(6,1), 
+                              size=(5,1), 
                               text_color=eColor1, 
                               background_color=eColor2, 
                               pad=((80,0),(20,22)))
@@ -387,6 +387,12 @@ def generarFiltrosVoltaje():
                               tooltip='Límite para análisis de variaciones en redes eléctricas',
                               disabled=False)
 
+    labelRegistros = sg.Text(key='-labelRegistros-', 
+                             text='0',
+                             text_color=eColor1, 
+                             background_color=eColor2, 
+                             pad=((5,20),(20,22)))
+
     layoutFiltros =    [
                             [
                                 #### Días disponibles
@@ -396,7 +402,7 @@ def generarFiltrosVoltaje():
                                 #### Fase A, B, C
                                 labelComboFases, comboFases,
                                 #### Límite variaciones redes eléctricas -10% 120 +10%
-                                label1Variacion, label2Variacion, inputVariacion, label3Variacion,
+                                label1Variacion, label2Variacion, inputVariacion, label3Variacion, labelRegistros
                             ],
                         ]
 
@@ -410,7 +416,7 @@ def generarFiltrosVoltaje():
 
 # ************************************************************************************************************************
 
-def generarUIPrincipal(frameLogo, frameFiltros):
+def generarUIPrincipal(frameLogo):
 
     # BARRA DE MENÚ PRINCIPAL
 
@@ -520,10 +526,6 @@ def generarUIPrincipal(frameLogo, frameFiltros):
                         [
                             frameSelectorPlantilla,
                         ],
-                        #### Sección de filtros
-                        [
-                            frameFiltros,
-                        ],
                     ]
 
     columna = sg.Column(key='-columna1-', 
@@ -630,14 +632,16 @@ def generarAcercaDe(frameLogo, frameNavegacion):
 
 # ************************************************************************************************************************
 
-def generarAnalisisVoltaje(frameNavegacion):
+def generarAnalisisVoltaje(frameNavegacion, frameFiltrosVoltaje):
 
     # Función especial que genera todo lo necesario para la sección de Análisis de Voltaje.
     # pySimpleGUI presenta restricciones en cuanto a la reutilización de elementos en sus Layouts.
 
     layoutTabFiltros =  [
                             [
-                                sg.Text(text='Filtros', size=(105,1), visible=True, border_width=0),
+                                #sg.Text(text='Filtros', size=(105,1), visible=True, border_width=0),
+                                #### Sección de filtros
+                                frameFiltrosVoltaje,
                             ],
                         ]
 
