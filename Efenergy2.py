@@ -243,15 +243,15 @@ while True:
 
         if (idProcesoActual == idVoltaje):
 
-            Efenergy2NotasRapidas.grabarNota(idProcesoActual, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, rutaInformacionVoltaje, txtVisorEditor)
+            informacionVoltaje = Efenergy2NotasRapidas.grabarNota(idProcesoActual, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, rutaInformacionVoltaje, txtVisorEditor)
 
         elif (idProcesoActual == idPotencia):
 
-            Efenergy2NotasRapidas.grabarNota(idProcesoActual, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, rutaInformacionPotencia, txtVisorEditor)
+            informacionPotencia = Efenergy2NotasRapidas.grabarNota(idProcesoActual, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, rutaInformacionPotencia, txtVisorEditor)
 
         elif (idProcesoActual == idArmonicos):
 
-            Efenergy2NotasRapidas.grabarNota(idProcesoActual, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, rutaInformacionArmonicos, txtVisorEditor)
+            informacionArmonicos = Efenergy2NotasRapidas.grabarNota(idProcesoActual, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, rutaInformacionArmonicos, txtVisorEditor)
 
     elif event == '-botonDescartarGrabacion-': # Descartar el contenido de la zona de edición de las Notas Rápidas y no grabarlo
 

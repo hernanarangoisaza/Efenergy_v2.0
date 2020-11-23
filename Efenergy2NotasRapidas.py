@@ -60,6 +60,8 @@ def grabarNota(tipoProceso, botonEditarNota, botonGrabarNota, botonDescartarGrab
         rutaInformacionArmonicos = rutaInformacion
         Efenergy2Funciones.escribirArchivo(rutaInformacionArmonicos, informacionArmonicos, errorPersonalizadoNotasEscribir)
 
+    return txtVisorEditor
+
 # ************************************************************************************************************************
 
 def editarNota(botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor):
