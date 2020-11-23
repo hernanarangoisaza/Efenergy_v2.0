@@ -13,11 +13,11 @@ global window, event, values
 
 global layoutPrincipal
 
-global columna1, barraMenuPrincipal, frameSelectorPlantilla, inputSeleccionPlantilla, botonPlantilla, botonCargarPlantilla
+global columna1, barraMenuPrincipal, frameSelectorPlantilla, inputSeleccionPlantilla, sbotonCargarPlantilla
 global columna2, frameAcercaDe
 global columna3, visorEditor, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, frameNota, frameTituloNota, labelTituloNota
 global columna4, botonVerNorma, botonVerSeleccionado, botonActualizarNorma, botonDescartarGestion, frameNorma, frameTituloNorma, labelTituloNorma
-global columna5, frameSeccionVoltaje, layoutTabTablaContenido, frameTituloSeccionVoltaje
+global columna5, frameSeccionVoltaje, frameTituloSeccionVoltaje, tablaVoltaje
 
 global frameFiltrosVoltaje, comboDias, comboVoltaje, comboFases, inputVariacion
 
@@ -69,7 +69,6 @@ rangoMenor = None
 rangoMayor = None
 
 dataTable = [['','',''],]
-layoutTabTablaContenido = []
 
 # Contenidos para filtros presentados con el componente Combo
 
@@ -82,8 +81,12 @@ eColor3 = '#FFFFFF' # Blanco
 eColor4 = '#F8AF26' # Naranja
 eColor5 = '#CDCDCD' # Gris botones
 eColor6 = '#F2EDEA' # Gris popup
+ecolor7 = '#4B7CBA' # Azul 1
+ecolor8 = '#428EAE' # Azul 2
+ecolor9 = '#0096D6' # Azul 3
 eColores1 = (eColor1,eColor5) 
 eColores2 = (eColor4,eColor2) 
+eColores3 = (eColor3,ecolor7) 
 
 # Paleta colores datatables en grises y amarillo
 
@@ -93,6 +96,8 @@ eColor10c = '#F9F9F9' # Gris intermedio
 eColor10d = '#FFFFEE' # Amarillo campo activo
 eColor10e = '#333333' # Negro/Gris disimulado
 eColor10f = '#AAAAAA' # Gris bordes campo
+
+
 
 sizeFrmPrincipal = (1030,600) # Tamaño de la ventana principal
 sizeColumnas = (1000,580) # Tamaño de las columnas que simulan ventanas ocultas

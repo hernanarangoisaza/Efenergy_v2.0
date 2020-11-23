@@ -2,23 +2,24 @@
 # -*- coding: utf-8 -*-
 
 import PySimpleGUI as sg
+import pandas
 
+from Efenergy2Globales import *
+import Efenergy2UI
 
-import wx
-import wx.grid
-import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.widgets import CheckButtons
 import datetime
 import numpy      
-from menu import Menu 
-import wx.lib.agw.aquabutton as AB    
-from GraficaPotencia import GraficaPotencia
-from matplotlib.widgets import CheckButtons
-from NuevoArchivoVoltajeReglas import NuevoArchivoVoltajeReglas
 
-class AnalisisDatosVoltaje(wx.Frame):
+#from GraficaPotencia import GraficaPotencia
+#from NuevoArchivoVoltajeReglas import NuevoArchivoVoltajeReglas
 
-	def __init__(self, datosVoltaje, rangoMenor, rangoMayor, dia, fase, voltaje):
+# ************************************************************************************************************************
+
+class AnalisisDatosVoltaje():
+
+	def __init__(self, datosVoltaje, rangoMenor, rangoMayor, dia, fase, voltaje, window, tablaVoltaje):
 
 		self.datosVoltaje = datosVoltaje
 		self.rangoMenor = rangoMenor
@@ -31,13 +32,13 @@ class AnalisisDatosVoltaje(wx.Frame):
 		self.txt_fase_b = []
 		self.txt_fase_c = []
 
-		self.cargarDatos()
+		self.cargarDatos(tablaVoltaje)
 
-#----------------------------------------------------------------------------------------------------
+	# ************************************************************************************************************************
 
-	def cargarDatos(self):
+	def cargarDatos(self, tablaVoltaje):
 
-		dfVoltaje = pd.read_excel(self.datosVoltaje, self.dia)
+		dfVoltaje = pandas.read_excel(self.datosVoltaje, self.dia)
 
 		self.fechas = []
 
@@ -52,17 +53,19 @@ class AnalisisDatosVoltaje(wx.Frame):
 
 		if estadoVoltaje == 'RANGO':
 
-			self.datosRango(voltajes)	
+			self.datosRango(voltajes, tablaVoltaje)	
 
 		elif estadoVoltaje == 'MAYOR':
 
-			self.datosMayores(voltajes)
+			self.datosMayores(voltajes, tablaVoltaje)
 
 		elif estadoVoltaje == 'MENOR':
 
-			self.datosMenores(voltajes)
+			self.datosMenores(voltajes, tablaVoltaje)
 
-	def datosRango(self, voltajes):
+	# ************************************************************************************************************************
+
+	def datosRango(self, voltajes, tablaVoltaje):
 
 		listaFechas = []
 		listaHoras = []
@@ -76,9 +79,11 @@ class AnalisisDatosVoltaje(wx.Frame):
 				listaHoras.append(self.horas[i])
 				listaVoltajes.append(voltajes[i])
 
-		self.llenarTablaVoltaje(listaFechas, listaHoras, listaVoltajes)
+		self.llenarTablaVoltaje(listaFechas, listaHoras, listaVoltajes, tablaVoltaje)
 
-	def datosMenores(self, voltajes):
+	# ************************************************************************************************************************
+
+	def datosMenores(self, voltajes, tablaVoltaje):
 
 		listaFechas = []
 		listaHoras = []
@@ -92,9 +97,11 @@ class AnalisisDatosVoltaje(wx.Frame):
 				listaFechas.append(self.fechas[i])
 				listaHoras.append(self.horas[i])
 
-		self.llenarTablaVoltaje(listaFechas, listaHoras, listaVoltajes)
+		self.llenarTablaVoltaje(listaFechas, listaHoras, listaVoltajes, tablaVoltaje)
 			
-	def datosMayores(self,voltajes):
+	# ************************************************************************************************************************
+
+	def datosMayores(self, voltajes, tablaVoltaje):
 
 		listaFechas = []
 		listaHoras = []
@@ -108,55 +115,27 @@ class AnalisisDatosVoltaje(wx.Frame):
 				listaFechas.append(self.fechas[i])
 				listaHoras.append(self.horas[i])
 
-		dataTable = self.llenarTablaVoltaje(listaFechas, listaHoras, listaVoltajes)
+		dataTable = self.llenarTablaVoltaje(listaFechas, listaHoras, listaVoltajes, tablaVoltaje)
 		
-	def llenarTablaVoltaje(self, listaFechas, listaHoras, listaVoltajes):
+	# ************************************************************************************************************************
 
-		#global layoutTabTablaContenido
+	def llenarTablaVoltaje(self, listaFechas, listaHoras, listaVoltajes, tablaVoltaje):
 
-		#layoutTabTablaContenido = []
-		encabezadoVoltaje = ['Fecha', 'Hora', 'Voltaje']
+		numRows = len(listaVoltajes)
+		numCols = 3
+		
+		data = [[j for j in range(numCols)] for i in range(numRows)]
 
-		prueba = sg.Text(text='Acá va la tabla 22222222222', key="-prueba-")
+		for fila in range(0, numRows):
+			data[fila] = [str(listaFechas[fila]), str(listaHoras[fila]), str(listaVoltajes[fila])]
 
-		print( [v for v in globals().keys() if not v.startswith('_')] )
-		#print( [v for v in globals().values() if not v.startswith('_')] )
+		tablaVoltaje.update(values=data)
 
-		globals()['layoutTabTablaContenido'].update([prueba])
-
-		#layoutTabTablaContenido.update([prueba])
-		#layoutTabTablaContenido.Update([prueba])
-		#layoutTabTablaContenido.update(values=[prueba])
-		#layoutTabTablaContenido.Update(values=[prueba])
-
-
-		#print('Depuración: ', self.layoutTabTablaContenido)
-
-
-
-
-#		tablaVoltaje = sg.Table(key='-tablaVoltaje-',
-#								values=[['', '', ''],],
-#								headings=encabezadoVoltaje, 
-#								max_col_width=25,
-#								# background_color='light blue',
-#								auto_size_columns=True,
-#								display_row_numbers=True,
-#								justification='right',
-#								num_rows=20,
-#								alternating_row_color='lightyellow',
-#								row_height=35),
-
-
-#		for fila in range(len(listaVoltajes)):
-
-#			data.append(str(fila+1), str(listaFechas[fila]), str(listaHoras[fila]), str(listaVoltajes[fila]))
-
-#		window['-tablaVoltaje-'].update(values=data)
+	# ************************************************************************************************************************
 
 	def graficaVoltajeVsTiempo(self, event, dia):
 
-		dfVoltaje = pd.read_excel(self.datosVoltaje, self.dia)
+		dfVoltaje = pandas.read_excel(self.datosVoltaje, self.dia)
 
 		datosVoltajeFaseA = dfVoltaje['Vrms ph-n AN Med'].values
 		datosVoltajeFaseB = dfVoltaje['Vrms ph-n BN Med'].values
@@ -177,4 +156,8 @@ class AnalisisDatosVoltaje(wx.Frame):
 						datosVoltajeFaseC,
 						'Tiempo(Hora)',
 						'Voltaje')
+
+	# ************************************************************************************************************************
+
+
 

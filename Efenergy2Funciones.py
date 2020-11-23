@@ -60,24 +60,23 @@ def hiloIndicadorCarga(window):
 
 # ************************************************************************************************************************
 
-def calcularRangoVariacion():
-
-    global voltajeLimiteInferior
-    global voltajeLimiteSuperior
+def calcularRangoVariacion(window, values, inputVariacion):
 
     try:
 
-        intVariacion = float(window['-inputVariacion-'].get())
+        intVariacion = float(values['-inputVariacion-'])
         voltajeLimiteInferior = intVariacion * (1 - porcentajeLimiteInferior)
         voltajeLimiteSuperior = intVariacion * (1 + porcentajeLimiteSuperior)
         nuevoTooltip = '  El rango establecido para análisis es [ {0:.2f} - {1:.2f} ]  '.format(voltajeLimiteInferior,voltajeLimiteSuperior)
         inputVariacion.set_tooltip(nuevoTooltip)
 
+        return voltajeLimiteInferior, voltajeLimiteSuperior
+
     except ValueError:
 
         # Validar que la representación del string corresponde a un número
         
-        window['-inputVariacion-'].update(''.join([i for i in window['-inputVariacion-'].get() if i.isdigit()])) 
+        inputVariacion.update(''.join([i for i in values['-inputVariacion-'] if i.isdigit()])) 
         
 # ************************************************************************************************************************
 
@@ -119,23 +118,9 @@ def cargarDatosPreliminares(tipoProceso, values, window):
 
 # ************************************************************************************************************************
 
-def asignarDatosPreliminares(tipoProceso):
+def asignarDatosPreliminares():
 
-    global datosVoltaje
-    global datosPotencia
-    global datosArmonicos
-
-    if (tipoProceso == idVoltaje):
-
-        datosVoltaje = datosPreliminares
-
-    elif (tipoProceso == idPotencia):
-
-        datosPotencia = datosPreliminares
-
-    elif (tipoProceso == idArmonicos):
-
-        datosArmonicos = datosPreliminares
+    return datosPreliminares
 
 # ************************************************************************************************************************
 

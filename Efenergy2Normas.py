@@ -26,7 +26,7 @@ def visualizarNorma(tipoProceso, values):
 
     elif tipoProceso == idOtroPDF:
 
-        rutaPdf = values['-seleccionPDF-']
+        rutaPdf = values['-inputSeleccionPDF-']
         webbrowser.open_new(rutaPdf)
 
 # ************************************************************************************************************************
@@ -57,7 +57,7 @@ def sustituirNorma(tipoProceso, botonActualizarNorma, botonDescartarGestion, bot
 
     try:
 
-        archivoSeleccionado = values['-seleccionPDF-']
+        archivoSeleccionado = values['-inputSeleccionPDF-']
 
         if tipoProceso == idVoltaje:
 
@@ -82,7 +82,7 @@ def sustituirNorma(tipoProceso, botonActualizarNorma, botonDescartarGestion, bot
         botonActualizarNorma.update(disabled=True)
         botonDescartarGestion.update(disabled=True)
         botonVerSeleccionado.update(disabled=True)
-        window['-seleccionPDF-'].update('')
+        window['-inputSeleccionPDF-'].update('')
 
     except:
 

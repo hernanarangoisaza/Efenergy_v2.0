@@ -59,7 +59,7 @@ columna4, botonVerNorma, botonVerSeleccionado, botonActualizarNorma, botonDescar
 
 # GENERACIÓN DINÁMICA DEL FRAME PARA ANÁLISIS DE VOLTAJE.
 
-columna5, frameSeccionVoltaje, layoutTabTablaContenido, frameTituloSeccionVoltaje = Efenergy2UI.generarAnalisisVoltaje(frameNavegacionV4)
+columna5, frameSeccionVoltaje, frameTituloSeccionVoltaje, tablaVoltaje = Efenergy2UI.generarAnalisisVoltaje(frameNavegacionV4)
  
 # ************************************************************************************************************************
 
@@ -68,7 +68,7 @@ columna5, frameSeccionVoltaje, layoutTabTablaContenido, frameTituloSeccionVoltaj
 global columna1
 
 frameFiltrosVoltaje, comboDias, comboVoltaje, comboFases, inputVariacion = Efenergy2UI.generarFiltrosVoltaje()
-columna1, barraMenuPrincipal, frameSelectorPlantilla, inputSeleccionPlantilla, botonPlantilla, botonCargarPlantilla = Efenergy2UI.generarUIPrincipal(frameLogoV1, frameFiltrosVoltaje)
+columna1, barraMenuPrincipal, frameSelectorPlantilla, inputSeleccionPlantilla, botonCargarPlantilla = Efenergy2UI.generarUIPrincipal(frameLogoV1, frameFiltrosVoltaje)
 columna2, frameAcercaDe = Efenergy2UI.generarAcercaDe(frameLogoV2, frameNavegacionV1)
 
 # ************************************************************************************************************************
@@ -172,16 +172,20 @@ while True:
         columna1.Update(visible=False)
         columna5.Update(visible=True)
 
-        Efenergy2Funciones.asignarDatosPreliminares(idVoltaje)
+        datosVoltaje = Efenergy2Funciones.asignarDatosPreliminares()
 
-        Efenergy2Funciones.calcularRangoVariacion()
+        voltajeLimiteInferior, voltajeLimiteSuperior = Efenergy2Funciones.calcularRangoVariacion(window, values, inputVariacion)
 
         AnalisisDatosVoltaje(datosVoltaje, 
-                             float(voltajeLimiteInferior), 
-                             float(voltajeLimiteSuperior), 
+                             voltajeLimiteInferior, 
+                             voltajeLimiteSuperior, 
                              values['-comboDias-'], 
                              values['-comboFases-'],
-                             values['-comboVoltaje-'])
+                             values['-comboVoltaje-'],
+                             window,
+                             tablaVoltaje)
+
+        tablaVoltaje.expand(expand_x=True)
 
 		# 'límites de variaciones de\nredes eléctricas\n\nEn el rango de 127-10% - 127+10% \nMayor a 127+10% \nMenor a 127-10%'
 
@@ -191,7 +195,7 @@ while True:
 
     elif event == '-inputVariacion-': # Rango de variación
     
-        Efenergy2Funciones.calcularRangoVariacion()
+        voltajeLimiteInferior, voltajeLimiteSuperior = Efenergy2Funciones.calcularRangoVariacion(window, values, inputVariacion)
 
     elif event.endswith('-opcAcercaDe-'): # Ventana Acerca de
 
@@ -297,7 +301,7 @@ while True:
         idProcesoActual = idArmonicos
         Efenergy2Normas.definirTituloNorma(idProcesoActual, columna1, columna4, labelTituloNorma)
 
-    elif event == ('-seleccionPDF-'): # Control de la barra de botones para la gestión de normas
+    elif event == ('-inputSeleccionPDF-'): # Control de la barra de botones para la gestión de normas
 
         Efenergy2Normas.botonesGestionarNorma(False, botonActualizarNorma, botonDescartarGestion, botonVerSeleccionado)
 
@@ -312,7 +316,7 @@ while True:
     elif event == ('-botonDescartarGestion-'): # Control de la barra de botones para la gestión de normas
 
         Efenergy2Normas.botonesGestionarNorma(True, botonActualizarNorma, botonDescartarGestion, botonVerSeleccionado)
-        window['-seleccionPDF-'].update('')
+        window['-inputSeleccionPDF-'].update('')
 
     elif event == ('-botonActualizarNorma-'): # Sustituir el archivo PDF actual de la norma con el contenido del nuevo recién seleccionado
 
