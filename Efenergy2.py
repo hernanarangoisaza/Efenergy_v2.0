@@ -4,18 +4,22 @@
 # -*- coding: utf-8 -*-
 
 import PySimpleGUI as sg
-import threading
-import pandas
+import sys
 
-from Efenergy2UI import *
+
+
+#from Efenergy2UI import *
+#import Efenergy2Globales
+
 from Efenergy2Globales import *
-from Efenergy2NotasRapidas import *
+import Efenergy2UI
+import Efenergy2NotasRapidas
+import Efenergy2Normas
+import Efenergy2Funciones
 
 import os.path
 import ctypes
 from pathlib import Path
-import webbrowser
-import shutil
 
 #import wx
 import wx.grid
@@ -27,226 +31,6 @@ from AnalisisDatosVoltaje import AnalisisDatosVoltaje
 #from AnalisisDatosArmonicos import AnalisisDatosArmonicos
 #from AnalisisDatosArmonicosCorriente import AnalisisDatosArmonicosCorriente
 #from EditarInformacion import EditarInformacion
-
-# ************************************************************************************************************************
-
-def cargarPlantilla(window, rutaPlantilla, tipoProceso):
-
-    global datosPreliminares
-
-    if (tipoProceso == idGeneral):
-
-        datosPreliminares = pandas.ExcelFile(rutaPlantilla)
-
-    window.write_event_value('-ThreadDone-','')
-
-# ************************************************************************************************************************
-
-def indicadorCarga(window):
-
-    limite = 100
-    i = 0
-    window['-progressBar-'].update_bar(0,0)
-
-    while (t1.is_alive()):
-
-        window['-progressBar-'].update_bar(i,limite)
-        i = i + 1
-        if (i==(limite-1)):
-            i = 0
-            window['-progressBar-'].update_bar(0,0)
-
-    window['-progressBar-'].update_bar(limite,limite)
-
-# ************************************************************************************************************************
-
-def hiloCargarPlantilla(rutaPlantilla, tipoProceso):
-
-    global t1
-
-    t1 = threading.Thread(target=cargarPlantilla, args=(window,rutaPlantilla,tipoProceso), daemon=True)
-    t1.name = 't1'
-    t1.start()
-
-# ************************************************************************************************************************
-
-def hiloIndicadorCarga():
-
-    global t2 
-
-    t2 = threading.Thread(target=indicadorCarga, args=(window,), daemon=True)
-    t2.name = 't2'
-    t2.start()
-
-# ************************************************************************************************************************
-
-def visualizarNorma(tipoProceso):
-
-    if tipoProceso == idVoltaje:
-
-        webbrowser.open_new(rutaPdfVoltaje)
-
-    elif tipoProceso == idPotencia:
-
-        webbrowser.open_new(rutaPdfPotencia)
-
-    elif tipoProceso == idArmonicos:
-
-        webbrowser.open_new(rutaPdfArmonicos)
-
-    elif tipoProceso == idOtroPDF:
-
-        rutaPdf = values['-seleccionPDF-']
-        webbrowser.open_new(rutaPdf)
-
-# ************************************************************************************************************************
-
-def definirTituloNorma(tipoProceso):
-
-    columna1.Update(visible=False)
-    columna4.Update(visible=True)
-
-    if tipoProceso == idVoltaje:
-
-        tituloNorma = 'VOLTAJE'
-
-    elif tipoProceso == idPotencia:
-
-        tituloNorma = 'POTENCIA'
-
-    elif tipoProceso == idArmonicos:
-
-        tituloNorma = 'ARMÓNICOS'
-
-    window['-labelTituloNorma-'].update(tituloNorma)
-
-# ************************************************************************************************************************
-
-def sustituirNorma(tipoProceso):
-
-    try:
-
-        if tipoProceso == idVoltaje:
-
-            shutil.copy(values['-seleccionPDF-'], rutaPdfVoltaje)
-
-        elif tipoProceso == idPotencia:
-
-            shutil.copy(values['-seleccionPDF-'], rutaPdfPotencia)
-
-        elif tipoProceso == idArmonicos:
-
-            shutil.copy(values['-seleccionPDF-'], rutaPdfArmonicos)
-
-        sg.Popup('NOTIFICACIÓN', 
-                 'El archivo PDF de la norma ha sido actualizado correctamente.',
-                 text_color=eColor1, 
-                 background_color=eColor6,
-                 button_color=eColores1,
-                 keep_on_top=True,
-                 no_titlebar=False)
-
-        botonActualizarNorma.update(disabled=True)
-        botonDescartarGestion.update(disabled=True)
-        botonVerSeleccionado.update(disabled=True)
-        window['-seleccionPDF-'].update('')
-
-    except:
-
-        sg.Popup('ERROR', 
-                 'Ocurrió un problema al intentar actualizar el archivo PDF de la norma. Revise que el archivo actual no esté abierto para visualización y que sean diferentes. Ciérrelo e intente de nuevo.',
-                 text_color=eColor1, 
-                 background_color=eColor6,
-                 button_color=eColores1,
-                 keep_on_top=True,
-                 no_titlebar=False)
-
-# ************************************************************************************************************************
-
-def botonesGestionarNorma(estado):
-
-    botonActualizarNorma.update(disabled=estado)
-    botonDescartarGestion.update(disabled=estado)
-    botonVerSeleccionado.update(disabled=estado)
-
-# ************************************************************************************************************************
-
-def calcularRangoVariacion():
-
-    global voltajeLimiteInferior
-    global voltajeLimiteSuperior
-
-    try:
-
-        intVariacion = float(window['-inputVariacion-'].get())
-        voltajeLimiteInferior = intVariacion * (1 - porcentajeLimiteInferior)
-        voltajeLimiteSuperior = intVariacion * (1 + porcentajeLimiteSuperior)
-        nuevoTooltip = '  El rango establecido para análisis es [ {0:.2f} - {1:.2f} ]  '.format(voltajeLimiteInferior,voltajeLimiteSuperior)
-        inputVariacion.set_tooltip(nuevoTooltip)
-
-    except ValueError:
-
-        # Validar que la representación del string corresponde a un número
-        
-        window['-inputVariacion-'].update(''.join([i for i in window['-inputVariacion-'].get() if i.isdigit()])) 
-        
-# ************************************************************************************************************************
-
-def actualizarFiltrosPlantilla():
-
-    comboDias.Update(values=datosPreliminares.sheet_names)
-    comboDias.Update(disabled=False)
-    comboDias.Update(readonly=True)
-    comboDias.Update(set_to_index=0)
-
-    comboFases.Update(disabled=False)
-    comboFases.Update(readonly=True)
-    comboFases.Update(set_to_index=0)
-
-    comboVoltaje.Update(disabled=False)
-    comboVoltaje.Update(readonly=True)
-    comboVoltaje.Update(set_to_index=1)
-
-# ************************************************************************************************************************
-
-def seleccionarPlantilla():
-
-    rutaPlantilla = values['-inputSeleccionPlantilla-']
-    archivoPlantilla = rutaPlantilla.split('/')[-1]
-    window['-valorRutaPlantilla-'].Update(rutaPlantilla.rpartition('/')[0])
-    window['-valorArchivoPlantilla-'].Update(archivoPlantilla)
-    barraMenuPrincipal.Update(menuPrincipal1)
-
-# ************************************************************************************************************************
-
-def cargarDatosPreliminares(tipoProceso):
-
-    if (tipoProceso == idGeneral):
-
-        rutaPlantillaPreliminar = values['-inputSeleccionPlantilla-']
-        hiloCargarPlantilla(rutaPlantillaPreliminar, tipoProceso)
-
-    hiloIndicadorCarga()
-
-# ************************************************************************************************************************
-
-def asignarDatosPreliminares(tipoProceso):
-
-    global datosVoltaje
-    global datosPotencia
-    global datosArmonicos
-
-    if (tipoProceso == idVoltaje):
-
-        datosVoltaje = datosPreliminares
-
-    elif (tipoProceso == idPotencia):
-
-        datosPotencia = datosPreliminares
-
-    elif (tipoProceso == idArmonicos):
-
-        datosArmonicos = datosPreliminares
 
 # ************************************************************************************************************************
 
@@ -276,10 +60,12 @@ columna4, botonVerNorma, botonVerSeleccionado, botonActualizarNorma, botonDescar
 # GENERACIÓN DINÁMICA DEL FRAME PARA ANÁLISIS DE VOLTAJE.
 
 columna5, frameSeccionVoltaje, layoutTabTablaContenido, frameTituloSeccionVoltaje = Efenergy2UI.generarAnalisisVoltaje(frameNavegacionV4)
-
+ 
 # ************************************************************************************************************************
 
 # GENERACIÓN DE LA INTERFAZ DE USUARIO PRINCIPAL
+
+global columna1
 
 frameFiltrosVoltaje, comboDias, comboVoltaje, comboFases, inputVariacion = Efenergy2UI.generarFiltrosVoltaje()
 columna1, barraMenuPrincipal, frameSelectorPlantilla, inputSeleccionPlantilla, botonPlantilla, botonCargarPlantilla = Efenergy2UI.generarUIPrincipal(frameLogoV1, frameFiltrosVoltaje)
@@ -304,7 +90,6 @@ layoutPrincipal =   [
                         ],
                     ]
 
-# ************************************************************************************************************************
 
 # Ventana principal y ajustes personalizados
 
@@ -312,13 +97,13 @@ sg.theme('Default1')
 sg.ChangeLookAndFeel('SystemDefault')
 
 window = sg.Window('Efenergy v2.0',
-                   layout=layoutPrincipal,
-                   use_default_focus=True,
-                   size=sizeFrmPrincipal,
-                   debugger_enabled=False,
-                   finalize=True,
-                   font=('Helvetica',11),
-                   icon=rutaIconoPrincipal)
+                    layout=layoutPrincipal,
+                    use_default_focus=True,
+                    size=sizeFrmPrincipal,
+                    debugger_enabled=False,
+                    finalize=True,
+                    font=('Helvetica',11),
+                    icon=rutaIconoPrincipal)
 
 # Establecer en la ventana de filtros el valor base para la Variación.
 
@@ -328,11 +113,13 @@ inputVariacion.Update = valorVariacion
 
 barraMenuPrincipal.Update(menuPrincipal2)
 
-# Carga los textos descriptivos para las normas
+# Carga los textos descriptivos para las notas
 
-informacionVoltaje = leerArchivo(rutaInformacionVoltaje)
-informacionPotencia = leerArchivo(rutaInformacionPotencia)
-informacionArmonicos = leerArchivo(rutaInformacionArmonicos)
+errorPersonalizadoNotasLeer = 'Ocurrió un problema al leer el archivo de texto de Notas Rápidas.'
+
+informacionVoltaje = Efenergy2Funciones.leerArchivo(rutaInformacionVoltaje, errorPersonalizadoNotasLeer)
+informacionPotencia = Efenergy2Funciones.leerArchivo(rutaInformacionPotencia, errorPersonalizadoNotasLeer)
+informacionArmonicos = Efenergy2Funciones.leerArchivo(rutaInformacionArmonicos, errorPersonalizadoNotasLeer)
 
 # Extender tamaño de algunos Frames para que ocupen el ancho del diseño.
 
@@ -358,8 +145,6 @@ window.refresh()
 
 # ctypes.windll.shcore.SetProcessDpiAwareness(2)
 
-# ************************************************************************************************************************
-
 # Run the Event Loop.
 
 while True:
@@ -374,12 +159,12 @@ while True:
     
     elif event == '-inputSeleccionPlantilla-': # Seleccionar plantilla de origen de datos
 
-        seleccionarPlantilla()
+        Efenergy2Funciones.seleccionarPlantilla(values, window, barraMenuPrincipal)
         botonCargarPlantilla.update(disabled=False)
 
     elif event == '-botonCargarPlantilla-': # Cargar plantilla de origen de datos
 
-        cargarDatosPreliminares(idGeneral)
+        Efenergy2Funciones.cargarDatosPreliminares(idGeneral, values, window)
 
     elif event.endswith('-opcV1-'): # Analizar Voltaje
 
@@ -387,9 +172,9 @@ while True:
         columna1.Update(visible=False)
         columna5.Update(visible=True)
 
-        asignarDatosPreliminares(idVoltaje)
+        Efenergy2Funciones.asignarDatosPreliminares(idVoltaje)
 
-        calcularRangoVariacion()
+        Efenergy2Funciones.calcularRangoVariacion()
 
         AnalisisDatosVoltaje(datosVoltaje, 
                              float(voltajeLimiteInferior), 
@@ -400,15 +185,13 @@ while True:
 
 		# 'límites de variaciones de\nredes eléctricas\n\nEn el rango de 127-10% - 127+10% \nMayor a 127+10% \nMenor a 127-10%'
 
-
-
     elif event == '-ThreadDone-': # Mensaje recibido desde los hilos al momento de haber finalizado las acciones que toman más tiempo
 
-        actualizarFiltrosPlantilla()
+        Efenergy2Funciones.actualizarFiltrosPlantilla(comboDias, comboFases, comboVoltaje)
 
     elif event == '-inputVariacion-': # Rango de variación
     
-        calcularRangoVariacion()
+        Efenergy2Funciones.calcularRangoVariacion()
 
     elif event.endswith('-opcAcercaDe-'): # Ventana Acerca de
 
@@ -438,85 +221,104 @@ while True:
     elif event.endswith('-opcN7-'): # Gestionar nota rápida para Voltaje
 
         idProcesoActual = idVoltaje
-        Efenergy2NotasRapidas.gestionarNota(idProcesoActual)
+        Efenergy2NotasRapidas.gestionarNota(idProcesoActual, window, columna1, columna3, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, informacionVoltaje)
 
     elif event.endswith('-opcN8-'): # Gestionar nota rápida para Potencia
 
         idProcesoActual = idPotencia
-        Efenergy2NotasRapidas.gestionarNota(idProcesoActual)
+        Efenergy2NotasRapidas.gestionarNota(idProcesoActual, window, columna1, columna3, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, informacionPotencia)
 
     elif event.endswith('-opcN9-'): # Gestionar nota rápida para Armónicos
 
         idProcesoActual = idArmonicos
-        Efenergy2NotasRapidas.gestionarNota(idProcesoActual)
+        Efenergy2NotasRapidas.gestionarNota(idProcesoActual, window, columna1, columna3, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, informacionArmonicos)
 
     elif event == '-botonEditarNota-': # Habilitar la zona de edición de texto de las Notas Rápidas
 
-        Efenergy2NotasRapidas.editarNota()
+        Efenergy2NotasRapidas.editarNota(botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor)
 
     elif event == '-botonGrabarNota-': # Actualizar los archivos en disco con el contenido de la zona de edición de las Notas Rápidas
 
-        Efenergy2NotasRapidas.grabarNota(idProcesoActual)
+        txtVisorEditor = values['-visorEditorNotas-']
+
+        if (idProcesoActual == idVoltaje):
+
+            Efenergy2NotasRapidas.grabarNota(idProcesoActual, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, rutaInformacionVoltaje, txtVisorEditor)
+
+        elif (idProcesoActual == idPotencia):
+
+            Efenergy2NotasRapidas.grabarNota(idProcesoActual, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, rutaInformacionPotencia, txtVisorEditor)
+
+        elif (idProcesoActual == idArmonicos):
+
+            Efenergy2NotasRapidas.grabarNota(idProcesoActual, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, rutaInformacionArmonicos, txtVisorEditor)
 
     elif event == '-botonDescartarGrabacion-': # Descartar el contenido de la zona de edición de las Notas Rápidas y no grabarlo
 
-        Efenergy2NotasRapidas.descartarGrabacion(idProcesoActual)
+        if (idProcesoActual == idVoltaje):
+
+            Efenergy2NotasRapidas.descartarGrabacion(botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, informacionVoltaje)
+
+        elif (idProcesoActual == idPotencia):
+
+            Efenergy2NotasRapidas.descartarGrabacion(botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, informacionPotencia)
+
+        elif (idProcesoActual == idArmonicos):
+
+            Efenergy2NotasRapidas.descartarGrabacion(botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, informacionArmonicos)
 
     elif event.endswith('-opcN1-'): # Ver norma Pdf para Voltaje
 
         idProcesoActual = idVoltaje
-        visualizarNorma(idProcesoActual)
+        Efenergy2Normas.visualizarNorma(idProcesoActual)
 
     elif event.endswith('-opcN2-'): # Ver norma Pdf para Potencia
 
         idProcesoActual = idPotencia
-        visualizarNorma(idProcesoActual)
+        Efenergy2Normas.visualizarNorma(idProcesoActual)
 
     elif event.endswith('-opcN3-'): # Ver norma Pdf para Armónicos
 
         idProcesoActual = idArmonicos
-        visualizarNorma(idProcesoActual)
+        Efenergy2Normas.visualizarNorma(idProcesoActual)
 
     elif event.endswith('-opcN4-'): # Gestionar norma Pdf para Voltaje
 
         idProcesoActual = idVoltaje
-        definirTituloNorma(idProcesoActual)
+        Efenergy2Normas.definirTituloNorma(idProcesoActual, columna1, columna4, labelTituloNorma)
 
     elif event.endswith('-opcN5-'): # Gestionar norma Pdf para Potencia
 
         idProcesoActual = idPotencia
-        definirTituloNorma(idProcesoActual)
+        Efenergy2Normas.definirTituloNorma(idProcesoActual, columna1, columna4, labelTituloNorma)
 
     elif event.endswith('-opcN6-'): # Gestionar norma Pdf para Armónicos
 
         idProcesoActual = idArmonicos
-        definirTituloNorma(idProcesoActual)
+        Efenergy2Normas.definirTituloNorma(idProcesoActual, columna1, columna4, labelTituloNorma)
 
     elif event == ('-seleccionPDF-'): # Control de la barra de botones para la gestión de normas
 
-        botonesGestionarNorma(False)
+        Efenergy2Normas.botonesGestionarNorma(False, botonActualizarNorma, botonDescartarGestion, botonVerSeleccionado)
 
     elif event == ('-botonVerNorma-'): # Ver archivo PDF para el contenido de la norma actual
 
-        visualizarNorma(idProcesoActual)
+        Efenergy2Normas.visualizarNorma(idProcesoActual, values)
  
     elif event == ('-botonVerSeleccionado-'): # Ver archivo PDF para el contenido de la nueva norma seleccionada
 
-        visualizarNorma(idOtroPDF)
+        Efenergy2Normas.visualizarNorma(idOtroPDF, values)
 
     elif event == ('-botonDescartarGestion-'): # Control de la barra de botones para la gestión de normas
 
-        botonesGestionarNorma(True)
+        Efenergy2Normas.botonesGestionarNorma(True, botonActualizarNorma, botonDescartarGestion, botonVerSeleccionado)
         window['-seleccionPDF-'].update('')
 
     elif event == ('-botonActualizarNorma-'): # Sustituir el archivo PDF actual de la norma con el contenido del nuevo recién seleccionado
 
-        sustituirNorma(idProcesoActual)
-   
+        Efenergy2Normas.sustituirNorma(idProcesoActual, botonActualizarNorma, botonDescartarGestion, botonVerSeleccionado, window, values)
 
     window.refresh() # Actualizar cambios en componentes de la GUI
-        
+
 window.close()
-
-# ************************************************************************************************************************
-
+    

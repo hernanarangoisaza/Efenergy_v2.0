@@ -1,60 +1,13 @@
 ﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import PySimpleGUI as sg
 from Efenergy2Globales import *
+import Efenergy2UI
+import Efenergy2Funciones
 
 # ************************************************************************************************************************
 
-def leerArchivo(file):
-
-    try:
-
-        archivo = open(file, "r", encoding="utf8", errors='ignore')
-        contenido = archivo.read()
-
-        return contenido
-
-    except:
-
-        sg.Popup('ERROR', 
-                    'Ocurrió un problema al leer el archivo de texto de Notas Rápidas.',
-                    text_color=eColor1, 
-                    background_color=eColor6,
-                    button_color=eColores1,
-                    keep_on_top=True,
-                    no_titlebar=False)
-    
-    finally:
-    
-        archivo.close()
-
-# ************************************************************************************************************************
-
-def escribirArchivo(file, contenido):
-
-    try:
-
-        archivo = open(file, "w", encoding="utf8")
-        archivo.write(contenido)
-
-    except:
-
-        sg.Popup('ERROR', 
-                    'Ocurrió un problema al escribir el archivo de texto de Notas Rápidas.',
-                    text_color=eColor1, 
-                    background_color=eColor6,
-                    button_color=eColores1,
-                    keep_on_top=True,
-                    no_titlebar=False)
-
-    finally:
-        
-        archivo.close()
-
-# ************************************************************************************************************************
-
-def definirTituloNota(tipoProceso):
+def definirTituloNota(tipoProceso, window):
 
     if tipoProceso == idVoltaje:
 
@@ -72,98 +25,74 @@ def definirTituloNota(tipoProceso):
 
 # ************************************************************************************************************************
 
-class Efenergy2NotasRapidas():
+def grabarNota(tipoProceso, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, rutaInformacion, txtVisorEditor):
 
-    def __init__(self):
+    global informacionVoltaje
+    global informacionPotencia
+    global informacionArmonicos
 
-        #self.datosVoltaje = datosVoltaje
-        print()
+    #listOfGlobals = globals()
 
-    # ************************************************************************************************************************
+    botonEditarNota.update(disabled=False)
+    botonGrabarNota.update(disabled=True)
+    botonDescartarGrabacion.update(disabled=True)
+    visorEditor.update(disabled=True)
+    visorEditor.update(background_color=eColor2)
 
-    def grabarNota(tipoProceso):
+    errorPersonalizadoNotasEscribir = 'Ocurrió un problema al escribir el archivo de texto de Notas Rápidas.'
 
-        global informacionVoltaje
-        global informacionPotencia
-        global informacionArmonicos
+    if (tipoProceso == idVoltaje):
 
-        botonEditarNota.update(disabled=False)
-        botonGrabarNota.update(disabled=True)
-        botonDescartarGrabacion.update(disabled=True)
-        visorEditor.update(disabled=True)
-        visorEditor.update(background_color=eColor2)
+        #listOfGlobals['informacionVoltaje'] = txtVisorEditor
+        informacionVoltaje = txtVisorEditor
+        rutaInformacionVoltaje = rutaInformacion
+        Efenergy2Funciones.escribirArchivo(rutaInformacionVoltaje, informacionVoltaje, errorPersonalizadoNotasEscribir)
 
-        if (tipoProceso == idVoltaje):
+    elif (tipoProceso == idPotencia):
 
-            informacionVoltaje = values['-visorEditorNotas-']
-            escribirArchivo(rutaInformacionVoltaje, informacionVoltaje)
+        informacionPotencia = txtVisorEditor
+        rutaInformacionPotencia = rutaInformacion
+        Efenergy2Funciones.escribirArchivo(rutaInformacionPotencia, informacionPotencia, errorPersonalizadoNotasEscribir)
 
-        elif (tipoProceso == idPotencia):
+    elif (tipoProceso == idArmonicos):
 
-            informacionPotencia = values['-visorEditorNotas-']
-            escribirArchivo(rutaInformacionPotencia, informacionPotencia)
+        informacionArmonicos = txtVisorEditor
+        rutaInformacionArmonicos = rutaInformacion
+        Efenergy2Funciones.escribirArchivo(rutaInformacionArmonicos, informacionArmonicos, errorPersonalizadoNotasEscribir)
 
-        elif (tipoProceso == idArmonicos):
+# ************************************************************************************************************************
 
-            informacionArmonicos = values['-visorEditorNotas-']
-            escribirArchivo(rutaInformacionArmonicos, informacionArmonicos)
+def editarNota(botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor):
 
-    # ************************************************************************************************************************
+    botonEditarNota.update(disabled=True)
+    botonGrabarNota.update(disabled=False)
+    botonDescartarGrabacion.update(disabled=False)
+    visorEditor.update(disabled=False)
+    visorEditor.update(background_color=eColor3)
 
-    def editarNota():
+# ************************************************************************************************************************
 
-        botonEditarNota.update(disabled=True)
-        botonGrabarNota.update(disabled=False)
-        botonDescartarGrabacion.update(disabled=False)
-        visorEditor.update(disabled=False)
-        visorEditor.update(background_color=eColor3)
+def gestionarNota(tipoProceso, window, columna1, columna3, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, informacion):
 
-    # ************************************************************************************************************************
+    definirTituloNota(tipoProceso, window)
+    columna1.Update(visible=False)
+    columna3.Update(visible=True)
+    botonEditarNota.update(disabled=False)
+    botonGrabarNota.update(disabled=True)
+    botonDescartarGrabacion.update(disabled=True)
+    visorEditor.update(disabled=True)
+    visorEditor.update(background_color=eColor2)
+    visorEditor.update(informacion)
+    
+# ************************************************************************************************************************
 
-    def gestionarNota(tipoProceso):
+def descartarGrabacion(botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, informacion):
 
-        definirTituloNota(tipoProceso)
-        
-        columna1.Update(visible=False)
-        columna3.Update(visible=True)
-        botonEditarNota.update(disabled=False)
-        botonGrabarNota.update(disabled=True)
-        botonDescartarGrabacion.update(disabled=True)
-        visorEditor.update(disabled=True)
-        visorEditor.update(background_color=eColor2)
+    botonEditarNota.update(disabled=False)
+    botonGrabarNota.update(disabled=True)
+    botonDescartarGrabacion.update(disabled=True)
+    visorEditor.update(disabled=True)
+    visorEditor.update(background_color=eColor2)
+    visorEditor.update(informacion)
 
-        if (tipoProceso == idVoltaje):
-
-            window['-visorEditorNotas-'].update(informacionVoltaje)
-
-        elif (tipoProceso == idPotencia):
-
-            window['-visorEditorNotas-'].update(informacionPotencia)
-
-        elif (tipoProceso == idArmonicos):
-
-            window['-visorEditorNotas-'].update(informacionArmonicos)
-
-    # ************************************************************************************************************************
-
-    def descartarGrabacion(tipoProceso):
-
-        botonEditarNota.update(disabled=False)
-        botonGrabarNota.update(disabled=True)
-        botonDescartarGrabacion.update(disabled=True)
-        visorEditor.update(disabled=True)
-        visorEditor.update(background_color=eColor2)
- 
-        if (tipoProceso == idVoltaje):
-
-            window['-visorEditorNotas-'].update(informacionVoltaje)
-
-        elif (tipoProceso == idPotencia):
-
-            window['-visorEditorNotas-'].update(informacionPotencia)
-
-        elif (tipoProceso == idArmonicos):
-
-            window['-visorEditorNotas-'].update(informacionArmonicos)
-
-    # ************************************************************************************************************************
+# ************************************************************************************************************************

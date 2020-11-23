@@ -7,6 +7,33 @@
 
 from pathlib import Path
 
+# ************************************************************************************************************************
+
+global window, event, values
+
+global layoutPrincipal
+
+global columna1, barraMenuPrincipal, frameSelectorPlantilla, inputSeleccionPlantilla, botonPlantilla, botonCargarPlantilla
+global columna2, frameAcercaDe
+global columna3, visorEditor, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, frameNota, frameTituloNota, labelTituloNota
+global columna4, botonVerNorma, botonVerSeleccionado, botonActualizarNorma, botonDescartarGestion, frameNorma, frameTituloNorma, labelTituloNorma
+global columna5, frameSeccionVoltaje, layoutTabTablaContenido, frameTituloSeccionVoltaje
+
+global frameFiltrosVoltaje, comboDias, comboVoltaje, comboFases, inputVariacion
+
+global frameLogoV1, logoPrincipalV1, statusBarPrincipalV1
+global frameLogoV2, logoPrincipalV2, statusBarPrincipalV2
+global frameLogoV3, logoPrincipalV3, statusBarPrincipalV3
+global frameLogoV4, logoPrincipalV4, statusBarPrincipalV4
+global frameLogoV5, logoPrincipalV5, statusBarPrincipalV5
+
+global frameNavegacionV1, botonInicioV1
+global frameNavegacionV2, botonInicioV2
+global frameNavegacionV3, botonInicioV3
+global frameNavegacionV4, botonInicioV4
+
+# ************************************************************************************************************************
+
 MENU_DISABLED_CHARACTER = '!'
 MENU_KEY_SEPARATOR = '::'
 SYMBOL_UP = '▲'
@@ -95,9 +122,9 @@ rutaPlantillaPreliminar = None
 
 # Variables contenedoras para los textos descriptivos de las normas
 
-informacionVoltaje = None
-informacionPotencia = None
-informacionArmonicos = None
+informacionVoltaje = ''
+informacionPotencia = ''
+informacionArmonicos = ''
 
 # Variables globales para control de ejecución de Hilos (Threads)
 
