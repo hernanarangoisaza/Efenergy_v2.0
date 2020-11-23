@@ -60,7 +60,7 @@ def hiloIndicadorCarga(window):
 
 # ************************************************************************************************************************
 
-def calcularRangoVariacion(window, values, inputVariacion):
+def calcularRangoVariacion(window, values):
 
     try:
 
@@ -68,7 +68,7 @@ def calcularRangoVariacion(window, values, inputVariacion):
         voltajeLimiteInferior = intVariacion * (1 - porcentajeLimiteInferior)
         voltajeLimiteSuperior = intVariacion * (1 + porcentajeLimiteSuperior)
         nuevoTooltip = '  El rango establecido para análisis es [ {0:.2f} - {1:.2f} ]  '.format(voltajeLimiteInferior,voltajeLimiteSuperior)
-        inputVariacion.set_tooltip(nuevoTooltip)
+        window['-inputVariacion-'].set_tooltip(nuevoTooltip)
 
         return voltajeLimiteInferior, voltajeLimiteSuperior
 
@@ -76,34 +76,33 @@ def calcularRangoVariacion(window, values, inputVariacion):
 
         # Validar que la representación del string corresponde a un número
         
-        inputVariacion.update(''.join([i for i in values['-inputVariacion-'] if i.isdigit()])) 
+        values['-inputVariacion-'].update(''.join([i for i in values['-inputVariacion-'] if i.isdigit()])) 
         
 # ************************************************************************************************************************
 
-def actualizarFiltrosPlantilla(comboDias, comboFases, comboVoltaje):
+def actualizarFiltrosPlantilla(window):
 
-    comboDias.Update(values=datosPreliminares.sheet_names)
-    comboDias.Update(disabled=False)
-    comboDias.Update(readonly=True)
-    comboDias.Update(set_to_index=0)
+    window['-comboDias-'].Update(values=datosPreliminares.sheet_names)
+    window['-comboDias-'].update(disabled=False)
+    window['-comboDias-'].update(readonly=True)
+    window['-comboDias-'].update(set_to_index=0)
 
-    comboFases.Update(disabled=False)
-    comboFases.Update(readonly=True)
-    comboFases.Update(set_to_index=0)
+    window['-comboFases-'].update(disabled=False)
+    window['-comboFases-'].update(readonly=True)
+    window['-comboFases-'].update(set_to_index=0)
 
-    comboVoltaje.Update(disabled=False)
-    comboVoltaje.Update(readonly=True)
-    comboVoltaje.Update(set_to_index=1)
+    window['-comboVoltaje-'].update(disabled=False)
+    window['-comboVoltaje-'].update(readonly=True)
+    window['-comboVoltaje-'].update(set_to_index=1)
 
 # ************************************************************************************************************************
 
-def seleccionarPlantilla(values, window, barraMenuPrincipal):
+def seleccionarPlantilla(values, window):
 
     rutaPlantilla = values['-inputSeleccionPlantilla-']
     archivoPlantilla = rutaPlantilla.split('/')[-1]
     window['-valorRutaPlantilla-'].Update(rutaPlantilla.rpartition('/')[0])
     window['-valorArchivoPlantilla-'].Update(archivoPlantilla)
-    barraMenuPrincipal.Update(menuPrincipal1)
 
 # ************************************************************************************************************************
 

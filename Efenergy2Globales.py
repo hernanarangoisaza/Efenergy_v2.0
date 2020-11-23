@@ -17,9 +17,9 @@ global columna1, barraMenuPrincipal, frameSelectorPlantilla, inputSeleccionPlant
 global columna2, frameAcercaDe
 global columna3, visorEditor, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, frameNota, frameTituloNota, labelTituloNota
 global columna4, botonVerNorma, botonVerSeleccionado, botonActualizarNorma, botonDescartarGestion, frameNorma, frameTituloNorma, labelTituloNorma
-global columna5, frameSeccionVoltaje, frameTituloSeccionVoltaje, tablaVoltaje
+global columna5, frameSeccionVoltaje, frameTituloSeccionVoltaje
 
-global frameFiltrosVoltaje, comboDias, comboVoltaje, comboFases, inputVariacion
+global frameFiltrosVoltaje, comboDias, comboVoltaje, comboFases
 
 global frameLogoV1, logoPrincipalV1, statusBarPrincipalV1
 global frameLogoV2, logoPrincipalV2, statusBarPrincipalV2
@@ -110,6 +110,7 @@ fontCombos = ('Helvetica',11)
 fontAcercaDe = ('Helvetica',10)+('bold',)
 fontTituloNorma = ('Helvetica',15)+('bold',)
 fontTituloNota = ('Helvetica',15)+('bold',)
+fontCantidadRegistros = ('Helvetica',12)+('bold',)
 
 rutaLogoPrincipal = 'imagenes\\logo_texto_2020.png'
 rutaIconoPrincipal = 'imagenes\\logo_2020.ico'

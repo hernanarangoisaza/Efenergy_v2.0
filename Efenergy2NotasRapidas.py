@@ -25,7 +25,7 @@ def definirTituloNota(tipoProceso, window):
 
 # ************************************************************************************************************************
 
-def grabarNota(tipoProceso, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, rutaInformacion, txtVisorEditor):
+def grabarNota(tipoProceso, rutaInformacion, txtVisorEditor, window):
 
     global informacionVoltaje
     global informacionPotencia
@@ -33,11 +33,11 @@ def grabarNota(tipoProceso, botonEditarNota, botonGrabarNota, botonDescartarGrab
 
     #listOfGlobals = globals()
 
-    botonEditarNota.update(disabled=False)
-    botonGrabarNota.update(disabled=True)
-    botonDescartarGrabacion.update(disabled=True)
-    visorEditor.update(disabled=True)
-    visorEditor.update(background_color=eColor2)
+    window['-botonEditarNota-'].update(disabled=False)
+    window['-botonGrabarNota-'].update(disabled=True)
+    window['-botonDescartarGrabacion-'].update(disabled=True)
+    window['-visorEditorNotas-'].update(disabled=True)
+    window['-visorEditorNotas-'].update(background_color=eColor2)
 
     errorPersonalizadoNotasEscribir = 'Ocurrió un problema al escribir el archivo de texto de Notas Rápidas.'
 
@@ -64,37 +64,37 @@ def grabarNota(tipoProceso, botonEditarNota, botonGrabarNota, botonDescartarGrab
 
 # ************************************************************************************************************************
 
-def editarNota(botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor):
+def editarNota(window):
 
-    botonEditarNota.update(disabled=True)
-    botonGrabarNota.update(disabled=False)
-    botonDescartarGrabacion.update(disabled=False)
-    visorEditor.update(disabled=False)
-    visorEditor.update(background_color=eColor3)
+    window['-botonEditarNota-'].update(disabled=True)
+    window['-botonGrabarNota-'].update(disabled=False)
+    window['-botonDescartarGrabacion-'].update(disabled=False)
+    window['-visorEditorNotas-'].update(disabled=False)
+    window['-visorEditorNotas-'].update(background_color=eColor3)
 
 # ************************************************************************************************************************
 
-def gestionarNota(tipoProceso, window, columna1, columna3, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, informacion):
+def gestionarNota(tipoProceso, window, informacion):
 
     definirTituloNota(tipoProceso, window)
-    columna1.Update(visible=False)
-    columna3.Update(visible=True)
-    botonEditarNota.update(disabled=False)
-    botonGrabarNota.update(disabled=True)
-    botonDescartarGrabacion.update(disabled=True)
-    visorEditor.update(disabled=True)
-    visorEditor.update(background_color=eColor2)
-    visorEditor.update(informacion)
+    window['-columna1-'].update(visible=False)
+    window['-columna3-'].update(visible=True)
+    window['-botonEditarNota-'].update(disabled=False)
+    window['-botonGrabarNota-'].update(disabled=True)
+    window['-botonDescartarGrabacion-'].update(disabled=True)
+    window['-visorEditorNotas-'].update(disabled=True)
+    window['-visorEditorNotas-'].update(background_color=eColor2)
+    window['-visorEditorNotas-'].update(informacion)
     
 # ************************************************************************************************************************
 
-def descartarGrabacion(botonEditarNota, botonGrabarNota, botonDescartarGrabacion, visorEditor, informacion):
+def descartarGrabacion(informacion, window):
 
-    botonEditarNota.update(disabled=False)
-    botonGrabarNota.update(disabled=True)
-    botonDescartarGrabacion.update(disabled=True)
-    visorEditor.update(disabled=True)
-    visorEditor.update(background_color=eColor2)
-    visorEditor.update(informacion)
+    window['-botonEditarNota-'].update(disabled=False)
+    window['-botonGrabarNota-'].update(disabled=True)
+    window['-botonDescartarGrabacion-'].update(disabled=True)
+    window['-visorEditorNotas-'].update(disabled=True)
+    window['-visorEditorNotas-'].update(background_color=eColor2)
+    window['-visorEditorNotas-'].update(informacion)
 
 # ************************************************************************************************************************

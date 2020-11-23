@@ -251,7 +251,8 @@ def generarGestionNormas(frameLogo, frameNavegacion):
                                  pad=((10,0),(5,5)))
 
     botonSeleccionarPDF = sg.FileBrowse(key='-botonSeleccionarPDF-', 
-                                        button_text='Seleccionar', 
+                                        button_text='Seleccionar',
+                                        enable_events=True, 
                                         button_color=eColores1, 
                                         file_types=extensionPdf, 
                                         pad=((10,10),(10,10)))
@@ -316,6 +317,7 @@ def generarFiltrosVoltaje():
 
     comboDias = sg.Combo(key='-comboDias-', 
                          values=[], 
+                         enable_events=True,
                          size=(10,1),
                          auto_size_text=False,
                          background_color=eColor3,
@@ -328,11 +330,12 @@ def generarFiltrosVoltaje():
                                 size=(5,1), 
                                 text_color=eColor1, 
                                 background_color=eColor2, 
-                                pad=((80,0),(20,22)),
+                                pad=((10,0),(20,22)),
                                 tooltip='Rangos a ser analizados conforme al límite de variación establecido')
 
     comboVoltaje = sg.Combo(key='-comboVoltaje-', 
                             values=filtroVoltaje, 
+                            enable_events=True,
                             size=(10,1),
                             auto_size_text=False,
                             background_color=eColor3,
@@ -345,10 +348,11 @@ def generarFiltrosVoltaje():
                               size=(5,1), 
                               text_color=eColor1, 
                               background_color=eColor2, 
-                              pad=((80,0),(20,22)))
+                              pad=((30,0),(20,22)))
 
     comboFases = sg.Combo(key='-comboFases-', 
                           values=filtroFases, 
+                          enable_events=True,
                           size=(10,1),
                           auto_size_text=False,
                           background_color=eColor3,
@@ -361,19 +365,13 @@ def generarFiltrosVoltaje():
                               size=(6,1), 
                               text_color=eColor1,
                               background_color=eColor2, 
-                              pad=((100,0),(20,22)))
+                              pad=((20,0),(20,22)))
 
     label2Variacion = sg.Text(key='-label2Variacion-',
                               text='-{0:.0f}%'.format(porcentajeLimiteInferior*100),
                               text_color=eColor1, 
                               background_color=eColor2, 
                               pad=((10,5),(20,22)))
-
-    label3Variacion = sg.Text(key='-label3Variacion-', 
-                              text='+{0:.0f}%'.format(porcentajeLimiteSuperior*100),
-                              text_color=eColor1, 
-                              background_color=eColor2, 
-                              pad=((5,20),(20,22)))
 
     inputVariacion = sg.Input(key='-inputVariacion-', 
                               default_text=valorVariacion,
@@ -387,11 +385,32 @@ def generarFiltrosVoltaje():
                               tooltip='Límite para análisis de variaciones en redes eléctricas',
                               disabled=False)
 
+    label3Variacion = sg.Text(key='-label3Variacion-', 
+                              text='+{0:.0f}%'.format(porcentajeLimiteSuperior*100),
+                              text_color=eColor1, 
+                              background_color=eColor2, 
+                              pad=((5,20),(20,22)))
+
     labelRegistros = sg.Text(key='-labelRegistros-', 
-                             text='0',
+                             text='Registros:',
                              text_color=eColor1, 
                              background_color=eColor2, 
-                             pad=((5,20),(20,22)))
+                             pad=((5,0),(20,22)))
+
+    cantidadRegistros = sg.Text(key='-cantidadRegistros-', 
+                                text='0',
+                                size=(4,1),
+                                font=fontCantidadRegistros,
+                                text_color=eColor1, 
+                                background_color=eColor2, 
+                                pad=((5,20),(20,22)))
+
+    botonFiltrarTablaVoltajes = sg.Button(key='-botonFiltrarTablaVoltajes-', 
+                                          button_text='Filtrar',
+                                          button_color=eColores1,
+                                          disabled=True,
+                                          size=(12,1),
+                                          pad=((10,5),(15,20)))
 
     layoutFiltros =    [
                             [
@@ -402,7 +421,10 @@ def generarFiltrosVoltaje():
                                 #### Fase A, B, C
                                 labelComboFases, comboFases,
                                 #### Límite variaciones redes eléctricas -10% 120 +10%
-                                label1Variacion, label2Variacion, inputVariacion, label3Variacion, labelRegistros
+                                label1Variacion, label2Variacion, inputVariacion, label3Variacion, labelRegistros, cantidadRegistros,
+                            ],
+                            [
+                                botonFiltrarTablaVoltajes,
                             ],
                         ]
 
@@ -412,7 +434,7 @@ def generarFiltrosVoltaje():
                             title_color=eColor1, 
                             background_color=eColor2)
 
-    return frameFiltros, comboDias, comboVoltaje, comboFases, inputVariacion
+    return frameFiltros, comboDias, comboVoltaje, comboFases
 
 # ************************************************************************************************************************
 
@@ -639,7 +661,6 @@ def generarAnalisisVoltaje(frameNavegacion, frameFiltrosVoltaje):
 
     layoutTabFiltros =  [
                             [
-                                #sg.Text(text='Filtros', size=(105,1), visible=True, border_width=0),
                                 #### Sección de filtros
                                 frameFiltrosVoltaje,
                             ],
@@ -673,8 +694,22 @@ def generarAnalisisVoltaje(frameNavegacion, frameFiltrosVoltaje):
                             ]
                         ]   
 
+    visorTabNotasRapidas = sg.Multiline(key='-visorTabNotasRapidas-',
+                                        default_text=None, 
+                                        size=(90,7), 
+                                        text_color=eColor1, 
+                                        background_color=eColor10d, 
+                                        border_width=1,
+                                        autoscroll=False,
+                                        write_only=False,
+                                        auto_refresh=True,
+                                        auto_size_text=False,
+                                        disabled=True,
+                                        pad=((15,15),(15,15)))
+
     layoutTabNotasRapidas = [
                                 [
+                                    visorTabNotasRapidas,
                                 ]
                             ]
 
@@ -784,7 +819,7 @@ def generarAnalisisVoltaje(frameNavegacion, frameFiltrosVoltaje):
                         background_color=eColor2, 
                         size=sizeColumnas)
 
-    return columna, frameSeccionVoltaje, frameTituloSeccionVoltaje, tablaVoltaje
+    return columna, frameSeccionVoltaje, frameTituloSeccionVoltaje
 
 # ************************************************************************************************************************
 

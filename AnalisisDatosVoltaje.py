@@ -19,7 +19,7 @@ import numpy
 
 class AnalisisDatosVoltaje():
 
-	def __init__(self, datosVoltaje, rangoMenor, rangoMayor, dia, fase, voltaje, window, tablaVoltaje):
+	def __init__(self, datosVoltaje, rangoMenor, rangoMayor, dia, fase, voltaje, window):
 
 		self.datosVoltaje = datosVoltaje
 		self.rangoMenor = rangoMenor
@@ -32,11 +32,11 @@ class AnalisisDatosVoltaje():
 		self.txt_fase_b = []
 		self.txt_fase_c = []
 
-		self.cargarDatos(tablaVoltaje, window)
+		self.cargarDatos(window)
 
 	# ************************************************************************************************************************
 
-	def cargarDatos(self, tablaVoltaje, window):
+	def cargarDatos(self, window):
 
 		dfVoltaje = pandas.read_excel(self.datosVoltaje, self.dia)
 
@@ -53,19 +53,19 @@ class AnalisisDatosVoltaje():
 
 		if estadoVoltaje == 'RANGO':
 
-			self.datosRango(voltajes, tablaVoltaje, window)	
+			self.datosRango(voltajes, window)	
 
 		elif estadoVoltaje == 'MAYOR':
 
-			self.datosMayores(voltajes, tablaVoltaje, window)
+			self.datosMayores(voltajes, window)
 
 		elif estadoVoltaje == 'MENOR':
 
-			self.datosMenores(voltajes, tablaVoltaje, window)
+			self.datosMenores(voltajes, window)
 
 	# ************************************************************************************************************************
 
-	def datosRango(self, voltajes, tablaVoltaje, window):
+	def datosRango(self, voltajes, window):
 
 		listaFechas = []
 		listaHoras = []
@@ -79,11 +79,11 @@ class AnalisisDatosVoltaje():
 				listaHoras.append(self.horas[i])
 				listaVoltajes.append(voltajes[i])
 
-		self.llenarTablaVoltaje(listaFechas, listaHoras, listaVoltajes, tablaVoltaje, window)
+		self.llenarTablaVoltaje(listaFechas, listaHoras, listaVoltajes, window)
 
 	# ************************************************************************************************************************
 
-	def datosMenores(self, voltajes, tablaVoltaje, window):
+	def datosMenores(self, voltajes, window):
 
 		listaFechas = []
 		listaHoras = []
@@ -97,11 +97,11 @@ class AnalisisDatosVoltaje():
 				listaFechas.append(self.fechas[i])
 				listaHoras.append(self.horas[i])
 
-		self.llenarTablaVoltaje(listaFechas, listaHoras, listaVoltajes, tablaVoltaje, window)
+		self.llenarTablaVoltaje(listaFechas, listaHoras, listaVoltajes, window)
 			
 	# ************************************************************************************************************************
 
-	def datosMayores(self, voltajes, tablaVoltaje, window):
+	def datosMayores(self, voltajes, window):
 
 		listaFechas = []
 		listaHoras = []
@@ -115,11 +115,11 @@ class AnalisisDatosVoltaje():
 				listaFechas.append(self.fechas[i])
 				listaHoras.append(self.horas[i])
 
-		dataTable = self.llenarTablaVoltaje(listaFechas, listaHoras, listaVoltajes, tablaVoltaje, window)
+		dataTable = self.llenarTablaVoltaje(listaFechas, listaHoras, listaVoltajes, window)
 		
 	# ************************************************************************************************************************
 
-	def llenarTablaVoltaje(self, listaFechas, listaHoras, listaVoltajes, tablaVoltaje, window):
+	def llenarTablaVoltaje(self, listaFechas, listaHoras, listaVoltajes, window):
 
 		numRows = len(listaVoltajes)
 		numCols = 4
@@ -129,8 +129,8 @@ class AnalisisDatosVoltaje():
 		for fila in range(0, numRows):
 			data[fila] = [str(fila+1), str(listaFechas[fila]), str(listaHoras[fila]), str(listaVoltajes[fila])]
 
-		tablaVoltaje.update(values=data)
-		window['-labelRegistros-'].update(numRows)
+		window['-tablaVoltaje-'].update(values=data)
+		window['-cantidadRegistros-'].update(numRows)
 
 	# ************************************************************************************************************************
 

@@ -31,10 +31,10 @@ def visualizarNorma(tipoProceso, values):
 
 # ************************************************************************************************************************
 
-def definirTituloNorma(tipoProceso, columna1, columna4, labelTituloNorma):
+def definirTituloNorma(tipoProceso, labelTituloNorma, window):
 
-    columna1.Update(visible=False)
-    columna4.Update(visible=True)
+    window['-columna1-'].update(visible=False)
+    window['-columna4-'].update(visible=True)
 
     if tipoProceso == idVoltaje:
 
@@ -48,12 +48,11 @@ def definirTituloNorma(tipoProceso, columna1, columna4, labelTituloNorma):
 
         txtTituloNorma = 'ARMÓNICOS'
 
-    labelTituloNorma.update(txtTituloNorma)
-    #window['-labelTituloNorma-'].update(txtTituloNorma)
+    window['-labelTituloNorma-'].update(txtTituloNorma)
 
 # ************************************************************************************************************************
 
-def sustituirNorma(tipoProceso, botonActualizarNorma, botonDescartarGestion, botonVerSeleccionado, window, values):
+def sustituirNorma(tipoProceso, window, values):
 
     try:
 
@@ -79,9 +78,9 @@ def sustituirNorma(tipoProceso, botonActualizarNorma, botonDescartarGestion, bot
                     keep_on_top=True,
                     no_titlebar=False)
 
-        botonActualizarNorma.update(disabled=True)
-        botonDescartarGestion.update(disabled=True)
-        botonVerSeleccionado.update(disabled=True)
+        window['-botonActualizarNorma-'].update(disabled=True)
+        window['-botonDescartarGestion-'].update(disabled=True)
+        window['-botonVerSeleccionado-'].update(disabled=True)
         window['-inputSeleccionPDF-'].update('')
 
     except:
@@ -96,10 +95,10 @@ def sustituirNorma(tipoProceso, botonActualizarNorma, botonDescartarGestion, bot
 
 # ************************************************************************************************************************
 
-def botonesGestionarNorma(estado, botonActualizarNorma, botonDescartarGestion, botonVerSeleccionado):
+def botonesGestionarNorma(estado, window):
 
-    botonActualizarNorma.update(disabled=estado)
-    botonDescartarGestion.update(disabled=estado)
-    botonVerSeleccionado.update(disabled=estado)
+    window['-botonActualizarNorma-'].update(disabled=estado)
+    window['-botonDescartarGestion-'].update(disabled=estado)
+    window['-botonVerSeleccionado-'].update(disabled=estado)
 
 # ************************************************************************************************************************
