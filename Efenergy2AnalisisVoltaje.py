@@ -6,18 +6,17 @@ import pandas
 
 from Efenergy2Globales import *
 import Efenergy2UI
+from Efenergy2GraficoTipo1 import Efenergy2GraficoTipo1
 
 import matplotlib.pyplot as plt
 from matplotlib.widgets import CheckButtons
 import datetime
 import numpy      
 
-#from GraficaPotencia import GraficaPotencia
-#from NuevoArchivoVoltajeReglas import NuevoArchivoVoltajeReglas
 
 # ************************************************************************************************************************
 
-class AnalisisDatosVoltaje():
+class Efenergy2AnalisisVoltaje():
 
 	def __init__(self, datosVoltaje, rangoMenor, rangoMayor, dia, fase, voltaje, window):
 
@@ -132,9 +131,11 @@ class AnalisisDatosVoltaje():
 		window['-tablaVoltaje-'].update(values=data)
 		window['-cantidadRegistros-'].update(numRows)
 
+		self.graficaVoltajeVsTiempo(self.dia)
+
 	# ************************************************************************************************************************
 
-	def graficaVoltajeVsTiempo(self, event, dia):
+	def graficaVoltajeVsTiempo(self, dia):
 
 		dfVoltaje = pandas.read_excel(self.datosVoltaje, self.dia)
 
@@ -142,21 +143,13 @@ class AnalisisDatosVoltaje():
 		datosVoltajeFaseB = dfVoltaje['Vrms ph-n BN Med'].values
 		datosVoltajeFaseC = dfVoltaje['Vrms ph-n CN Med'].values 
 
-		lsHora = df.Hora.str.slice(0,2)
-		lsMinuto = df.Hora.str.slice(3,5)
-		lsAmPm = df.Hora.str.slice(9,13)
+		lsHora = dfVoltaje.Hora.str.slice(0,2)
+		lsMinuto = dfVoltaje.Hora.str.slice(3,5)
+		lsAmPm = dfVoltaje.Hora.str.slice(9,13)
 
-		grafica = GraficaPotencia()
+		grafica = Efenergy2GraficoTipo1()
 
-		grafico.generar('voltaje',
-						lsHora,
- 						lsMinuto,
- 						lsAmPm,
- 						datosVoltajeFaseA,
- 						datosVoltajeFaseB,
-						datosVoltajeFaseC,
-						'Tiempo(Hora)',
-						'Voltaje')
+		grafica.generar(idVoltaje, lsHora, lsMinuto, lsAmPm, datosVoltajeFaseA, datosVoltajeFaseB, datosVoltajeFaseC, 'Tiempo(Hora)', 'Voltaje')
 
 	# ************************************************************************************************************************
 

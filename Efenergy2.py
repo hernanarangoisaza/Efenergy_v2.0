@@ -5,26 +5,24 @@
 
 import PySimpleGUI as sg
 import sys
-
-
-
-#from Efenergy2UI import *
-#import Efenergy2Globales
+import os.path
+import ctypes
+from pathlib import Path
 
 from Efenergy2Globales import *
 import Efenergy2UI
 import Efenergy2NotasRapidas
 import Efenergy2Normas
 import Efenergy2Funciones
+from Efenergy2AnalisisVoltaje import Efenergy2AnalisisVoltaje
 
-import os.path
-import ctypes
-from pathlib import Path
+
+
 
 #import wx
-import wx.grid
+#import wx.grid
 
-from AnalisisDatosVoltaje import AnalisisDatosVoltaje
+
 
 #from AnalisisDatosPotencia import AnalisisDatosPotencia
 #from AnalisisDatosPotenciaReactiva import AnalisisDatosPotenciaReactiva
@@ -174,13 +172,13 @@ while True:
 
         voltajeLimiteInferior, voltajeLimiteSuperior = Efenergy2Funciones.calcularRangoVariacion(window, values)
 
-        AnalisisDatosVoltaje(datosVoltaje, 
-                             voltajeLimiteInferior, 
-                             voltajeLimiteSuperior, 
-                             values['-comboDias-'], 
-                             values['-comboFases-'],
-                             values['-comboVoltaje-'],
-                             window)
+        Efenergy2AnalisisVoltaje(datosVoltaje, 
+                                 voltajeLimiteInferior, 
+                                 voltajeLimiteSuperior, 
+                                 values['-comboDias-'], 
+                                 values['-comboFases-'],
+                                 values['-comboVoltaje-'],
+                                 window)
 
         window['-tablaVoltaje-'].expand(expand_x=True)
 
@@ -335,13 +333,13 @@ while True:
 
         voltajeLimiteInferior, voltajeLimiteSuperior = Efenergy2Funciones.calcularRangoVariacion(window, values)
 
-        AnalisisDatosVoltaje(datosVoltaje, 
-                             voltajeLimiteInferior, 
-                             voltajeLimiteSuperior, 
-                             values['-comboDias-'], 
-                             values['-comboFases-'],
-                             values['-comboVoltaje-'],
-                             window)
+        Efenergy2AnalisisVoltaje(datosVoltaje, 
+                                 voltajeLimiteInferior, 
+                                 voltajeLimiteSuperior, 
+                                 values['-comboDias-'], 
+                                 values['-comboFases-'],
+                                 values['-comboVoltaje-'],
+                                 window)
 
         window['-tablaVoltaje-'].expand(expand_x=True)
 
