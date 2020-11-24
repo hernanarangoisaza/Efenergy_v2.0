@@ -1,63 +1,103 @@
 #!/usr/bin/env python
+from matplotlib.ticker import NullFormatter  # useful for `logit` scale
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import PySimpleGUI as sg
-import random
-import string
+import matplotlib
+matplotlib.use('TkAgg')
 
 """
-    Basic use of the Table Element
+Demonstrates one way of embedding Matplotlib figures into a PySimpleGUI window.
+Basic steps are:
+ * Create a Canvas Element
+ * Layout form
+ * Display form (NON BLOCKING)
+ * Draw plots onto convas
+ * Display form (BLOCKING)
+ 
+ Based on information from: https://matplotlib.org/3.1.0/gallery/user_interfaces/embedding_in_tk_sgskip.html
+ (Thank you Em-Bo & dirck)
 """
 
-sg.theme('Dark Red')
 
-# ------ Some functions to help generate data for the table ------
-def word():
-    return ''.join(random.choice(string.ascii_lowercase) for i in range(10))
-def number(max_val=1000):
-    return random.randint(0, max_val)
+# ------------------------------- PASTE YOUR MATPLOTLIB CODE HERE -------------------------------
+#
+# # Goal is to have your plot contained in the variable  "fig"
+#
+# # Fixing random state for reproducibility
+# np.random.seed(19680801)
+#
+# # make up some data in the interval ]0, 1[
+# y = np.random.normal(loc=0.5, scale=0.4, size=1000)
+# y = y[(y > 0) & (y < 1)]
+# y.sort()
+# x = np.arange(len(y))
+#
+# # plot with various axes scales
+# plt.figure(1)
+#
+# # linear
+# plt.subplot(221)
+# plt.plot(x, y)
+# plt.yscale('linear')
+# plt.title('linear')
+# plt.grid(True)
+#
+# # log
+# plt.subplot(222)
+# plt.plot(x, y)
+# plt.yscale('log')
+# plt.title('log')
+# plt.grid(True)
+#
+# # symmetric log
+# plt.subplot(223)
+# plt.plot(x, y - y.mean())
+# plt.yscale('symlog', linthreshy=0.01)
+# plt.title('symlog')
+# plt.grid(True)
+#
+# # logit
+# plt.subplot(224)
+# plt.plot(x, y)
+# plt.yscale('logit')
+# plt.title('logit')
+# plt.grid(True)
+# plt.gca().yaxis.set_minor_formatter(NullFormatter())
+# plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.25,
+#                     wspace=0.35)
+# fig = plt.gcf()
+#
 
-def make_table(num_rows, numCols):
-    data = [[j for j in range(numCols)] for i in range(num_rows)]
-    data[0] = [word() for __ in range(numCols)]
-    for i in range(1, num_rows):
-        data[i] = [word(), *[number() for i in range(numCols - 1)]]
-    return data
 
-# ------ Make the Table Data ------
-data = make_table(num_rows=15, numCols=6)
-headings = [str(data[0][x])+'     ..' for x in range(len(data[0]))]
+fig = matplotlib.figure.Figure(figsize=(5, 4), dpi=100)
+t = np.arange(0, 3, .01)
+fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
 
-# ------ Window Layout ------
-layout = [[sg.Table(values=data[1:][:], headings=headings, max_col_width=25,
-                    # background_color='light blue',
-                    auto_size_columns=True,
-                    display_row_numbers=True,
-                    justification='right',
-                    num_rows=20,
-                    alternating_row_color='lightyellow',
-                    key='-TABLE-',
-                    row_height=35,
-                    tooltip='This is a table')],
-          [sg.Button('Read'), sg.Button('Double'), sg.Button('Change Colors')],
-          [sg.Text('Read = read which rows are selected')],
-          [sg.Text('Double = double the amount of data in the table')],
-          [sg.Text('Change Colors = Changes the colors of rows 8 and 9')]]
+# ------------------------------- END OF YOUR MATPLOTLIB CODE -------------------------------
 
-# ------ Create Window ------
-window = sg.Window('The Table Element', layout,
-                   # font='Helvetica 25',
-                   )
+# ------------------------------- Beginning of Matplotlib helper code -----------------------
 
-# ------ Event Loop ------
-while True:
-    event, values = window.read()
-    print(event, values)
-    if event == sg.WIN_CLOSED:
-        break
-    if event == 'Double':
-        for i in range(len(data)):
-            data.append(data[i])
-        window['-TABLE-'].update(values=data)
-    elif event == 'Change Colors':
-        window['-TABLE-'].update(row_colors=((8, 'white', 'red'), (9, 'green')))
+def draw_figure(canvas, figure):
+    figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
+    figure_canvas_agg.draw()
+    figure_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
+    return figure_canvas_agg
+
+# ------------------------------- Beginning of GUI CODE -------------------------------
+
+# define the window layout
+layout = [[sg.Text('Plot test')],
+          [sg.Canvas(key='-CANVAS-')],
+          [sg.Button('Ok')]]
+
+# create the form and show it without the plot
+window = sg.Window('Demo Application - Embedding Matplotlib In PySimpleGUI', layout, finalize=True, element_justification='center', font='Helvetica 18')
+
+# add the plot to the window
+fig_canvas_agg = draw_figure(window['-CANVAS-'].TKCanvas, fig)
+
+event, values = window.read()
 
 window.close()

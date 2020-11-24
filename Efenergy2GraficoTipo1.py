@@ -1,4 +1,6 @@
-﻿#!/usr/bin/env python3
+﻿# ************************************************************************************************************************
+
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import PySimpleGUI as sg
@@ -157,7 +159,7 @@ class Efenergy2GraficoTipo1:
         check = CheckButtons(rax, ('Fase A', 'Datos A', 'Fase B', 'Datos B', 'Fase C', 'Datos C'), (True, False, True, False, True, False))
 
         check.on_clicked(self.selectorLineas)
-        
+       
         plt.show()
 
     # ************************************************************************************************************************

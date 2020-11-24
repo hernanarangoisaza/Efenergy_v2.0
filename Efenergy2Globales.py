@@ -5,6 +5,7 @@
 
 # import os.path
 
+import Efenergy2Funciones
 from pathlib import Path
 
 # ************************************************************************************************************************
@@ -126,12 +127,6 @@ rutaPlantilla = None
 archivoPlantilla = None
 rutaPlantillaPreliminar = None
 
-# Variables contenedoras para los textos descriptivos de las normas
-
-informacionVoltaje = ''
-informacionPotencia = ''
-informacionArmonicos = ''
-
 # Variables globales para control de ejecución de Hilos (Threads)
 
 t1 = None # Hilo para carga y procesamiento con la libreria Panda
@@ -151,7 +146,13 @@ rutaPdfVoltaje = str(Path().absolute()) + '\\archivos\\NormaVoltaje.pdf'
 rutaPdfPotencia = str(Path().absolute()) + '\\archivos\\NormaPotencia.pdf'
 rutaPdfArmonicos = str(Path().absolute()) + '\\archivos\\NormaArmónicos.pdf'
 
-clave = '1234' # Clave para edición de la norma
+# Carga los textos descriptivos para las notas
+
+errorPersonalizadoNotasLeer = 'Ocurrió un problema al leer el archivo de texto de Notas Rápidas.'
+
+informacionVoltaje = Efenergy2Funciones.leerArchivo(rutaInformacionVoltaje, errorPersonalizadoNotasLeer)
+informacionPotencia = Efenergy2Funciones.leerArchivo(rutaInformacionPotencia, errorPersonalizadoNotasLeer)
+informacionArmonicos = Efenergy2Funciones.leerArchivo(rutaInformacionArmonicos, errorPersonalizadoNotasLeer)
 
 # Información para Acerca De...
 

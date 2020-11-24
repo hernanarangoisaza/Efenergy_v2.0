@@ -1,4 +1,6 @@
-﻿#!/usr/bin/env python3
+﻿# ************************************************************************************************************************
+
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import PySimpleGUI as sg
@@ -31,7 +33,7 @@ def visualizarNorma(tipoProceso, values):
 
 # ************************************************************************************************************************
 
-def definirTituloNorma(tipoProceso, labelTituloNorma, window):
+def definirTituloNorma(tipoProceso, window):
 
     window['-columna1-'].update(visible=False)
     window['-columna4-'].update(visible=True)
