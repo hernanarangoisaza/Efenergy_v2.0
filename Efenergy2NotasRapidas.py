@@ -78,15 +78,15 @@ def editarNota(window):
 
 def gestionarNota(tipoProceso, window, informacion):
 
-    #definirTituloNota(tipoProceso, window)
+    definirTituloNota(tipoProceso, window)
     window['-columna1-'].update(visible=False)
     window['-columna3-'].update(visible=True)
-    #window['-botonEditarNota-'].update(disabled=False)
-    #window['-botonGrabarNota-'].update(disabled=True)
-    #window['-botonDescartarGrabacion-'].update(disabled=True)
-    #window['-visorEditorNotas-'].update(disabled=True)
-    #window['-visorEditorNotas-'].update(background_color=eColor2)
-    #window['-visorEditorNotas-'].update(informacion)
+    window['-botonEditarNota-'].update(disabled=False)
+    window['-botonGrabarNota-'].update(disabled=True)
+    window['-botonDescartarGrabacion-'].update(disabled=True)
+    window['-visorEditorNotas-'].update(disabled=True)
+    window['-visorEditorNotas-'].update(background_color=eColor2)
+    window['-visorEditorNotas-'].update(informacion)
     
 # ************************************************************************************************************************
 
