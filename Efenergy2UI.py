@@ -696,7 +696,7 @@ def generarAnalisisVoltaje(frameNavegacion, frameFiltrosVoltaje):
     
     layoutTabGrafica =  [
                             [
-                                seccionCanvasGraficas
+                                #seccionCanvasGraficas
                             ]
                         ]   
 

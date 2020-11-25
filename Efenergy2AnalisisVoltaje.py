@@ -29,10 +29,6 @@ class Efenergy2AnalisisVoltaje():
 		self.fase = fase
 		self.voltaje = voltaje
 
-		self.txt_fase_a = []
-		self.txt_fase_b = []
-		self.txt_fase_c = []
-
 		self.cargarDatos(window)
 
 	# ************************************************************************************************************************
@@ -151,7 +147,17 @@ class Efenergy2AnalisisVoltaje():
 
 		grafica = Efenergy2GraficoTipo1()
 
-		grafica.generar(idVoltaje, lsHora, lsMinuto, lsAmPm, datosVoltajeFaseA, datosVoltajeFaseB, datosVoltajeFaseC, 'Tiempo(Hora)', 'Voltaje')
+		grafica.generar(idVoltaje, 
+						lsHora, 
+						lsMinuto, 
+						lsAmPm, 
+						datosVoltajeFaseA, 
+						datosVoltajeFaseB, 
+						datosVoltajeFaseC, 
+						self.rangoMenor,
+						self.rangoMayor,
+						'Tiempo(Hora)', 
+						'Voltaje')
 
 	# ************************************************************************************************************************
 

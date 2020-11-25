@@ -3,33 +3,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import Efenergy2Funciones
 from pathlib import Path
-
-# ************************************************************************************************************************
-
-global window, event, values
-
-global layoutPrincipal
-
-global columna1, barraMenuPrincipal, frameSelectorPlantilla, inputSeleccionPlantilla, sbotonCargarPlantilla
-global columna2, frameAcercaDe
-global columna3, visorEditor, botonEditarNota, botonGrabarNota, botonDescartarGrabacion, frameNota, frameTituloNota, labelTituloNota
-global columna4, botonVerNorma, botonVerSeleccionado, botonActualizarNorma, botonDescartarGestion, frameNorma, frameTituloNorma, labelTituloNorma
-global columna5, frameSeccionVoltaje, frameTituloSeccionVoltaje
-
-global frameFiltrosVoltaje, comboDias, comboVoltaje, comboFases
-
-global frameLogoV1, logoPrincipalV1, statusBarPrincipalV1
-global frameLogoV2, logoPrincipalV2, statusBarPrincipalV2
-global frameLogoV3, logoPrincipalV3, statusBarPrincipalV3
-global frameLogoV4, logoPrincipalV4, statusBarPrincipalV4
-global frameLogoV5, logoPrincipalV5, statusBarPrincipalV5
-
-global frameNavegacionV1, botonInicioV1
-global frameNavegacionV2, botonInicioV2
-global frameNavegacionV3, botonInicioV3
-global frameNavegacionV4, botonInicioV4
 
 # ************************************************************************************************************************
 
@@ -40,7 +14,7 @@ SYMBOL_DOWN = '▼'
 
 # Identificadores de los tipos de procesos
 
-idGeneral = 0
+idPreliminar = 0
 idVoltaje = 1
 idPotencia = 2
 idArmonicos = 3
@@ -143,14 +117,6 @@ rutaInformacionArmonicos = 'archivos\\InformaciónArmónicos.txt'
 rutaPdfVoltaje = str(Path().absolute()) + '\\archivos\\NormaVoltaje.pdf'
 rutaPdfPotencia = str(Path().absolute()) + '\\archivos\\NormaPotencia.pdf'
 rutaPdfArmonicos = str(Path().absolute()) + '\\archivos\\NormaArmónicos.pdf'
-
-# Carga los textos descriptivos para las notas
-
-errorPersonalizadoNotasLeer = 'Ocurrió un problema al leer el archivo de texto de Notas Rápidas.'
-
-informacionVoltaje = Efenergy2Funciones.leerArchivo(rutaInformacionVoltaje, errorPersonalizadoNotasLeer)
-informacionPotencia = Efenergy2Funciones.leerArchivo(rutaInformacionPotencia, errorPersonalizadoNotasLeer)
-informacionArmonicos = Efenergy2Funciones.leerArchivo(rutaInformacionArmonicos, errorPersonalizadoNotasLeer)
 
 # Información para Acerca De...
 

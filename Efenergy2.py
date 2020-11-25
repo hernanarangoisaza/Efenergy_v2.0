@@ -23,6 +23,14 @@ from Efenergy2AnalisisVoltaje import Efenergy2AnalisisVoltaje
 
 # ************************************************************************************************************************
 
+# Carga los textos descriptivos para las notas
+
+errorPersonalizadoNotasLeer = 'Ocurrió un problema al leer el archivo de texto de Notas Rápidas.'
+
+informacionVoltaje = Efenergy2Funciones.leerArchivo(rutaInformacionVoltaje, errorPersonalizadoNotasLeer)
+informacionPotencia = Efenergy2Funciones.leerArchivo(rutaInformacionPotencia, errorPersonalizadoNotasLeer)
+informacionArmonicos = Efenergy2Funciones.leerArchivo(rutaInformacionArmonicos, errorPersonalizadoNotasLeer)
+
 # GENERACIÓN DINÁMICA DE FRAMES PARA EL LOGO. DEBE CREARSE UNA POR CADA SIMULACIÓN DE PANTALLA MEDIANTE COLUMNAS.
 
 frameLogoV1, logoPrincipalV1, statusBarPrincipalV1 = Efenergy2UI.generarLogo(1)
@@ -144,7 +152,7 @@ while True:
 
     elif event == '-botonCargarPlantilla-': # Cargar plantilla de origen de datos
 
-        Efenergy2Funciones.cargarDatosPreliminares(idGeneral, values, window)
+        Efenergy2Funciones.cargarDatosPreliminares(idPreliminar, values, window)
 
     elif event.endswith('-opcV1-'): # Analizar Voltaje
 

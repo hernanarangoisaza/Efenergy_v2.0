@@ -29,11 +29,15 @@ class Efenergy2GraficoTipo1:
                 lsAmPm, 
                 datosFaseA, 
                 datosFaseB, 
-                datosFaseC, 
+                datosFaseC,
+                rangoMenor,
+                rangoMayor,
                 txtEjeHorizontal, 
                 txtEjeVertical):
         
         self.idProceso = idProceso
+        self.rangoMenor = rangoMenor
+        self.rangoMayor = rangoMayor
         
         faseA = []
         faseB = []
@@ -104,39 +108,39 @@ class Efenergy2GraficoTipo1:
         fig, ax = plt.subplots()
 
         plt.grid(True)
-        plt.grid(color = '0.5', linestyle = '--', linewidth = 1)
+        plt.grid(color='0.5', linestyle='--', linewidth=1)
 
-        self.lineaFaseA, = ax.plot(listaHora, listaFaseA, 'o-', visible=True, lw=2, color='red',  mfc='red')
-        self.lineaFaseB, = ax.plot(listaHora, listaFaseB, 'o-', visible=True, lw=2, color='green', mfc='green' )
-        self.lineaFaseC, = ax.plot(listaHora, listaFaseC, 'o-', visible=True, lw=2 , color='blue', mfc='blue')
+        self.lineaFaseA = ax.plot(listaHora, listaFaseA, 'o-', visible=True, lw=1, color='red',  mfc='red')
+        self.lineaFaseB = ax.plot(listaHora, listaFaseB, 'o-', visible=True, lw=1, color='green', mfc='green' )
+        self.lineaFaseC = ax.plot(listaHora, listaFaseC, 'o-', visible=True, lw=1, color='blue', mfc='blue')
         
-        if self.idProceso == idVoltaje:
+        if (self.idProceso == idVoltaje):
 
             for i in range(len(listaFaseA)):
 
-                if listaFaseA[i] > 139.7:
+                if (listaFaseA[i] > self.rangoMayor):
 
-                    plt.axhline(y = 139.7, xmin = 0, xmax = 1, color='#387B7F', linestyle='--', lw=2)
+                    plt.axhline(y=self.rangoMayor, xmin=0, xmax=1, color='#387B7F', linestyle='--', lw=1)
 
-                if listaFaseB[i] > 139.7:
+                if (listaFaseB[i] > self.rangoMayor):
 
-                    plt.axhline(y = 139.7, xmin = 0, xmax = 1, color='#387B7F', linestyle='--', lw=2)
+                    plt.axhline(y=self.rangoMayor, xmin=0, xmax=1, color='#387B7F', linestyle='--', lw=1)
 
-                if listaFaseC[i] > 139.7:
+                if (listaFaseC[i] > self.rangoMayor):
 
-                    plt.axhline(y = 139.7, xmin = 0, xmax = 1, color='#387B7F', linestyle='--', lw=2)
+                    plt.axhline(y=self.rangoMayor, xmin=0, xmax=1, color='#387B7F', linestyle='--', lw=1)
 
-                if listaFaseA[i] < 114.3:
+                if (listaFaseA[i] < self.rangoMenor):
 
-                    plt.axhline(y = 114.3, xmin = 0, xmax = 1, color='#387B7F', linestyle='--', lw=2)
+                    plt.axhline(y=self.rangoMenor, xmin=0, xmax=1, color='#387B7F', linestyle='--', lw=1)
 
-                if listaFaseB[i] < 114.3:
+                if (listaFaseB[i] < self.rangoMenor):
 
-                    plt.axhline(y = 114.3, xmin = 0, xmax = 1, color='#387B7F', linestyle='--', lw=2)
+                    plt.axhline(y=self.rangoMenor, xmin=0, xmax=1, color='#387B7F', linestyle='--', lw=1)
 
-                if listaFaseC[i] < 114.3:
+                if (listaFaseC[i] < self.rangoMenor):
 
-                    plt.axhline(y = 114.3, xmin = 0, xmax = 1, color='#387B7F', linestyle='--', lw=2)
+                    plt.axhline(y=self.rangoMenor, xmin=0, xmax=1, color='#387B7F', linestyle='--', lw=1)
 
         plt.subplots_adjust(left=0.2, right=0.98, top=0.90, bottom=0.14)
 

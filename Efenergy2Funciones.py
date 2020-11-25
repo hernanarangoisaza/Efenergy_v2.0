@@ -15,7 +15,7 @@ def cargarPlantilla(window, rutaPlantilla, tipoProceso):
 
     global datosPreliminares
 
-    if (tipoProceso == idGeneral):
+    if (tipoProceso == idPreliminar):
 
         datosPreliminares = pandas.ExcelFile(rutaPlantilla)
 
@@ -109,11 +109,8 @@ def seleccionarPlantilla(values, window):
 
 def cargarDatosPreliminares(tipoProceso, values, window):
 
-    if (tipoProceso == idGeneral):
-
-        rutaPlantillaPreliminar = values['-inputSeleccionPlantilla-']
-        hiloCargarPlantilla(rutaPlantillaPreliminar, tipoProceso, window)
-
+    rutaPlantillaPreliminar = values['-inputSeleccionPlantilla-']
+    hiloCargarPlantilla(rutaPlantillaPreliminar, tipoProceso, window)
     hiloIndicadorCarga(window)
 
 # ************************************************************************************************************************
